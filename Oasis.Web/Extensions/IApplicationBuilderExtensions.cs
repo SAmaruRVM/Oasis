@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 namespace Oasis.Web.Extensions
 {
@@ -10,17 +9,19 @@ namespace Oasis.Web.Extensions
         {
             if (env.IsDevelopment())
             {
-                @this.UseDeveloperExceptionPage();
+                @this.UseDeveloperExceptionPage();            
             }
 
             @this.UseRouting();
 
+            @this.UseStaticFiles();
+          
             @this.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapControllerRoute(
+                    name: string.Empty,
+                    pattern: "{controller=Home}/{action=Index}"
+                );
             });
         }
     }
