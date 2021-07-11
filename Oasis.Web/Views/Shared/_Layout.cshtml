@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6 order-1 order-lg-2 hero-img">
-                        <img src="~/assets/img/hero-img.png" class="img-fluid animated" alt="">
+                        <img src="~/assets/img/education.png" class="img-fluid animated" alt="" style="height:400px; width:auto">
                     </div>
                 </div>
             </div>
@@ -259,7 +259,8 @@
                 </div>
             </section>
         </main>
-        <partial name="_Footer"/>
+        <partial name="_Footer" />
+
         <div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-labelledby="modal-login-titulo" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -273,12 +274,14 @@
                         ...
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
                         <button type="button" class="btn btn-primary">Login</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                     </div>
                 </div>
             </div>
         </div>
+
+
         <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
         @RenderBody()
     </main>
