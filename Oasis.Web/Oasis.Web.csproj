@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Oasis.Dados\Oasis.Dados.csproj" />
+    <ProjectReference Include="..\Oasis.Dominio\Oasis.Dominio.csproj" />
   </ItemGroup>
 
 </Project>

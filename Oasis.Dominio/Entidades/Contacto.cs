@@ -9,6 +9,7 @@ namespace Oasis.Dominio.Entidades
 
         [Required]
         [StringLength(20)]
+        [Display(Name = "Assunto", Prompt = "Introduza o assunto do contacto")]
         public string Assunto { get; set; }
 
         [Required]

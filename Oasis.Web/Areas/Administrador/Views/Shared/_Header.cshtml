@@ -1,0 +1,7 @@
+﻿@inject IConfiguration configuration 
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <button type="button" class="btn btn-link btn order-1 order-lg-0" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+    <a class="navbar-brand" asp-action="Index" asp-controller="Home" asp-area="Administrador">@configuration["Projeto:Nome"] - Administração</a>
+    <ul class="navbar-nav ml-auto ml-10">
+    </ul>
+</nav>

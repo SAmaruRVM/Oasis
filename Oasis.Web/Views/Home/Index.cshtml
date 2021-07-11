@@ -1,1 +1,4 @@
-﻿
+﻿@inject IConfiguration configuration
+@{ 
+    ViewBag.Title = configuration["Projeto:Nome"];
+}

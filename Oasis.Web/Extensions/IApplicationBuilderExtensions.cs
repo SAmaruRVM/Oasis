@@ -19,8 +19,13 @@ namespace Oasis.Web.Extensions
             @this.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                     name: string.Empty,
+                     pattern: "{area:exists}/{controller=Home}/{action=Index}"
+                 );
+
+                endpoints.MapControllerRoute(
                     name: string.Empty,
-                    pattern: "{controller=Home}/{action=Index}"
+                    pattern: "{controller=Escola}/{action=Index}"
                 );
             });
         }

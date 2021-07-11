@@ -4,8 +4,25 @@
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
 */
+
+
 !(function($) {
   "use strict";
+
+    // Add active state to sidbar nav links
+    var path = window.location.href; // because the 'href' property of the DOM element is the absolute path
+    $("#layoutSidenav_nav .sb-sidenav a.nav-link").each(function () {
+        if (this.href === path) {
+            $(this).addClass("active");
+        }
+    });
+
+    // Toggle the side navigation
+    $("#sidebarToggle").on("click", function (e) {
+        e.preventDefault();
+        $("body").toggleClass("sb-sidenav-toggled");
+    });
+ 
 
   // Smooth scroll for the navigation menu and links with .scrollto classes
   var scrolltoOffset = $('#header').outerHeight() - 16;

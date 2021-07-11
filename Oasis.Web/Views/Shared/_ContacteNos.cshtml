@@ -1,0 +1,42 @@
+﻿@model Contacto
+<form class="w-100"
+      asp-action="ContacteNos"
+      asp-controller="Home"
+      asp-antiforgery="true"
+      data-ajax="true"
+      data-ajax-method="POST"
+      data-ajax-success="ajaxCompleto"
+      data-ajax-loading="#loading-icon-contacteNos">
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="PrimeiroNome"></label>
+            <input class="form-control" asp-for="PrimeiroNome" />
+            <span class="text-danger text-center" asp-validation-for="PrimeiroNome"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="Apelido"></label>
+            <input class="form-control" asp-for="Apelido" />
+            <span class="text-danger text-center" asp-validation-for="Apelido"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="EmailContactante"></label>
+        <input class="form-control" asp-for="EmailContactante" />
+        <span class="text-danger text-center" asp-validation-for="EmailContactante"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Assunto"></label>
+        <input class="form-control" asp-for="Assunto" />
+        <span class="text-danger text-center" asp-validation-for="Assunto"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Descricao"></label>
+        <textarea class="form-control" rows="10" asp-for="Descricao"></textarea>
+        <span class="text-danger text-center" asp-validation-for="Descricao"></span>
+    </div>
+    <button class="btn btn-primary btn-block" type="submit">
+        <i id="loading-icon-contacteNos" style="display: none;" class="fas fa-sync fa-spin"></i>
+        Send Message
+    </button>
+</form>

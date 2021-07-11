@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Oasis.Web.Extensions;
-
 namespace Oasis.Web
 {
     public class Startup
