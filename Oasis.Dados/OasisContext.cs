@@ -45,7 +45,9 @@ namespace Oasis.Dados
                    .Ignore(user => user.TwoFactorEnabled)
                    .Ignore(user => user.PhoneNumber)
                    .Ignore(user => user.PhoneNumberConfirmed)
-                   .ToTable("Utilizadores");
+                   .ToTable("Utilizadores")
+                   .Property(user => user.DataCriacao)
+                   .HasDefaultValueSql("getdate()");
 
             // Inserção dos tipos de Utilizador
             int indexTiposUtilizador = 0;
@@ -168,6 +170,10 @@ namespace Oasis.Dados
                    .WithMany(aluno => aluno.ReportsAluno)
                    .OnDelete(DeleteBehavior.NoAction);
 
+            builder.Entity<Report>()
+                   .Property(report => report.DataCriacao)
+                   .HasDefaultValueSql("getdate()");
+
             // Grupos
             builder.Entity<Grupo>()
                    .HasOne(grupo => grupo.Professor)
@@ -179,6 +185,42 @@ namespace Oasis.Dados
                    .HasOne(post => post.Criador)
                    .WithMany(criador => criador.PostsCriados)
                    .OnDelete(DeleteBehavior.NoAction);
+
+
+            builder.Entity<Post>()
+                   .Property(post => post.DataCriacao)
+                   .HasDefaultValueSql("getdate()");
+
+
+            // Contactos
+            builder.Entity<Contacto>()
+                   .Property(contacto => contacto.DataContacto)
+                   .HasDefaultValueSql("getdate()");
+
+            // Notificações
+            builder.Entity<Notificacao>()
+                   .Property(notificacao => notificacao.DataCriacao)
+                   .HasDefaultValueSql("getdate()");
+
+            // Requisições dos Equipamentos
+            builder.Entity<RequisicaoEquipamento>()
+                   .Property(requisicao => requisicao.DataRequisicao)
+                   .HasDefaultValueSql("getdate()");
+
+            // Paginas Principais
+            builder.Entity<PaginaPrincipal>()
+                   .Property(pagina => pagina.DataCriacao)
+                   .HasDefaultValueSql("getdate()");
+
+            // Equipamentos
+            builder.Entity<Equipamento>()
+                   .Property(equipamento => equipamento.Quantidade)
+                   .HasDefaultValue(0);
+
+            // Escolas
+            builder.Entity<Escola>()
+                   .Property(escola => escola.DataCriacao)
+                   .HasDefaultValueSql("getdate()");
         }
     }
 }

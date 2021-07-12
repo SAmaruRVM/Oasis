@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Oasis.Dados.Migrations
 {
-    public partial class Initial : Migration
+    public partial class AdicionarValorDefaultGetDateParaDatasEAdicionaColunaDataCriacaoNaEscola : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,12 +13,12 @@ namespace Oasis.Dados.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Assunto = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Assunto = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Descricao = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     EmailContactante = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PrimeiroNome = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Apelido = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    DataContacto = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DataContacto = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
@@ -37,7 +37,8 @@ namespace Oasis.Dados.Migrations
                     Distrito = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     CodigoPostal = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ContactoTelefonico = table.Column<string>(type: "nvarchar(9)", maxLength: 9, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
@@ -114,8 +115,8 @@ namespace Oasis.Dados.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ConteudoHtml = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DataCriacao = table.Column<int>(type: "int", nullable: false),
-                    DataUltimaAlteracao = table.Column<int>(type: "int", nullable: true),
+                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
+                    DataUltimaAlteracao = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EscolaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -136,7 +137,7 @@ namespace Oasis.Dados.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Quantidade = table.Column<int>(type: "int", nullable: false),
+                    Quantidade = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     EscolaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -160,7 +161,7 @@ namespace Oasis.Dados.Migrations
                     DescricaoPerfil = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     PrimeiroNome = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Apelido = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     DataUltimoLogin = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TemaId = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -347,7 +348,7 @@ namespace Oasis.Dados.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Titulo = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     FoiVista = table.Column<bool>(type: "bit", nullable: false),
                     ApplicationUserId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -370,7 +371,7 @@ namespace Oasis.Dados.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Titulo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Descricao = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     AlunoId = table.Column<int>(type: "int", nullable: true),
                     ProfessorId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -395,7 +396,7 @@ namespace Oasis.Dados.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DataRequisicao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataRequisicao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     DataEntrega = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EstaAprovado = table.Column<bool>(type: "bit", nullable: false),
                     ApplicationUserId = table.Column<int>(type: "int", nullable: false),
@@ -497,7 +498,7 @@ namespace Oasis.Dados.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Titulo = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Conteudo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     Ficheiro = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     TipoPostId = table.Column<int>(type: "int", nullable: false),
                     ApplicationUserId = table.Column<int>(type: "int", nullable: false)
@@ -610,10 +611,10 @@ namespace Oasis.Dados.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "77144091-5d08-4545-a8f7-7fad9de82239", "Administrador", "ADMINISTRADOR" },
-                    { 2, "b405617e-820b-4cc2-9d09-abe1d22f3794", "Diretor", "DIRETOR" },
-                    { 3, "87361594-9bf0-4435-8de8-029581c4e14a", "Professor", "PROFESSOR" },
-                    { 4, "0722e931-80ed-4a4d-ae3d-00b6a8d80710", "Aluno", "ALUNO" }
+                    { 1, "b1fcc05b-7f11-4e97-9f54-1da57f42137d", "Administrador", "ADMINISTRADOR" },
+                    { 2, "8693c4e9-d9fc-46be-9f94-e64efa824c0b", "Diretor", "DIRETOR" },
+                    { 3, "3a43383b-9510-43fb-93dd-7a7ae828ca1a", "Professor", "PROFESSOR" },
+                    { 4, "9feadc7f-f809-454a-8f8a-014dcbb2edf5", "Aluno", "ALUNO" }
                 });
 
             migrationBuilder.CreateIndex(

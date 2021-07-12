@@ -51,28 +51,28 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "77144091-5d08-4545-a8f7-7fad9de82239",
+                            ConcurrencyStamp = "b1fcc05b-7f11-4e97-9f54-1da57f42137d",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "b405617e-820b-4cc2-9d09-abe1d22f3794",
+                            ConcurrencyStamp = "8693c4e9-d9fc-46be-9f94-e64efa824c0b",
                             Name = "Diretor",
                             NormalizedName = "DIRETOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "87361594-9bf0-4435-8de8-029581c4e14a",
+                            ConcurrencyStamp = "3a43383b-9510-43fb-93dd-7a7ae828ca1a",
                             Name = "Professor",
                             NormalizedName = "PROFESSOR"
                         },
                         new
                         {
                             Id = 4,
-                            ConcurrencyStamp = "0722e931-80ed-4a4d-ae3d-00b6a8d80710",
+                            ConcurrencyStamp = "9feadc7f-f809-454a-8f8a-014dcbb2edf5",
                             Name = "Aluno",
                             NormalizedName = "ALUNO"
                         });
@@ -196,7 +196,9 @@ namespace Oasis.Dados.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<DateTime?>("DataUltimoLogin")
                         .HasColumnType("datetime2");
@@ -296,11 +298,13 @@ namespace Oasis.Dados.Migrations
 
                     b.Property<string>("Assunto")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("DataContacto")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
@@ -385,7 +389,9 @@ namespace Oasis.Dados.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Quantidade")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.HasKey("Id");
 
@@ -414,6 +420,11 @@ namespace Oasis.Dados.Migrations
                         .IsRequired()
                         .HasMaxLength(9)
                         .HasColumnType("nvarchar(9)");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Distrito")
                         .IsRequired()
@@ -502,7 +513,9 @@ namespace Oasis.Dados.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<bool>("FoiVista")
                         .HasColumnType("bit");
@@ -529,11 +542,13 @@ namespace Oasis.Dados.Migrations
                     b.Property<string>("ConteudoHtml")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DataCriacao")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("DataCriacao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
-                    b.Property<int?>("DataUltimaAlteracao")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("DataUltimaAlteracao")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("EscolaId")
                         .HasColumnType("int");
@@ -561,7 +576,9 @@ namespace Oasis.Dados.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<byte[]>("Ficheiro")
                         .HasColumnType("varbinary(max)");
@@ -651,7 +668,9 @@ namespace Oasis.Dados.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
@@ -689,7 +708,9 @@ namespace Oasis.Dados.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataRequisicao")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("EquipamentoId")
                         .HasColumnType("int");

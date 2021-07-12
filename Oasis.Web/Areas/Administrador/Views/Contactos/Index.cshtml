@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Contacto>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Assunto</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Email Contactante</th>
+            <th scope="col">Primeiro nome</th>
+            <th scope="col">Apelido</th>
+            <th scope="col">Data de contacto</th>
+            <th scope="col">Responder a este contacto</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Contacto contacto in Model)
+        {
+            <tr>
+                <td>@contacto.Assunto</td>
+                <td>@contacto.Descricao</td>
+                <td>@contacto.EmailContactante</td>
+                <td>@contacto.PrimeiroNome</td>
+                <td>@contacto.Apelido</td>
+                <td>@contacto.DataContacto</td>
+                @if (contacto.RespostaContacto?.Contacto is not null)
+                {
+                    <td>
+                        <button type="button" class="btn btn-primary">
+                            Responder
+                        </button>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    <partial name="_DataTables" />
+}
+
+<div class="modal fade" id="modal-responder-contacto" tabindex="-1" role="dialog" aria-labelledby="modal-responder-contacto-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-responder-contacto-titulo">Responder ao contacto selecionado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-responder-contacto-descricao"></p>
+
+                <button class="btn btn-primary btn-block" type="submit">
+                    <i id="loading-icon-resposta-contacto" style="display: none;" class="fas fa-spinner fa-spin"></i>
+                    Responder ao contacto
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>

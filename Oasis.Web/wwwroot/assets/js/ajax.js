@@ -1,4 +1,13 @@
-﻿const ajaxCompleto = respostaAjax => mostrarNotificacao(respostaAjax);
+﻿const urlDefaultPath = `${location.protocol}//${location.hostname}:${location.port}/`;
+function ajaxCompleto(respostaAjax)
+{
+    console.log(respostaAjax.urlRedirecionar);
+    if (respostaAjax.urlRedirecionar !== '')
+    {
+        location.href = `${urlDefaultPath + respostaAjax.urlRedirecionar}`;
+    }
+    mostrarNotificacao(respostaAjax);
+}
 
 
 function mostrarNotificacao(respostaAjax) {
@@ -15,10 +24,10 @@ function mostrarNotificacao(respostaAjax) {
         messageLineHeight: '',
         backgroundColor: '',
         theme: 'dark', // dark
-        color: respostaAjax.ocorreuAlgumErro ? 'green' : 'red',
-        icon: '',
+        color: !(respostaAjax.ocorreuAlgumErro) ? 'green' : 'red',
+        icon: !(respostaAjax.ocorreuAlgumErro) ? 'fas fa-check-circle' : 'fas fa-exclamation-circle',
         iconText: '',
-        iconColor: '',
+        iconColor: '#000',
         iconUrl: null,
         image: '',
         imageWidth: 50,

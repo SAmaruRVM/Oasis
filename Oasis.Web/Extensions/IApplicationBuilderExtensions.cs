@@ -25,7 +25,7 @@ namespace Oasis.Web.Extensions
 
                 endpoints.MapControllerRoute(
                     name: string.Empty,
-                    pattern: "{controller=Escola}/{action=Index}"
+                    pattern: "{controller=Home}/{action=Index}"
                 );
             });
         }

@@ -8,7 +8,7 @@
 <body>
     <partial name="_Header" />
     <partial name="_SideBar" />
-    <div id="layoutSidenav_content">
+    <div id="layoutSidenav_content" class="m-2">
         @RenderBody()
     </div>
     </div>
@@ -21,5 +21,6 @@
     <script src="~/assets/vendor/venobox/venobox.min.js"></script>
     <script src="~/assets/vendor/owl.carousel/owl.carousel.min.js"></script>
     <script src="~/assets/js/main.js"></script>
+    @await RenderSectionAsync(name: "Scripts", required: false) 
 </body>
 </html>

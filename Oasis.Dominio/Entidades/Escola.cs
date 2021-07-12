@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Oasis.Dominio.Entidades
@@ -37,6 +38,9 @@ namespace Oasis.Dominio.Entidades
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+
+        // default getdate() <<-- SQL
+        public DateTime DataCriacao { get; set; }
 
         public PaginaPrincipal ConteudoPaginaPrincipal { get; set; }
 
