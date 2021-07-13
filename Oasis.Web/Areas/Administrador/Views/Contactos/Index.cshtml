@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Contacto>
 <table class="table">
-    <thead class="thead-dark">
+    <thead class="thead-light">
         <tr>
+            <th scope="col">Data de contacto</th>
             <th scope="col">Assunto</th>
             <th scope="col">Descrição</th>
             <th scope="col">Email Contactante</th>
             <th scope="col">Primeiro nome</th>
             <th scope="col">Apelido</th>
-            <th scope="col">Data de contacto</th>
             <th scope="col">Responder a este contacto</th>
         </tr>
     </thead>
@@ -15,12 +15,12 @@
         @foreach (Contacto contacto in Model)
         {
             <tr>
+                <td>@contacto.DataContacto</td>
                 <td>@contacto.Assunto</td>
                 <td>@contacto.Descricao</td>
                 <td>@contacto.EmailContactante</td>
                 <td>@contacto.PrimeiroNome</td>
                 <td>@contacto.Apelido</td>
-                <td>@contacto.DataContacto</td>
                 @if (contacto.RespostaContacto?.Contacto is not null)
                 {
                     <td>

@@ -37,23 +37,23 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 99999;
 }
 
-.back-to-top i {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  width: 40px;
-  height: 40px;
-  border-radius: 4px;
-  background: #16df7e;
-  color: #fff;
-  transition: all 0.4s;
-}
+    .back-to-top i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        background: #56cc9d;
+        color: #fff;
+        transition: all 0.4s;
+    }
 
-.back-to-top i:hover {
-  background: #206bfb;
-  color: #fff;
-}
+        .back-to-top i:hover {
+            background: #7ea4ed;
+            color: #fff;
+        }
 
 /*--------------------------------------------------------------
 # Header

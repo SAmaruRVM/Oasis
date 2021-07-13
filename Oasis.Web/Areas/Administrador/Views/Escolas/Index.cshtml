@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Escola>
+<div>
+    <button class="btn btn-secondary m-3">Adicionar Escola</button>
+
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Código Escola</th>
+                <th scope="col">Nome Escola</th>
+                <th scope="col">Distrito</th>
+                <th scope="col">Morada</th>
+                <th scope="col">Codigo Postal</th>
+                <th scope="col">Telefone</th>
+                <th scope="col">Email</th>
+                <th scope="col">Director responsavel</th>
+                <th scope="col">Data de criação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Escola escola in Model) {
+                <tr>
+                    <td>@escola.Codigo</td>
+                    <td>@escola.Nome</td>
+                    <td>@escola.Distrito</td>
+                    <td>@escola.Rua</td>
+                    <td>@escola.CodigoPostal</td>
+                    <td>@escola.ContactoTelefonico</td>
+                    <td>@escola.Email</td>
+                    <td>@escola.Diretores</td>
+                    <td>@escola.DataCriacao</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

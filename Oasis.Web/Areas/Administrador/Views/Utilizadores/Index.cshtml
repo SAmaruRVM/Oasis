@@ -1,0 +1,30 @@
+﻿@model IEnumerable<ApplicationUser>
+<div>
+    <button class="btn btn-secondary m-3">Adicionar Utilizador</button>
+
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Primeiro nome</th>
+                <th scope="col">Ultimo nome</th>
+                <th scope="col">Email utilizador</th>
+                <th scope="col">Tipo de perfil</th>
+                <th scope="col">Data de criação</th>
+                <th scope="col">Data do ultimo Login</th>
+                <th scope="col">Acções</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ApplicationUser utilizador in Model) {
+                <tr>
+                    <td>@utilizador.PrimeiroNome</td>
+                    <td>@utilizador.Apelido</td>
+                    <td>@utilizador.Email</td>
+                    <td>@utilizador.DescricaoPerfil</td>
+                    <td>@utilizador.DataCriacao</td>
+                    <td>@utilizador.DataUltimoLogin</td>
+                </tr>
+             }
+        </tbody>
+    </table>
+</div>

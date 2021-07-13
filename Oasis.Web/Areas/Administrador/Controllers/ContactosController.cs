@@ -19,7 +19,6 @@ namespace Oasis.Web.Areas.Administrador.Controllers
                                                   .OrderByDescending(contacto => contacto.DataContacto)
                                                   .ToListAsync());
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> RespostaContacto([FromForm] int n) => Json(string.Empty);
