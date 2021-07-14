@@ -20,7 +20,12 @@ namespace Oasis.Web.Extensions
 
             @this.AddIdentity<ApplicationUser, IdentityRole<int>>(options => 
             {
-               
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 3;
+                options.Password.RequiredUniqueChars = 1;
+                options.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<OasisContext>();
 
 
@@ -28,7 +33,7 @@ namespace Oasis.Web.Extensions
             {
                 cookieOptions.Cookie.HttpOnly = true;
                 cookieOptions.Cookie.Path = "/";
-                cookieOptions.Cookie.Expiration = TimeSpan.FromDays(366);
+                cookieOptions.ExpireTimeSpan = TimeSpan.FromDays(366);
             });
 
 

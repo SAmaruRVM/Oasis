@@ -1,7 +1,6 @@
 ﻿const urlDefaultPath = `${location.protocol}//${location.hostname}:${location.port}/`;
 function ajaxCompleto(respostaAjax)
 {
-    console.log(respostaAjax.urlRedirecionar);
     if (respostaAjax.urlRedirecionar !== '')
     {
         location.href = `${urlDefaultPath + respostaAjax.urlRedirecionar}`;

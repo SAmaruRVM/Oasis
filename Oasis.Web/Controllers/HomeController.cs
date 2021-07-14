@@ -1,15 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Oasis.Aplicacao;
 using Oasis.Aplicacao.Extensions;
 using Oasis.Dados;
 using Oasis.Dominio.Entidades;
 using Oasis.Web.Http;
-using Oasis.Web.ViewModels;
-using System;
-using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Oasis.Web.Extensions;
 
 namespace Oasis.Web.Controllers
 {
@@ -17,7 +15,9 @@ namespace Oasis.Web.Controllers
     {
         private readonly OasisContext _context;
         private readonly IConfiguration _configuration;
-        public HomeController(IConfiguration configuration, OasisContext context) => (_configuration, _context) = (configuration, context);
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        public HomeController(IConfiguration configuration, OasisContext context, SignInManager<ApplicationUser> signInManager)
+            => (_configuration, _context, _signInManager) = (configuration, context, signInManager);
 
         [HttpGet]
         public ViewResult Index() => View();
@@ -25,9 +25,9 @@ namespace Oasis.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> ContacteNos([FromForm] Contacto contacto) 
+        public async Task<JsonResult> ContacteNos([FromForm] Contacto contacto)
         {
-            if(!(ModelState.IsValid))
+            if (!(ModelState.IsValid))
             {
                 return Json(new Ajax
                 {
@@ -37,14 +37,16 @@ namespace Oasis.Web.Controllers
                     UrlRedirecionar = string.Empty
                 });
             }
-           
+
             _context.Contactos.Add(contacto);
             await _context.SaveChangesAsync();
 
-            await new SmtpClient().EnviarEmailAsync("Teste email", "Contacto enviado", contacto.EmailContactante, _configuracoesEmail());
-            await new SmtpClient().EnviarEmailAsync("Teste email", "Uma nova pessoa tentou contactar", "joaopedromane23@gmail.com", _configuracoesEmail());
+            SmtpClient smtpClient = new();
 
-            return Json(new Ajax 
+            await smtpClient.EnviarEmailAsync("Teste email", "Contacto enviado", contacto.EmailContactante, smtpClient.ConfiguracoesEmail(_configuration));
+            await smtpClient.EnviarEmailAsync("Teste email", "Uma nova pessoa tentou contactar", "joaopedromane23@gmail.com", smtpClient.ConfiguracoesEmail(_configuration));
+
+            return Json(new Ajax
             {
                 Titulo = "O seu contacto foi enviado com sucesso!",
                 Descricao = "Por favor, fique atento ao seu email, no qual irá ser contactado por um dos nossos colaboradores.",
@@ -52,24 +54,5 @@ namespace Oasis.Web.Controllers
                 UrlRedirecionar = string.Empty
             });
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public JsonResult Login([FromForm] LoginViewModel loginViewModel) => Json(string.Empty);
-
-
-        // Métodos Privados
-        private Action<ConfiguracoesEmail> _configuracoesEmail() => configuracoesEmail =>
-        {
-            configuracoesEmail.Credenciais = new NetworkCredential
-            {
-                UserName = _configuration["Projeto:Email:User"],
-                Password = _configuration["Projeto:Email:Password"]
-            };
-            configuracoesEmail.Email = _configuration["Projeto:Email:User"];
-            configuracoesEmail.SmtpHost = _configuration["Projeto:Email:Smtp-Host"];
-            configuracoesEmail.SmtpPort = int.Parse(_configuration["Projeto:Email:Smtp-Port"]);
-        };
-
     }
 }

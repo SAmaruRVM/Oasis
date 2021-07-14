@@ -15,7 +15,10 @@ namespace Oasis.Web.Extensions
             @this.UseRouting();
 
             @this.UseStaticFiles();
-          
+
+            @this.UseAuthentication();
+            @this.UseAuthorization();
+
             @this.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

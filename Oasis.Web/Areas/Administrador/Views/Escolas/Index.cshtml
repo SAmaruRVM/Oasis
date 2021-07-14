@@ -1,8 +1,7 @@
-﻿@model IEnumerable<Escola>
+﻿@model EscolasViewModel
 <div>
-    <button class="btn btn-secondary m-3">Adicionar Escola</button>
-
-    <table class="table">
+    <button class="btn btn-secondary m-3" data-toggle="modal" data-target="#modal-inserir-escola">Adicionar Escola</button>
+    <table class="table" id="tabela-escolas">
         <thead class="thead-light">
             <tr>
                 <th scope="col">Código Escola</th>
@@ -12,12 +11,13 @@
                 <th scope="col">Codigo Postal</th>
                 <th scope="col">Telefone</th>
                 <th scope="col">Email</th>
-                <th scope="col">Director responsavel</th>
                 <th scope="col">Data de criação</th>
+                <th scope="col">Directores</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (Escola escola in Model) {
+            @foreach (Escola escola in Model.Escolas)
+            {
                 <tr>
                     <td>@escola.Codigo</td>
                     <td>@escola.Nome</td>
@@ -26,10 +26,155 @@
                     <td>@escola.CodigoPostal</td>
                     <td>@escola.ContactoTelefonico</td>
                     <td>@escola.Email</td>
-                    <td>@escola.Diretores</td>
                     <td>@escola.DataCriacao</td>
+                    <td>
+                        <button class="btn btn-info m-3 btn-ver-diretores-escola" data-toggle="modal" data-target="#modal-inserir-escola" data-id-escola="@escola.Id">Ver diretores</button>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+<!-- Modal verificar diretores associados a esta escola -->
+<div class="modal fade" id="modal-diretores-escola" tabindex="-1" role="dialog" aria-labelledby="modal-diretores-escola-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-diretores-escola-titulo"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+               
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Model inserção escola -->
+<div class="modal fade" id="modal-inserir-escola" tabindex="-1" role="dialog" aria-labelledby="modal-inserir-escola-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-inserir-escola-titulo">Adicionar escola</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-adicionar-escola"
+                      asp-action="AdicionarEscola"
+                      asp-controller="Escolas"
+                      asp-area="Administrador"
+                      asp-antiforgery="true"
+                      data-ajax="true"
+                      data-ajax-method="POST"
+                      data-ajax-success="insercaoEscolaConcluidaSucesso"
+                      data-ajax-loading="#loading-icon-insercao-escola">
+
+                    <div class="form-group">
+                        <label asp-for="EscolaAdicionar.Codigo"></label>
+                        <input class="form-control" asp-for="EscolaAdicionar.Codigo" />
+                        <span class="text-danger text-center" asp-validation-for="EscolaAdicionar.Codigo"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="EscolaAdicionar.Nome"></label>
+                        <input class="form-control" asp-for="EscolaAdicionar.Nome" />
+                        <span class="text-danger text-center" asp-validation-for="EscolaAdicionar.Nome"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="EscolaAdicionar.Distrito"></label>
+                        <input class="form-control" asp-for="EscolaAdicionar.Distrito" />
+                        <span class="text-danger text-center" asp-validation-for="EscolaAdicionar.Distrito"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="EscolaAdicionar.Rua"></label>
+                        <input class="form-control" asp-for="EscolaAdicionar.Rua" />
+                        <span class="text-danger text-center" asp-validation-for="EscolaAdicionar.Rua"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="EscolaAdicionar.CodigoPostal"></label>
+                        <input class="form-control" asp-for="EscolaAdicionar.CodigoPostal" />
+                        <span class="text-danger text-center" asp-validation-for="EscolaAdicionar.CodigoPostal"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="EscolaAdicionar.ContactoTelefonico"></label>
+                        <input class="form-control" asp-for="EscolaAdicionar.ContactoTelefonico" />
+                        <span class="text-danger text-center" asp-validation-for="EscolaAdicionar.ContactoTelefonico"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="EscolaAdicionar.Email"></label>
+                        <input class="form-control" asp-for="EscolaAdicionar.Email" />
+                        <span class="text-danger text-center" asp-validation-for="EscolaAdicionar.Email"></span>
+                    </div>
+
+                    <button class="btn btn-primary btn-block" type="submit">
+                        <i id="loading-icon-insercao-escola" style="display: none;" class="fas fa-spinner fa-spin"></i>
+                        Inserir escola
+                    </button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="~/Views/Shared/_Validacoes.cshtml" />
+    <partial name="~/Views/Shared/_Ajax.cshtml" />
+    <script>
+        if (location.hash.toLowerCase().trim() === '#inserir-escola') {
+            $('#modal-inserir-escola').modal('show');
+        }
+
+        function insercaoEscolaConcluidaSucesso(respostaAjax) {
+            $('#modal-inserir-escola').modal('hide');
+            document.getElementById('form-adicionar-escola').reset();
+            inserirEscolaAdicionadaNaTabela(respostaAjax.escola);
+            ajaxCompleto(respostaAjax.ajax);
+        }
+
+        function inserirEscolaAdicionadaNaTabela(escola) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${escola.codigo}</td>
+                            <td>${escola.nome}</td>
+                            <td>${escola.distrito}</td>
+                            <td>${escola.rua}</td>
+                            <td>${escola.codigoPostal}</td>
+                            <td>${escola.contactoTelefonico}</td>
+                            <td>${escola.email}</td>
+                            <td>${escola.dataCriacao}</td>
+                            <td>
+                              <button class="btn btn-info m-3 btn-ver-diretores-escola" data-toggle="modal" data-target="#modal-inserir-escola" data-id-escola="${escola.id}">Ver diretores</button>
+                            </td>`;
+            document.querySelector(`#tabela-escolas > tbody`).appendChild(tr);
+        }
+
+
+        // Carregamento diretores modal <<--
+
+        const btnsVerDiretoresEscola = document.getElementsByClassName('btn-ver-diretores-escola');
+
+        for (const btn in btnsVerDiretoresEscola) {
+            btn.addEventListener('click', () => {
+                alert(btn.getAttribute('data-id-escola'));
+            });
+        }
+    </script>
+}

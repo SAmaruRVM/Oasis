@@ -21,6 +21,9 @@ namespace Oasis.Web.Areas.Administrador.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> RespostaContacto([FromForm] int n) => Json(string.Empty);
+        public async Task<JsonResult> RespostaContacto([FromForm] int n)
+        {
+            return Json(string.Empty);
+        } 
     }
 }
