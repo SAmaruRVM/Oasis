@@ -17,5 +17,10 @@ namespace Oasis.Web.Areas.Administrador.Controllers {
                                                   .AsNoTracking()
                                                   .OrderBy(tema => tema.Nome)
                                                   .ToListAsync());
+
+        [HttpPost]
+        public async Task<JsonResult> EditarTemas([FromForm] int n) {
+            return Json(string.Empty);
+        }
     }
 }

@@ -1,35 +1,34 @@
 ﻿@model EscolasViewModel
 <div>
-    <button class="btn btn-secondary m-3" data-toggle="modal" data-target="#modal-inserir-escola">Adicionar Escola</button>
-    <table class="table" id="tabela-escolas">
+    <button class="btn btn-info btn-sm my-3" data-toggle="modal" data-target="#modal-inserir-escola">Adicionar Escola</button>
+    <table class="table table-hover" id="tabela-escolas">
         <thead class="thead-light">
             <tr>
                 <th scope="col">Código Escola</th>
                 <th scope="col">Nome Escola</th>
                 <th scope="col">Distrito</th>
-                <th scope="col">Morada</th>
-                <th scope="col">Codigo Postal</th>
+                @*<th scope="col">Morada</th>*@
+                @*<th scope="col">Codigo Postal</th>*@
                 <th scope="col">Telefone</th>
                 <th scope="col">Email</th>
                 <th scope="col">Data de criação</th>
-                <th scope="col">Directores</th>
+                @*<th scope="col">Directores</th>*@
             </tr>
         </thead>
         <tbody>
-            @foreach (Escola escola in Model.Escolas)
-            {
+            @foreach (Escola escola in Model.Escolas) {
                 <tr>
                     <td>@escola.Codigo</td>
                     <td>@escola.Nome</td>
                     <td>@escola.Distrito</td>
-                    <td>@escola.Rua</td>
-                    <td>@escola.CodigoPostal</td>
+                    @*<td>@escola.Rua</td>*@
+                    @*<td>@escola.CodigoPostal</td>*@
                     <td>@escola.ContactoTelefonico</td>
                     <td>@escola.Email</td>
                     <td>@escola.DataCriacao</td>
-                    <td>
+                    @*<td>
                         <button class="btn btn-info m-3 btn-ver-diretores-escola" data-toggle="modal" data-target="#modal-inserir-escola" data-id-escola="@escola.Id">Ver diretores</button>
-                    </td>
+                    </td>*@
                 </tr>
             }
         </tbody>
@@ -47,7 +46,7 @@
                 </button>
             </div>
             <div class="modal-body">
-               
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
@@ -122,7 +121,7 @@
                         <span class="text-danger text-center" asp-validation-for="EscolaAdicionar.Email"></span>
                     </div>
 
-                    <button class="btn btn-primary btn-block" type="submit">
+                    <button class="btn btn-success btn-block" type="submit">
                         <i id="loading-icon-insercao-escola" style="display: none;" class="fas fa-spinner fa-spin"></i>
                         Inserir escola
                     </button>
@@ -136,6 +135,7 @@
 </div>
 
 @section Scripts {
+    <partial name="_DataTables" />
     <partial name="~/Views/Shared/_Validacoes.cshtml" />
     <partial name="~/Views/Shared/_Ajax.cshtml" />
     <script>
@@ -153,16 +153,16 @@
         function inserirEscolaAdicionadaNaTabela(escola) {
             const tr = document.createElement('tr');
             tr.innerHTML = `<td>${escola.codigo}</td>
-                            <td>${escola.nome}</td>
-                            <td>${escola.distrito}</td>
-                            <td>${escola.rua}</td>
-                            <td>${escola.codigoPostal}</td>
-                            <td>${escola.contactoTelefonico}</td>
-                            <td>${escola.email}</td>
-                            <td>${escola.dataCriacao}</td>
-                            <td>
-                              <button class="btn btn-info m-3 btn-ver-diretores-escola" data-toggle="modal" data-target="#modal-inserir-escola" data-id-escola="${escola.id}">Ver diretores</button>
-                            </td>`;
+                                    <td>${escola.nome}</td>
+                                    <td>${escola.distrito}</td>
+                                    <td>${escola.rua}</td>
+                                    <td>${escola.codigoPostal}</td>
+                                    <td>${escola.contactoTelefonico}</td>
+                                    <td>${escola.email}</td>
+                                    <td>${escola.dataCriacao}</td>
+                                    <td>
+                                      <button class="btn btn-info m-3 btn-ver-diretores-escola" data-toggle="modal" data-target="#modal-inserir-escola" data-id-escola="${escola.id}">Ver diretores</button>
+                                    </td>`;
             document.querySelector(`#tabela-escolas > tbody`).appendChild(tr);
         }
 

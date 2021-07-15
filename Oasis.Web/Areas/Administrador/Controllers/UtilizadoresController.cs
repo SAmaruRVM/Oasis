@@ -111,6 +111,16 @@ namespace Oasis.Web.Areas.Administrador.Controllers
                     UrlRedirecionar = string.Empty
                 });
             }
+
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<JsonResult> EditarUtilizador([FromForm] int n) {
+            return Json(string.Empty);
         }
     }
 }

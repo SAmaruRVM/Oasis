@@ -1,12 +1,12 @@
 ﻿@model UtilizadoresViewModel
 <div>
-    <button class="btn btn-secondary m-3" data-toggle="modal" data-target="#modal-inserir-utilizador">Adicionar membro da direção</button>
+    <button class="btn btn-info btn-sm my-3" data-toggle="modal" data-target="#modal-inserir-utilizador">Adicionar membro da direção</button>
 
     <table class="table">
         <thead class="thead-light">
             <tr>
-                <th scope="col">Primeiro nome</th>
-                <th scope="col">Ultimo nome</th>
+                <th scope="col">Nome Proprio</th>
+                <th scope="col">Apelido</th>
                 <th scope="col">Email utilizador</th>
                 <th scope="col">Tipo de perfil</th>
                 <th scope="col">Data de criação</th>
@@ -15,16 +15,19 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (ApplicationUser utilizador in Model.Utilizadores)
-            {
-            <tr>
-                <td>@utilizador.PrimeiroNome</td>
-                <td>@utilizador.Apelido</td>
-                <td>@utilizador.Email</td>
-                <td>Tipo de Perfil</td>
-                <td>@utilizador.DataCriacao</td>
-                <td>@utilizador.DataUltimoLogin</td>
-            </tr>
+            @foreach (ApplicationUser utilizador in Model.Utilizadores) {
+                <tr>
+                    <td>@utilizador.PrimeiroNome</td>
+                    <td>@utilizador.Apelido</td>
+                    <td>@utilizador.Email</td>
+                    <td>Tipo de Perfil</td>
+                    <td>@utilizador.DataCriacao</td>
+                    <td>@utilizador.DataUltimoLogin</td>
+                    <td>
+                        <a href="#" data-toggle="modal" data-target="#modal-editar-utilizador" data-id="@utilizador.Id"><i class="far fa-edit fa-lg ml-1"></i></a>
+                        <a href="#"><i class="far fa-trash-alt fa-lg ml-2"></i></a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
@@ -71,11 +74,12 @@
                     <select class="wide mb-2" asp-for="IdEscola" asp-items="@Model.EscolasDropdownList">
                         <option selected disabled value="">-- Selecione uma escola --</option>
                     </select>
-                    <a asp-action="Index" asp-area="Administrador" asp-controller="Escolas" asp-fragment="inserir-escola" class="btn btn-secondary btn-block">
+
+                    <a asp-action="Index" asp-area="Administrador" asp-controller="Escolas" asp-fragment="inserir-escola" class="btn btn-info btn-block">
                         Criar nova escola
                     </a>
 
-                    <button class="btn btn-primary btn-block" type="submit">
+                    <button class="btn btn-success btn-block" type="submit">
                         <i id="loading-icon-insercao-membro-direcao" style="display: none;" class="fas fa-spinner fa-spin"></i>
                         Inserir membro da direção
                     </button>
@@ -87,7 +91,84 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+
+<div class="modal fade" id="#modal-editar-utilizador" tabindex="-1" role="dialog" aria-labelledby="modal-editar-utilizador-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-editar-utilizador-titulo">Editar utilizador</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-editar-utilizador"
+                      asp-action="EditarUtilizador"
+                      asp-controller="Utilizadores"
+                      asp-area="Administrador"
+                      asp-antiforgery="true"
+                      data-ajax="true"
+                      data-ajax-method="POST"
+                      data-ajax-success="insercaoMembroDirecaoConcluidaSucesso"
+                      data-ajax-loading="#loading-icon-insercao-membro-direcao">
+
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input/>
+                        <span></span>
+                    </div>
+
+                    @*<div class="form-group">
+                        <label asp-for="MembroDirecao.PrimeiroNome"></label>
+                        <input class="form-control" asp-for="MembroDirecao.PrimeiroNome" />
+                        <span class="text-danger text-center" asp-validation-for="MembroDirecao.PrimeiroNome"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="MembroDirecao.Apelido"></label>
+                        <input class="form-control" asp-for="MembroDirecao.Apelido" />
+                        <span class="text-danger text-center" asp-validation-for="MembroDirecao.Apelido"></span>
+                    </div>
+
+                    <select class="wide mb-2" asp-for="IdEscola" asp-items="@Model.EscolasDropdownList">
+                        <option selected disabled value="">-- Selecione uma escola --</option>
+                    </select>
+
+                    <a asp-action="Index" asp-area="Administrador" asp-controller="Escolas" asp-fragment="inserir-escola" class="btn btn-info btn-block">
+                        Criar nova escola
+                    </a>*@
+
+                    <button class="btn btn-success btn-block" type="submit">
+                        <i id="loading-icon-insercao-membro-direcao" style="display: none;" class="fas fa-spinner fa-spin"></i>
+                        Inserir membro da direção
+                    </button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
 @section Scripts {
+    <partial name="_DataTables" />
     <partial name="~/Views/Shared/_Validacoes.cshtml" />
     <partial name="~/Views/Shared/_Ajax.cshtml" />
     <script>

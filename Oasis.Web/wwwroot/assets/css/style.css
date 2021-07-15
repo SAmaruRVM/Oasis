@@ -122,9 +122,9 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "Open Sans", sans-serif;
 }
 
-.nav-menu a:hover, .nav-menu .active > a, .nav-menu li:hover > a {
-  color: #14c871;
-}
+    .nav-menu a:hover, .nav-menu .active > a, .nav-menu li:hover > a {
+        color: #7ea4ed;
+    }
 
 .nav-menu .drop-down ul {
   display: block;
@@ -539,10 +539,10 @@ section {
   margin: 0 0 15px 0;
 }
 
-.featured-services .icon i {
-  color: #16df7e;
-  font-size: 36px;
-}
+    .featured-services .icon i {
+        color: #78C2AD;
+        font-size: 36px;
+    }
 
 .featured-services .title {
   font-weight: 600;
@@ -559,9 +559,9 @@ section {
   border-color: #eaecef;
 }
 
-.featured-services .icon-box:hover .title a {
-  color: #16df7e;
-}
+    .featured-services .icon-box:hover .title a {
+        color: #78C2AD;
+    }
 
 .featured-services .description {
   line-height: 24px;
@@ -586,11 +586,11 @@ section {
   padding-bottom: 10px;
 }
 
-.about .content ul i {
-  font-size: 20px;
-  padding-right: 4px;
-  color: #16df7e;
-}
+    .about .content ul i {
+        font-size: 20px;
+        padding-right: 4px;
+        color: #78C2AD;
+    }
 
 .about .content p:last-child {
   margin-bottom: 0;
@@ -603,12 +603,12 @@ section {
   padding-top: 0;
 }
 
-.counts .counters span {
-  font-size: 48px;
-  display: block;
-  color: #16df7e;
-  font-weight: 700;
-}
+    .counts .counters span {
+        font-size: 48px;
+        display: block;
+        color: #78C2AD;
+        font-weight: 700;
+    }
 
 .counts .counters p {
   padding: 0;
@@ -638,11 +638,11 @@ section {
   transition: ease-in-out 0.3s;
 }
 
-.services .icon-box .icon i {
-  color: #16df7e;
-  font-size: 36px;
-  transition: 0.3s;
-}
+    .services .icon-box .icon i {
+        color: #78C2AD;
+        font-size: 36px;
+        transition: 0.3s;
+    }
 
 .services .icon-box h4 {
   font-weight: 700;
@@ -665,9 +665,9 @@ section {
   border-color: #eaecef;
 }
 
-.services .icon-box:hover h4 a {
-  color: #16df7e;
-}
+    .services .icon-box:hover h4 a {
+        color: #78C2AD;
+    }
 
 /*--------------------------------------------------------------
 # Portfolio

@@ -1,38 +1,37 @@
 ﻿@model IEnumerable<Contacto>
-<table class="table">
-    <thead class="thead-light">
-        <tr>
-            <th scope="col">Data de contacto</th>
-            <th scope="col">Assunto</th>
-            <th scope="col">Descrição</th>
-            <th scope="col">Email Contactante</th>
-            <th scope="col">Primeiro nome</th>
-            <th scope="col">Apelido</th>
-            <th scope="col">Responder a este contacto</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (Contacto contacto in Model)
-        {
+<div class="mt-3">
+    <table class="table">
+        <thead class="thead-light">
             <tr>
-                <td>@contacto.DataContacto</td>
-                <td>@contacto.Assunto</td>
-                <td>@contacto.Descricao</td>
-                <td>@contacto.EmailContactante</td>
-                <td>@contacto.PrimeiroNome</td>
-                <td>@contacto.Apelido</td>
-                @if (contacto.RespostaContacto?.Contacto is not null)
-                {
+                <th scope="col">Data de contacto</th>
+                <th scope="col">Assunto</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Email Contactante</th>
+                <th scope="col">Nome Proprio</th>
+                <th scope="col">Apelido</th>
+                <th scope="col">Responder a este contacto</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Contacto contacto in Model) {
+                <tr>
+                    <td>@contacto.DataContacto</td>
+                    <td>@contacto.Assunto</td>
+                    <td>@contacto.Descricao</td>
+                    <td>@contacto.EmailContactante</td>
+                    <td>@contacto.PrimeiroNome</td>
+                    <td>@contacto.Apelido</td>
                     <td>
-                        <button type="button" class="btn btn-primary">
+                        <button type="button" class="btn btn-outline-dark">
                             Responder
                         </button>
                     </td>
-                }
-            </tr>
-        }
-    </tbody>
-</table>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 @section Scripts {
     <partial name="_DataTables" />
 }
