@@ -14,7 +14,7 @@ namespace Oasis.Dominio.Entidades
         public string Codigo { get; set; }
 
         [Required(ErrorMessage = "O nome tem que ser obrigatóriamente preenchido!")]
-        [StringLength(30, ErrorMessage = "O {0} tem que ter no máximo {1} caracteres!")]
+        [StringLength(100, ErrorMessage = "O {0} tem que ter no máximo {1} caracteres!")]
         public string Nome { get; set; }
 
         [Required(ErrorMessage = "A rua tem que ser obrigatóriamente preenchida!")]

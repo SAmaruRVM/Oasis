@@ -13,7 +13,7 @@ namespace Oasis.Dominio.Entidades
         public string Assunto { get; set; }
 
         [Required(ErrorMessage = "A descrição tem que ser obrigatóriamente preenchido!")]
-        [StringLength(200, ErrorMessage = "A {0} tem que ter no máximo {1} caracteres!")]
+        //[StringLength(200, ErrorMessage = "A {0} tem que ter no máximo {1} caracteres!")]
         [Display(Name = "Descrição", Prompt = "Introduza a descrição do contacto")]
         public string Descricao { get; set; }
 

@@ -8,7 +8,7 @@ namespace Oasis.Dominio.Entidades
         public int Id { get; set; }
 
         [Required]
-        [StringLength(50)]
+        [StringLength(100)]
         public string Comentario { get; set; }
 
         // default getdate() <<-- SQL

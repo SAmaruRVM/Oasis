@@ -8,10 +8,10 @@ namespace Oasis.Dominio.Entidades
         public int Id { get; set; }
 
         [Required]
-        [StringLength(25)]
+        [StringLength(50)]
         public string Nome { get; set; }
 
-        [StringLength(100)]
+        [StringLength(150)]
         public string Descricao { get; set; }
 
         public byte[] Banner { get; set; }
