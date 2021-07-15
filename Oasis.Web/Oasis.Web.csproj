@@ -19,10 +19,4 @@
     <ProjectReference Include="..\Oasis.Dominio\Oasis.Dominio.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Direcao\Controllers\" />
-    <Folder Include="Areas\Direcao\Views\" />
-    <Folder Include="Areas\Direcao\ViewModels\" />
-  </ItemGroup>
-
 </Project>

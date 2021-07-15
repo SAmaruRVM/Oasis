@@ -51,28 +51,28 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "87d8aee9-b7d6-4637-a61b-4897e275839f",
+                            ConcurrencyStamp = "7aaa90a7-87f8-43dc-9af7-3392053e5a22",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "b4e8a415-6218-4809-bb21-4b9f5bf2e873",
+                            ConcurrencyStamp = "ef3bce70-37dd-4a4d-b3d5-468db0aef3ca",
                             Name = "Diretor",
                             NormalizedName = "DIRETOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "a0adfa42-2f1d-4391-92b4-2a09076095b2",
+                            ConcurrencyStamp = "8ddec2bb-222c-43b0-b409-6c37e82035da",
                             Name = "Professor",
                             NormalizedName = "PROFESSOR"
                         },
                         new
                         {
                             Id = 4,
-                            ConcurrencyStamp = "849109e4-06d8-41b3-87de-39a9aecebc37",
+                            ConcurrencyStamp = "5172d218-e2f1-4ccf-96da-f499525d4c15",
                             Name = "Aluno",
                             NormalizedName = "ALUNO"
                         });
@@ -273,8 +273,8 @@ namespace Oasis.Dados.Migrations
 
                     b.Property<string>("Comentario")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("DataCriacao")
                         .HasColumnType("datetime2");
@@ -348,8 +348,8 @@ namespace Oasis.Dados.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -424,8 +424,8 @@ namespace Oasis.Dados.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Rua")
                         .IsRequired()
@@ -448,16 +448,16 @@ namespace Oasis.Dados.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Descricao")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<int>("DisciplinaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("ProfessorId")
                         .HasColumnType("int");

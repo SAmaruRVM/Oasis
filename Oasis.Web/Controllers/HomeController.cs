@@ -15,9 +15,9 @@ namespace Oasis.Web.Controllers
     {
         private readonly OasisContext _context;
         private readonly IConfiguration _configuration;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+
         public HomeController(IConfiguration configuration, OasisContext context, SignInManager<ApplicationUser> signInManager)
-            => (_configuration, _context, _signInManager) = (configuration, context, signInManager);
+            => (_configuration, _context) = (configuration, context);
 
         [HttpGet]
         public ViewResult Index() => View();
@@ -41,7 +41,7 @@ namespace Oasis.Web.Controllers
             _context.Contactos.Add(contacto);
             await _context.SaveChangesAsync();
 
-            SmtpClient smtpClient = new();
+            using SmtpClient smtpClient = new();
 
             await smtpClient.EnviarEmailAsync("Teste email", "Contacto enviado", contacto.EmailContactante, smtpClient.ConfiguracoesEmail(_configuration));
             await smtpClient.EnviarEmailAsync("Teste email", "Uma nova pessoa tentou contactar", "joaopedromane23@gmail.com", smtpClient.ConfiguracoesEmail(_configuration));

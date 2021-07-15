@@ -32,7 +32,7 @@ namespace Oasis.Dados.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Codigo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Nome = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Rua = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Distrito = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     CodigoPostal = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -302,7 +302,7 @@ namespace Oasis.Dados.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ApplicationUserId = table.Column<int>(type: "int", nullable: false),
                     EscolaId = table.Column<int>(type: "int", nullable: false)
@@ -408,8 +408,8 @@ namespace Oasis.Dados.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Nome = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
                     Banner = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     DisciplinaId = table.Column<int>(type: "int", nullable: false),
                     ProfessorId = table.Column<int>(type: "int", nullable: false)
@@ -509,7 +509,7 @@ namespace Oasis.Dados.Migrations
                     PostId = table.Column<int>(type: "int", nullable: false),
                     ApplicationUserId = table.Column<int>(type: "int", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false),
-                    Comentario = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Comentario = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -594,10 +594,10 @@ namespace Oasis.Dados.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "87d8aee9-b7d6-4637-a61b-4897e275839f", "Administrador", "ADMINISTRADOR" },
-                    { 2, "b4e8a415-6218-4809-bb21-4b9f5bf2e873", "Diretor", "DIRETOR" },
-                    { 3, "a0adfa42-2f1d-4391-92b4-2a09076095b2", "Professor", "PROFESSOR" },
-                    { 4, "849109e4-06d8-41b3-87de-39a9aecebc37", "Aluno", "ALUNO" }
+                    { 1, "7aaa90a7-87f8-43dc-9af7-3392053e5a22", "Administrador", "ADMINISTRADOR" },
+                    { 2, "ef3bce70-37dd-4a4d-b3d5-468db0aef3ca", "Diretor", "DIRETOR" },
+                    { 3, "8ddec2bb-222c-43b0-b409-6c37e82035da", "Professor", "PROFESSOR" },
+                    { 4, "5172d218-e2f1-4ccf-96da-f499525d4c15", "Aluno", "ALUNO" }
                 });
 
             migrationBuilder.CreateIndex(
