@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Oasis.Dados.Migrations
 {
-    public partial class AdicionarValorDefaultGetDateParaDatasEAdicionaColunaDataCriacaoNaEscola : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -164,6 +164,7 @@ namespace Oasis.Dados.Migrations
                     DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     DataUltimoLogin = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TemaId = table.Column<int>(type: "int", nullable: false),
+                    EscolaId = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -176,6 +177,11 @@ namespace Oasis.Dados.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Utilizadores", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Utilizadores_Escolas_EscolaId",
+                        column: x => x.EscolaId,
+                        principalTable: "Escolas",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Utilizadores_Temas_TemaId",
                         column: x => x.TemaId,
@@ -288,29 +294,6 @@ namespace Oasis.Dados.Migrations
                         principalTable: "Utilizadores",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DirecoesEscolas",
-                columns: table => new
-                {
-                    ApplicationUserId = table.Column<int>(type: "int", nullable: false),
-                    EscolaId = table.Column<int>(type: "int", nullable: false),
-                    DataInsercao = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DirecoesEscolas", x => new { x.ApplicationUserId, x.EscolaId });
-                    table.ForeignKey(
-                        name: "FK_DirecoesEscolas_Escolas_EscolaId",
-                        column: x => x.EscolaId,
-                        principalTable: "Escolas",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_DirecoesEscolas_Utilizadores_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "Utilizadores",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -611,10 +594,10 @@ namespace Oasis.Dados.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "b1fcc05b-7f11-4e97-9f54-1da57f42137d", "Administrador", "ADMINISTRADOR" },
-                    { 2, "8693c4e9-d9fc-46be-9f94-e64efa824c0b", "Diretor", "DIRETOR" },
-                    { 3, "3a43383b-9510-43fb-93dd-7a7ae828ca1a", "Professor", "PROFESSOR" },
-                    { 4, "9feadc7f-f809-454a-8f8a-014dcbb2edf5", "Aluno", "ALUNO" }
+                    { 1, "87d8aee9-b7d6-4637-a61b-4897e275839f", "Administrador", "ADMINISTRADOR" },
+                    { 2, "b4e8a415-6218-4809-bb21-4b9f5bf2e873", "Diretor", "DIRETOR" },
+                    { 3, "a0adfa42-2f1d-4391-92b4-2a09076095b2", "Professor", "PROFESSOR" },
+                    { 4, "849109e4-06d8-41b3-87de-39a9aecebc37", "Aluno", "ALUNO" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -647,11 +630,6 @@ namespace Oasis.Dados.Migrations
                 table: "ConteudoPaginaPrincipalEscolas",
                 column: "EscolaId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DirecoesEscolas_EscolaId",
-                table: "DirecoesEscolas",
-                column: "EscolaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Disciplinas_ApplicationUserId",
@@ -757,6 +735,11 @@ namespace Oasis.Dados.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Utilizadores_EscolaId",
+                table: "Utilizadores",
+                column: "EscolaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Utilizadores_TemaId",
                 table: "Utilizadores",
                 column: "TemaId");
@@ -791,9 +774,6 @@ namespace Oasis.Dados.Migrations
 
             migrationBuilder.DropTable(
                 name: "ConteudoPaginaPrincipalEscolas");
-
-            migrationBuilder.DropTable(
-                name: "DirecoesEscolas");
 
             migrationBuilder.DropTable(
                 name: "GruposAlunos");
@@ -841,10 +821,10 @@ namespace Oasis.Dados.Migrations
                 name: "Disciplinas");
 
             migrationBuilder.DropTable(
-                name: "Escolas");
+                name: "Utilizadores");
 
             migrationBuilder.DropTable(
-                name: "Utilizadores");
+                name: "Escolas");
 
             migrationBuilder.DropTable(
                 name: "Temas");

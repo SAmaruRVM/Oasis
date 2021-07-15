@@ -16,7 +16,6 @@ namespace Oasis.Dados
         public DbSet<ApplicationUser> Utilizadores { get; set; }
         public DbSet<ComentarioPostUtilizador> ComentariosPostsUtilizadores { get; set; }
         public DbSet<Contacto> Contactos { get; set; }
-        public DbSet<DirecaoEscola> DirecoesEscolas { get; set; }
         public DbSet<Disciplina> Disciplinas { get; set; }
         public DbSet<Equipamento> Equipamentos { get; set; }
         public DbSet<Escola> Escolas { get; set; }
@@ -96,20 +95,6 @@ namespace Oasis.Dados
             builder.Entity<ComentarioPostUtilizador>()
                    .HasOne(cpu => cpu.Post)
                    .WithMany(post => post.Comentarios)
-                   .OnDelete(DeleteBehavior.NoAction);
-
-            // Direcoes Escolas
-            builder.Entity<DirecaoEscola>()
-                   .HasKey(direcao => new { direcao.ApplicationUserId, direcao.EscolaId });
-
-            builder.Entity<DirecaoEscola>()
-                   .HasOne(direcao => direcao.Escola)
-                   .WithMany(escola => escola.Diretores)
-                   .OnDelete(DeleteBehavior.NoAction);
-
-            builder.Entity<DirecaoEscola>()
-                   .HasOne(direcao => direcao.Diretor)
-                   .WithMany(diretor => diretor.EscolasEmQueFazParteDaDirecao)
                    .OnDelete(DeleteBehavior.NoAction);
 
             // Grupos Alunos
@@ -221,6 +206,11 @@ namespace Oasis.Dados
             builder.Entity<Escola>()
                    .Property(escola => escola.DataCriacao)
                    .HasDefaultValueSql("getdate()");
+
+            builder.Entity<Escola>()
+                   .HasMany(escola => escola.Membros)
+                   .WithOne(membro => membro.Escola)
+                   .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

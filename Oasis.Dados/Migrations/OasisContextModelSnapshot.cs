@@ -51,28 +51,28 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "b1fcc05b-7f11-4e97-9f54-1da57f42137d",
+                            ConcurrencyStamp = "87d8aee9-b7d6-4637-a61b-4897e275839f",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "8693c4e9-d9fc-46be-9f94-e64efa824c0b",
+                            ConcurrencyStamp = "b4e8a415-6218-4809-bb21-4b9f5bf2e873",
                             Name = "Diretor",
                             NormalizedName = "DIRETOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "3a43383b-9510-43fb-93dd-7a7ae828ca1a",
+                            ConcurrencyStamp = "a0adfa42-2f1d-4391-92b4-2a09076095b2",
                             Name = "Professor",
                             NormalizedName = "PROFESSOR"
                         },
                         new
                         {
                             Id = 4,
-                            ConcurrencyStamp = "9feadc7f-f809-454a-8f8a-014dcbb2edf5",
+                            ConcurrencyStamp = "849109e4-06d8-41b3-87de-39a9aecebc37",
                             Name = "Aluno",
                             NormalizedName = "ALUNO"
                         });
@@ -214,6 +214,9 @@ namespace Oasis.Dados.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int>("EscolaId")
+                        .HasColumnType("int");
+
                     b.Property<byte[]>("ImagemPerfil")
                         .HasColumnType("varbinary(max)");
 
@@ -244,6 +247,8 @@ namespace Oasis.Dados.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EscolaId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -323,24 +328,6 @@ namespace Oasis.Dados.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Contactos");
-                });
-
-            modelBuilder.Entity("Oasis.Dominio.Entidades.DirecaoEscola", b =>
-                {
-                    b.Property<int>("ApplicationUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EscolaId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DataInsercao")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ApplicationUserId", "EscolaId");
-
-                    b.HasIndex("EscolaId");
-
-                    b.ToTable("DirecoesEscolas");
                 });
 
             modelBuilder.Entity("Oasis.Dominio.Entidades.Disciplina", b =>
@@ -879,11 +866,19 @@ namespace Oasis.Dados.Migrations
 
             modelBuilder.Entity("Oasis.Dominio.Entidades.ApplicationUser", b =>
                 {
+                    b.HasOne("Oasis.Dominio.Entidades.Escola", "Escola")
+                        .WithMany("Membros")
+                        .HasForeignKey("EscolaId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("Oasis.Dominio.Entidades.Tema", "Tema")
                         .WithMany("Utilizadores")
                         .HasForeignKey("TemaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Escola");
 
                     b.Navigation("Tema");
                 });
@@ -905,25 +900,6 @@ namespace Oasis.Dados.Migrations
                     b.Navigation("Post");
 
                     b.Navigation("Utilizador");
-                });
-
-            modelBuilder.Entity("Oasis.Dominio.Entidades.DirecaoEscola", b =>
-                {
-                    b.HasOne("Oasis.Dominio.Entidades.ApplicationUser", "Diretor")
-                        .WithMany("EscolasEmQueFazParteDaDirecao")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Oasis.Dominio.Entidades.Escola", "Escola")
-                        .WithMany("Diretores")
-                        .HasForeignKey("EscolaId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Diretor");
-
-                    b.Navigation("Escola");
                 });
 
             modelBuilder.Entity("Oasis.Dominio.Entidades.Disciplina", b =>
@@ -1145,8 +1121,6 @@ namespace Oasis.Dados.Migrations
 
                     b.Navigation("DisciplinasCriadas");
 
-                    b.Navigation("EscolasEmQueFazParteDaDirecao");
-
                     b.Navigation("GruposOndeEnsina");
 
                     b.Navigation("GruposOndeTemAulas");
@@ -1185,11 +1159,11 @@ namespace Oasis.Dados.Migrations
                 {
                     b.Navigation("ConteudoPaginaPrincipal");
 
-                    b.Navigation("Diretores");
-
                     b.Navigation("Disciplinas");
 
                     b.Navigation("Equipamentos");
+
+                    b.Navigation("Membros");
                 });
 
             modelBuilder.Entity("Oasis.Dominio.Entidades.Grupo", b =>

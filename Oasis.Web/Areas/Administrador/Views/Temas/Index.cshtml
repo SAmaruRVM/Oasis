@@ -1,4 +1,8 @@
 ﻿@model IEnumerable<Tema>
+@inject IConfiguration configuration
+@{
+    ViewBag.Title = $"Administração {configuration["Projeto:Nome"]} - Temas";
+}
 <div>
     <button class="btn btn-info btn-sm my-3">Adicionar Tema</button>
     <table class="table">
@@ -10,7 +14,8 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (Tema tema in Model) {
+            @foreach (Tema tema in Model)
+            {
                 <tr>
                     <td>@tema.Nome</td>
                     <td>@tema.LinkCdn</td>
@@ -48,7 +53,7 @@
 
                     <div class="form-group">
                         <label>Nome</label>
-                        <input class="form-control" value=""/>
+                        <input class="form-control" value="" />
 
                     </div>
 

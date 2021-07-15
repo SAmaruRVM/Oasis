@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Oasis.Dominio.Entidades;
 using Microsoft.AspNetCore.Identity;
 using Oasis.Web.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Oasis.Web.Controllers
 {
@@ -35,7 +36,10 @@ namespace Oasis.Web.Controllers
                 });
             }
 
-            var utilizadorTentativaLogin = await _signInManager.UserManager.FindByEmailAsync(loginViewModel.Email);
+            var utilizadorTentativaLogin = await _context.Utilizadores
+                                                         .Include(utilizador => utilizador.Escola)
+                                                         .SingleOrDefaultAsync(utilizador => utilizador.Email == loginViewModel.Email);
+    
 
             if (utilizadorTentativaLogin is null)
             {
@@ -78,7 +82,7 @@ namespace Oasis.Web.Controllers
                 Titulo = "Login foi realizado som ceusso!",
                 Descricao = "Será agora redirecionado para a página da sua escola.",
                 OcorreuAlgumErro = false,
-                UrlRedirecionar = "LoginPath"
+                UrlRedirecionar = $"escola/{utilizadorTentativaLogin.Escola.NomeEscolaUrl}"
             });
         }
     }

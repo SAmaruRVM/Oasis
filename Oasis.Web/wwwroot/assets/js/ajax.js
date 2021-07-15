@@ -1,4 +1,6 @@
 ﻿const urlDefaultPath = `${location.protocol}//${location.hostname}:${location.port}/`;
+/*let btnDesativoAposSubmissaoForm = undefined;*/
+
 function ajaxCompleto(respostaAjax)
 {
     if (respostaAjax.urlRedirecionar !== '')
@@ -6,8 +8,14 @@ function ajaxCompleto(respostaAjax)
         location.href = `${urlDefaultPath + respostaAjax.urlRedirecionar}`;
     }
     mostrarNotificacao(respostaAjax);
+/*    btnDesativoAposSubmissaoForm.removeAttribute('disabled');*/
 }
 
+//document.querySelectorAll('form')
+//    .forEach(form => form.addEventListener('submit', function () {
+//        btnDesativoAposSubmissaoForm = form.querySelector('button[type="submit"]');
+//        btnDesativoAposSubmissaoForm.setAttribute('disabled', '');
+//    }));
 
 function mostrarNotificacao(respostaAjax) {
     iziToast.show({

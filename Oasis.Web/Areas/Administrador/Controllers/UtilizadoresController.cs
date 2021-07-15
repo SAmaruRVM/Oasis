@@ -13,7 +13,6 @@ using Oasis.Web.Areas.Administrador.ViewModels;
 using Oasis.Web.Extensions;
 using Oasis.Web.Http;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -67,6 +66,7 @@ namespace Oasis.Web.Areas.Administrador.Controllers
                 PrimeiroNome = inserirMembroDirecaoViewModel.MembroDirecao.PrimeiroNome,
                 Apelido = inserirMembroDirecaoViewModel.MembroDirecao.Apelido,
                 SecurityStamp = Guid.NewGuid().ToString(),
+                EscolaId = inserirMembroDirecaoViewModel.IdEscola,
                 TemaId = 1
             };
             IDbContextTransaction databaseTransaction = null;
@@ -77,12 +77,6 @@ namespace Oasis.Web.Areas.Administrador.Controllers
                     var passwordGerada = Guid.NewGuid().ToString();
                     await _userManager.CreateAsync(userDirecao, password: passwordGerada);
                     await _userManager.AddToRoleAsync(userDirecao, role: TipoUtilizador.Diretor.ToString());
-
-                    _context.DirecoesEscolas.Add(new DirecaoEscola
-                    {
-                        ApplicationUserId = userDirecao.Id,
-                        EscolaId = inserirMembroDirecaoViewModel.IdEscola
-                    });
 
                     await _context.SaveChangesAsync();
 

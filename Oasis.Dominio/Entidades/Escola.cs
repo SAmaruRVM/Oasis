@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Oasis.Dominio.Entidades
 {
@@ -45,8 +46,13 @@ namespace Oasis.Dominio.Entidades
 
         public PaginaPrincipal ConteudoPaginaPrincipal { get; set; }
 
-        public ICollection<DirecaoEscola> Diretores { get; } = new List<DirecaoEscola>();
+        public ICollection<ApplicationUser> Membros { get; } = new List<ApplicationUser>();
         public ICollection<Disciplina> Disciplinas { get; } = new List<Disciplina>();
         public ICollection<Equipamento> Equipamentos { get; } = new List<Equipamento>();
+
+        // Not mapped properties
+
+        [NotMapped]
+        public string NomeEscolaUrl => string.Join('-', Nome.ToLower().Split(' '));
     }
 }
