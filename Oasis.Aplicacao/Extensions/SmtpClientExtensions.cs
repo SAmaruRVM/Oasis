@@ -9,6 +9,7 @@ namespace Oasis.Aplicacao.Extensions
         public static async Task EnviarEmailAsync(this SmtpClient @this, string assunto, string conteudo, string emailDestinatario, Action<ConfiguracoesEmail> configuracoesEmail)
         {
             using MailMessage mailMessage = new();
+            mailMessage.IsBodyHtml = true;
             mailMessage.To.Add(emailDestinatario);
             ConfiguracoesEmail emailConfiguracoes = new();
             configuracoesEmail(emailConfiguracoes);

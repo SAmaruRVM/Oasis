@@ -211,6 +211,11 @@ namespace Oasis.Dados
                    .HasMany(escola => escola.Membros)
                    .WithOne(membro => membro.Escola)
                    .OnDelete(DeleteBehavior.NoAction);
+
+           // Disciplinas
+           builder.Entity<Disciplina>()
+                  .Property(disciplina => disciplina.DataCriacao)
+                  .HasDefaultValueSql("getdate()");
         }
     }
 }

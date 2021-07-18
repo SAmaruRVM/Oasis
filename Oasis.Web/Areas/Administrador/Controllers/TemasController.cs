@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Oasis.Dados;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,6 +18,12 @@ namespace Oasis.Web.Areas.Administrador.Controllers {
 
         [HttpPost]
         public async Task<JsonResult> EditarTemas([FromForm] int n) {
+            return Json(string.Empty);
+        }
+
+
+        [HttpPost]
+        public async Task<JsonResult> Criar([FromForm] TemasController temasController) {
             return Json(string.Empty);
         }
     }

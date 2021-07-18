@@ -10,7 +10,7 @@ namespace Oasis.Web.Extensions
 {
     public static class IServiceCollectionExtensions
     {
-        public static void Adicionar(this IServiceCollection @this, IConfiguration configuration) 
+        public static void Adicionar(this IServiceCollection @this, IConfiguration configuration)
         {
             @this.AddControllersWithViews();
 
@@ -18,7 +18,7 @@ namespace Oasis.Web.Extensions
                  options.UseSqlServer(configuration.GetConnectionString("SQL-SERVER"))
             );
 
-            @this.AddIdentity<ApplicationUser, IdentityRole<int>>(options => 
+            @this.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
             {
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
@@ -29,15 +29,28 @@ namespace Oasis.Web.Extensions
             }).AddEntityFrameworkStores<OasisContext>();
 
 
-            @this.ConfigureApplicationCookie(cookieOptions => 
+            @this.ConfigureApplicationCookie(cookieOptions =>
             {
                 cookieOptions.Cookie.HttpOnly = true;
                 cookieOptions.Cookie.Path = "/";
+                cookieOptions.Cookie.IsEssential = true;
                 cookieOptions.ExpireTimeSpan = TimeSpan.FromDays(366);
             });
 
+            @this.AddHttpContextAccessor();
+            @this.AddDistributedMemoryCache();
+            
+            @this.AddSession(sessionOptions =>
+            {
+                sessionOptions.Cookie.Name = Guid.NewGuid().ToString();
+                sessionOptions.Cookie.HttpOnly = true;
+                sessionOptions.Cookie.Path = "/";
+                sessionOptions.Cookie.IsEssential = true;
+                sessionOptions.IdleTimeout = TimeSpan.FromSeconds(10);
+            });
 
-            @this.AddRouting(options => 
+
+            @this.AddRouting(options =>
             {
                 options.AppendTrailingSlash = true;
                 options.LowercaseUrls = true;

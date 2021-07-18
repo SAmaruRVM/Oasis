@@ -1,4 +1,5 @@
-﻿using Identity = Microsoft.AspNetCore.Identity;
+﻿using System;
+using Identity = Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Oasis.Web.ViewModels;
 using System.Threading.Tasks;
@@ -8,20 +9,25 @@ using Oasis.Dominio.Entidades;
 using Microsoft.AspNetCore.Identity;
 using Oasis.Web.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Oasis.Aplicacao.Extensions;
 
 namespace Oasis.Web.Controllers
 {
+    [Route("[controller]")]
     public class ContaController : Controller
     {
         private readonly OasisContext _context;
         private readonly IConfiguration _configuration;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ContaController(IConfiguration configuration, OasisContext context, SignInManager<ApplicationUser> signInManager)
-            => (_configuration, _context, _signInManager) = (configuration, context, signInManager);
+        public ContaController(IConfiguration configuration, OasisContext context, SignInManager<ApplicationUser> signInManager,
+        UserManager<ApplicationUser> userManager)
+            => (_configuration, _context, _signInManager, _userManager) = (configuration, context, signInManager, userManager);
 
 
-        [HttpPost]
+        [HttpPost("[action]")]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> Login([FromForm] LoginViewModel loginViewModel)
         {
@@ -39,7 +45,7 @@ namespace Oasis.Web.Controllers
             var utilizadorTentativaLogin = await _context.Utilizadores
                                                          .Include(utilizador => utilizador.Escola)
                                                          .SingleOrDefaultAsync(utilizador => utilizador.Email == loginViewModel.Email);
-    
+
 
             if (utilizadorTentativaLogin is null)
             {
@@ -77,6 +83,14 @@ namespace Oasis.Web.Controllers
                 });
             }
 
+            if(utilizadorTentativaLogin.DataUltimoLogin is null) 
+            {
+                HttpContext.Session.SetString("PrimeiraVezLogin", true.ToString());
+            }
+
+            utilizadorTentativaLogin.DataUltimoLogin = DateTime.Now;
+            await _userManager.UpdateAsync(utilizadorTentativaLogin);
+
             return Json(new Ajax
             {
                 Titulo = "Login foi realizado som ceusso!",
@@ -84,6 +98,42 @@ namespace Oasis.Web.Controllers
                 OcorreuAlgumErro = false,
                 UrlRedirecionar = $"escola/{utilizadorTentativaLogin.Escola.NomeEscolaUrl}"
             });
+        }
+
+        [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
+        public async Task<RedirectToActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(actionName: "Index", controllerName: "Home");
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<JsonResult> EmailEValido(string email) => Json(await _userManager.FindByEmailAsync(email) is null);
+
+        [HttpGet("confirmacao-email/{emailEncriptado}")]
+        public ContentResult ConfirmacaoEmail(string emailEncriptado)
+         => Content($"<form action='{Request.Scheme}://{Request.Host}/conta/confirmacao-email' id='form-confirmacao-email' method='post'><input type='hidden' name='emailDesencriptado' value='{emailEncriptado.Decrypt()}'/></form><script>document.getElementById('form-confirmacao-email').submit();</script>", "text/html");
+
+
+        [HttpPost("confirmacao-email")]
+        public async Task<IActionResult> ConfirmacaoEmailPost([FromForm] string emailDesencriptado)
+        {
+            HttpContext.Session.SetString("EmailConfirmado", true.ToString());
+
+            var user = await _userManager.FindByEmailAsync(emailDesencriptado);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            user.EmailConfirmed = true;
+
+            await _userManager.UpdateAsync(user);
+
+            return RedirectToAction(actionName: "Index", controllerName: "Home", fragment: "Login");
         }
     }
 }

@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 namespace Oasis.Web.Extensions
 {
     internal static class IApplicationBuilderExtensions
     {
         public static void Configurar(this IApplicationBuilder @this, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                @this.UseDeveloperExceptionPage();            
-            }
+            @this.UseDeveloperExceptionPage();
 
             @this.UseRouting();
 
@@ -18,6 +14,7 @@ namespace Oasis.Web.Extensions
 
             @this.UseAuthentication();
             @this.UseAuthorization();
+            @this.UseSession();
 
             @this.UseEndpoints(endpoints =>
             {

@@ -303,7 +303,7 @@ namespace Oasis.Dados.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     ApplicationUserId = table.Column<int>(type: "int", nullable: false),
                     EscolaId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -594,10 +594,10 @@ namespace Oasis.Dados.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "7aaa90a7-87f8-43dc-9af7-3392053e5a22", "Administrador", "ADMINISTRADOR" },
-                    { 2, "ef3bce70-37dd-4a4d-b3d5-468db0aef3ca", "Diretor", "DIRETOR" },
-                    { 3, "8ddec2bb-222c-43b0-b409-6c37e82035da", "Professor", "PROFESSOR" },
-                    { 4, "5172d218-e2f1-4ccf-96da-f499525d4c15", "Aluno", "ALUNO" }
+                    { 1, "8dc84605-4942-4eeb-a936-d98137eb704b", "Administrador", "ADMINISTRADOR" },
+                    { 2, "e631253a-1fdf-4893-83bd-3d1849a47ee7", "Diretor", "DIRETOR" },
+                    { 3, "ea2f4cc2-2256-493c-8598-1575a950f8c3", "Professor", "PROFESSOR" },
+                    { 4, "1ac15a95-e2d1-4c2d-b2fe-1d8febb0a8c5", "Aluno", "ALUNO" }
                 });
 
             migrationBuilder.CreateIndex(

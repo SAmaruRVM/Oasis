@@ -1,6 +1,4 @@
 ﻿using System.Net;
-
-
 namespace Oasis.Aplicacao
 {
     public sealed class ConfiguracoesEmail

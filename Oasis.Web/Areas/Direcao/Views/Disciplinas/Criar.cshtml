@@ -1,11 +1,12 @@
 ﻿@model Disciplina
+@inject IConfiguration configuration
 @{
     Layout = "~/Views/Escola/Shared/_Layout.cshtml";
-    ViewBag.Title = "Teste titulo";
+    ViewBag.Title = $"Direção {configuration["Projeto:Nome"]} - Disciplinas";
 }
 <form id="form-inserir-disciplina"
       class="w-100"
-      asp-action="Inserir"
+      asp-action="Criar"
       asp-controller="Disciplinas"
       asp-area="Direcao"
       asp-antiforgery="true"
@@ -25,7 +26,7 @@
 </form>
 
 @section Scripts {
-    <partial name="~/Views/Shared/_Validacoes.cshtml" />
+    <partial name="~/Views/Shared/_Validacoes.cshtml" /> 
     <partial name="~/Views/Shared/_Ajax.cshtml" />
     <script>
         function disciplinaInserida(respostaAjax) {

@@ -1,10 +1,11 @@
-﻿@model UtilizadoresViewModel
-@inject IConfiguration configuration 
-@{ 
+﻿@model UtilizadoresAdministradorViewModel
+@inject IConfiguration configuration
+@{
     ViewBag.Title = $"Administração {configuration["Projeto:Nome"]} - Utilizadores";
 }
 <div>
-    <button class="btn btn-info btn-sm my-3" data-toggle="modal" data-target="#modal-inserir-utilizador">Adicionar membro da direção</button>
+    <button class="btn btn-info btn-sm my-3" data-toggle="modal" data-target="#modal-inserir-utilizador">Adicionar
+        membro da direção</button>
 
     <table class="table">
         <thead class="thead-light">
@@ -19,7 +20,8 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (ApplicationUser utilizador in Model.Utilizadores) {
+            @foreach (ApplicationUser utilizador in Model.Utilizadores)
+            {
                 <tr>
                     <td>@utilizador.PrimeiroNome</td>
                     <td>@utilizador.Apelido</td>
@@ -28,7 +30,8 @@
                     <td>@utilizador.DataCriacao</td>
                     <td>@utilizador.DataUltimoLogin</td>
                     <td>
-                        <a href="#" data-toggle="modal" data-target="#modal-editar-utilizador" data-id="@utilizador.Id"><i class="far fa-edit fa-lg ml-1"></i></a>
+                        <a href="#" data-toggle="modal" data-target="#modal-editar-utilizador" data-id="@utilizador.Id"><i
+                            class="far fa-edit fa-lg ml-1"></i></a>
                         <a href="#"><i class="far fa-trash-alt fa-lg ml-2"></i></a>
                     </td>
                 </tr>
@@ -37,7 +40,8 @@
     </table>
 </div>
 
-<div class="modal fade" id="modal-inserir-utilizador" tabindex="-1" role="dialog" aria-labelledby="modal-inserir-utilizador-titulo" aria-hidden="true">
+<div class="modal fade" id="modal-inserir-utilizador" tabindex="-1" role="dialog"
+    aria-labelledby="modal-inserir-utilizador-titulo" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -47,21 +51,10 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="form-adicionar-membro-direcao"
-                      asp-action="AdicionarMembroDirecao"
-                      asp-controller="Utilizadores"
-                      asp-area="Administrador"
-                      asp-antiforgery="true"
-                      data-ajax="true"
-                      data-ajax-method="POST"
-                      data-ajax-success="insercaoMembroDirecaoConcluidaSucesso"
-                      data-ajax-loading="#loading-icon-insercao-membro-direcao">
-
-                    <div class="form-group">
-                        <label asp-for="MembroDirecao.Email"></label>
-                        <input class="form-control" asp-for="MembroDirecao.Email" />
-                        <span class="text-danger text-center" asp-validation-for="MembroDirecao.Email"></span>
-                    </div>
+                <form id="form-adicionar-membro-direcao" asp-action="AdicionarMembroDirecao"
+                    asp-controller="Utilizadores" asp-area="Administrador" asp-antiforgery="true" data-ajax="true"
+                    data-ajax-method="POST" data-ajax-success="insercaoMembroDirecaoConcluidaSucesso"
+                    data-ajax-loading="#loading-icon-insercao-membro-direcao">
 
                     <div class="form-group">
                         <label asp-for="MembroDirecao.PrimeiroNome"></label>
@@ -75,17 +68,25 @@
                         <span class="text-danger text-center" asp-validation-for="MembroDirecao.Apelido"></span>
                     </div>
 
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input class="form-control" asp-for="Email" />
+                        <span class="text-danger text-center" asp-validation-for="Email"></span>
+                    </div>
+
                     <select class="wide mb-2" asp-for="IdEscola" asp-items="@Model.EscolasDropdownList">
                         <option selected disabled value="">-- Selecione uma escola --</option>
                     </select>
                     <span class="text-danger text-center" asp-validation-for="IdEscola"></span>
 
-                    <a asp-action="Index" asp-area="Administrador" asp-controller="Escolas" asp-fragment="inserir-escola" class="btn btn-info btn-block">
+                    <a asp-action="Index" asp-area="Administrador" asp-controller="Escolas"
+                        asp-fragment="inserir-escola" class="btn btn-info btn-block">
                         Criar nova escola
                     </a>
 
                     <button class="btn btn-success btn-block" type="submit">
-                        <i id="loading-icon-insercao-membro-direcao" style="display: none;" class="fas fa-spinner fa-spin"></i>
+                        <i id="loading-icon-insercao-membro-direcao" style="display: none;"
+                            class="fas fa-spinner fa-spin"></i>
                         Inserir membro da direção
                     </button>
                 </form>
@@ -102,7 +103,8 @@
 
 
 
-<div class="modal fade" id="#modal-editar-utilizador" tabindex="-1" role="dialog" aria-labelledby="modal-editar-utilizador-titulo" aria-hidden="true">
+<div class="modal fade" id="#modal-editar-utilizador" tabindex="-1" role="dialog"
+    aria-labelledby="modal-editar-utilizador-titulo" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -112,19 +114,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="form-editar-utilizador"
-                      asp-action="EditarUtilizador"
-                      asp-controller="Utilizadores"
-                      asp-area="Administrador"
-                      asp-antiforgery="true"
-                      data-ajax="true"
-                      data-ajax-method="POST"
-                      data-ajax-success="insercaoMembroDirecaoConcluidaSucesso"
-                      data-ajax-loading="#loading-icon-insercao-membro-direcao">
+                <form id="form-editar-utilizador" asp-action="EditarUtilizador" asp-controller="Utilizadores"
+                    asp-area="Administrador" asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
+                    data-ajax-success="insercaoMembroDirecaoConcluidaSucesso"
+                    data-ajax-loading="#loading-icon-insercao-membro-direcao">
 
                     <div class="form-group">
                         <label>Nome</label>
-                        <input/>
+                        <input />
                         <span></span>
                     </div>
 
@@ -132,24 +129,26 @@
                         <label asp-for="MembroDirecao.PrimeiroNome"></label>
                         <input class="form-control" asp-for="MembroDirecao.PrimeiroNome" />
                         <span class="text-danger text-center" asp-validation-for="MembroDirecao.PrimeiroNome"></span>
-                    </div>
+                        </div>
 
-                    <div class="form-group">
+                        <div class="form-group">
                         <label asp-for="MembroDirecao.Apelido"></label>
                         <input class="form-control" asp-for="MembroDirecao.Apelido" />
                         <span class="text-danger text-center" asp-validation-for="MembroDirecao.Apelido"></span>
-                    </div>
+                        </div>
 
-                    <select class="wide mb-2" asp-for="IdEscola" asp-items="@Model.EscolasDropdownList">
+                        <select class="wide mb-2" asp-for="IdEscola" asp-items="@Model.EscolasDropdownList">
                         <option selected disabled value="">-- Selecione uma escola --</option>
-                    </select>
+                        </select>
 
-                    <a asp-action="Index" asp-area="Administrador" asp-controller="Escolas" asp-fragment="inserir-escola" class="btn btn-info btn-block">
+                        <a asp-action="Index" asp-area="Administrador" asp-controller="Escolas"
+                        asp-fragment="inserir-escola" class="btn btn-info btn-block">
                         Criar nova escola
-                    </a>*@
+                        </a>*@
 
                     <button class="btn btn-success btn-block" type="submit">
-                        <i id="loading-icon-insercao-membro-direcao" style="display: none;" class="fas fa-spinner fa-spin"></i>
+                        <i id="loading-icon-insercao-membro-direcao" style="display: none;"
+                            class="fas fa-spinner fa-spin"></i>
                         Inserir membro da direção
                     </button>
                 </form>
@@ -162,25 +161,15 @@
 </div>
 
 
-
-
-
-
-
-
-
-
-
-
 @section Scripts {
-    <partial name="_DataTables" />
-    <partial name="~/Views/Shared/_Validacoes.cshtml" />
-    <partial name="~/Views/Shared/_Ajax.cshtml" />
-    <script>
-        function insercaoMembroDirecaoConcluidaSucesso(respostaAjax) {
-            $('#modal-inserir-utilizador').modal('hide');
-            document.getElementById('form-adicionar-membro-direcao').reset();
-            ajaxCompleto(respostaAjax);
-        }
-    </script>
+<partial name="_DataTables" />
+<partial name="~/Views/Shared/_Validacoes.cshtml" />
+<partial name="~/Views/Shared/_Ajax.cshtml" />
+<script>
+    function insercaoMembroDirecaoConcluidaSucesso(respostaAjax) {
+        $('#modal-inserir-utilizador').modal('hide');
+        document.getElementById('form-adicionar-membro-direcao').reset();
+        ajaxCompleto(respostaAjax);
+    }
+</script>
 }

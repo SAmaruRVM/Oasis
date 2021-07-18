@@ -1,4 +1,19 @@
 ﻿@inject IConfiguration configuration
-@{ 
+@inject IHttpContextAccessor httpContext
+@{
     ViewBag.Title = configuration["Projeto:Nome"];
+}
+
+@if (bool.TryParse(httpContext.HttpContext.Session.GetString("EmailConfirmado"), out _))
+{
+    httpContext.HttpContext.Session.Remove("EmailConfirmado");
+    // mostrar push notification a avisar que email foi confirmado
+}
+
+@section Scripts {
+<script>
+    if (location.hash.toLowerCase().trim() === '#login') {
+        $('#modal-login').modal('show');
+    }
+</script>
 }

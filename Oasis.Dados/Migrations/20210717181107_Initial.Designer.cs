@@ -10,7 +10,7 @@ using Oasis.Dados;
 namespace Oasis.Dados.Migrations
 {
     [DbContext(typeof(OasisContext))]
-    [Migration("20210715190419_Initial")]
+    [Migration("20210717181107_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,28 +53,28 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "7aaa90a7-87f8-43dc-9af7-3392053e5a22",
+                            ConcurrencyStamp = "8dc84605-4942-4eeb-a936-d98137eb704b",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "ef3bce70-37dd-4a4d-b3d5-468db0aef3ca",
+                            ConcurrencyStamp = "e631253a-1fdf-4893-83bd-3d1849a47ee7",
                             Name = "Diretor",
                             NormalizedName = "DIRETOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "8ddec2bb-222c-43b0-b409-6c37e82035da",
+                            ConcurrencyStamp = "ea2f4cc2-2256-493c-8598-1575a950f8c3",
                             Name = "Professor",
                             NormalizedName = "PROFESSOR"
                         },
                         new
                         {
                             Id = 4,
-                            ConcurrencyStamp = "5172d218-e2f1-4ccf-96da-f499525d4c15",
+                            ConcurrencyStamp = "1ac15a95-e2d1-4c2d-b2fe-1d8febb0a8c5",
                             Name = "Aluno",
                             NormalizedName = "ALUNO"
                         });
@@ -343,7 +343,9 @@ namespace Oasis.Dados.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<int>("EscolaId")
                         .HasColumnType("int");

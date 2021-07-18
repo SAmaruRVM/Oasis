@@ -31,7 +31,7 @@ namespace Oasis.Web.Areas.Administrador.Controllers
         [HttpGet]
         public async Task<ViewResult> Index()
         {
-            UtilizadoresViewModel utilizadoresViewModel = new()
+            UtilizadoresAdministradorViewModel utilizadoresViewModel = new()
             {
                 Utilizadores = await _context.Utilizadores
                                                   .AsNoTracking()
@@ -46,7 +46,7 @@ namespace Oasis.Web.Areas.Administrador.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AdicionarMembroDirecao([FromForm] UtilizadoresViewModel inserirMembroDirecaoViewModel)
+        public async Task<JsonResult> AdicionarMembroDirecao([FromForm] UtilizadoresAdministradorViewModel inserirMembroDirecaoViewModel)
         {
             if (!(ModelState.IsValid))
             {
@@ -61,14 +61,15 @@ namespace Oasis.Web.Areas.Administrador.Controllers
 
             ApplicationUser userDirecao = new()
             {
-                Email = inserirMembroDirecaoViewModel.MembroDirecao.Email,
-                UserName = inserirMembroDirecaoViewModel.MembroDirecao.Email,
+                Email = inserirMembroDirecaoViewModel.Email,
+                UserName = inserirMembroDirecaoViewModel.Email,
                 PrimeiroNome = inserirMembroDirecaoViewModel.MembroDirecao.PrimeiroNome,
                 Apelido = inserirMembroDirecaoViewModel.MembroDirecao.Apelido,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 EscolaId = inserirMembroDirecaoViewModel.IdEscola,
                 TemaId = 1
             };
+
             IDbContextTransaction databaseTransaction = null;
             try
             {
@@ -78,12 +79,13 @@ namespace Oasis.Web.Areas.Administrador.Controllers
                     await _userManager.CreateAsync(userDirecao, password: passwordGerada);
                     await _userManager.AddToRoleAsync(userDirecao, role: TipoUtilizador.Diretor.ToString());
 
-                    await _context.SaveChangesAsync();
-
                     await databaseTransaction.CommitAsync();
-                    SmtpClient client = new();
 
-                    await client.EnviarEmailAsync("Foste inscrito na oasis", $"Password gerada: {passwordGerada}", userDirecao.Email, client.ConfiguracoesEmail(_configuration));
+                    using SmtpClient client = new();
+
+                  
+                    var urlConfirmacaoEmail = $"{Request.Scheme}://{Request.Host}/conta/confirmacao-email/{userDirecao.Email.Encrypt()}";
+                    await client.EnviarEmailAsync("Foste inscrito na oasis", $"Password gerada: {passwordGerada}<hr/><a href='{urlConfirmacaoEmail}'>Confirmar email </a>", userDirecao.Email, client.ConfiguracoesEmail(_configuration));
 
                     return Json(new Ajax
                     {
@@ -105,7 +107,6 @@ namespace Oasis.Web.Areas.Administrador.Controllers
                     UrlRedirecionar = string.Empty
                 });
             }
-
         }
 
 
@@ -113,7 +114,8 @@ namespace Oasis.Web.Areas.Administrador.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<JsonResult> EditarUtilizador([FromForm] int n) {
+        public async Task<JsonResult> EditarUtilizador([FromForm] int n)
+        {
             return Json(string.Empty);
         }
     }
