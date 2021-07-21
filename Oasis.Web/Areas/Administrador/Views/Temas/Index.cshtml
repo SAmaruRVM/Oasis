@@ -1,10 +1,10 @@
-﻿@model IEnumerable<Tema>
+﻿@model TemasViewModel
 @inject IConfiguration configuration
 @{
     ViewBag.Title = $"Administração {configuration["Projeto:Nome"]} - Temas";
 }
 <div>
-    <button class="btn btn-info btn my-3">Adicionar Tema</button>
+    <button class="btn btn-info btn my-3" data-toggle="modal" data-target="#modal-inserir-tema">Adicionar Tema</button>
     <table class="table">
         <thead class="thead-light">
             <tr>
@@ -14,7 +14,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (Tema tema in Model)
+            @foreach (Tema tema in Model.Temas)
             {
                 <tr>
                     <td>@tema.Nome</td>
@@ -30,6 +30,73 @@
 </div>
 
 
+<!-- Modal inserção tema -->
+<div class="modal fade" id="modal-inserir-tema" tabindex="-1" role="dialog" aria-labelledby="modal-inserir-tema-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-inserir-tema-titulo">Adicionar tema</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id=""
+                      asp-action="Criar"
+                      asp-controller="Temas"
+                      asp-area="Administrador"
+                      asp-antiforgery="true"
+                      data-ajax="true"
+                      data-ajax-method="POST"
+                      data-ajax-success="insercaoTema"
+                      data-ajax-loading="#loading-icon-insercao-tema">
+
+                    <div class="form-group">
+                        <label asp-for="TemaAdicionar.Nome"></label>
+                        <input class="form-control" asp-for="TemaAdicionar.Nome" />
+                        <span class="text-danger text-center" asp-validation-for="TemaAdicionar.Nome"></span>
+                    </div>
+
+                      <div class="form-group">
+                        <label asp-for="TemaAdicionar.LinkCdn"></label>
+                        <input class="form-control" asp-for="TemaAdicionar.LinkCdn" />
+                        <span class="text-danger text-center" asp-validation-for="TemaAdicionar.LinkCdn"></span>
+                    </div>
+
+
+                    <button class="btn btn-success btn-block" type="submit">
+                        <i id="loading-icon-insercao-tema" style="display: none;" class="fas fa-spinner fa-spin"></i>
+                        Inserir tema
+                    </button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_DataTables" />
+    <partial name="~/Views/Shared/_Validacoes.cshtml" />
+    <partial name="~/Views/Shared/_Ajax.cshtml" />
+    <script>
+        function insercaoTema(respostaAjax) {
+            if (!(respostaAjax.ocorreuAlgumErro)) {
+                $('#modal-inserir-tema').modal('hide');
+                document.getElementById('form-adicionar-tema').reset();
+            }
+            ajaxCompleto(respostaAjax.ajax);
+        }
+    </script>
+}
+
+
+
+
+
+<!-- Modal atualização tema -->
 <div class="modal fade" id="modal-editar-tema" tabindex="-1" role="dialog" aria-labelledby="modal-editar-tema-titulo" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">

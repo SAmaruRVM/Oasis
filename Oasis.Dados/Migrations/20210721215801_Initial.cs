@@ -90,7 +90,8 @@ namespace Oasis.Dados.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Resposta = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    ContactoId = table.Column<int>(type: "int", nullable: false)
+                    ContactoId = table.Column<int>(type: "int", nullable: false),
+                    DataResposta = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
@@ -600,10 +601,10 @@ namespace Oasis.Dados.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "c2c7bd09-b29f-4494-99e5-860b6f7525a4", "Administrador", "ADMINISTRADOR" },
-                    { 2, "83638220-85a5-40f5-af45-827359b4a9bf", "Diretor", "DIRETOR" },
-                    { 3, "a5656d9d-9a39-4d2d-815f-188dfc39bde3", "Professor", "PROFESSOR" },
-                    { 4, "4672e010-6257-4f3b-8249-24b904e2015e", "Aluno", "ALUNO" }
+                    { 1, "2f840ea7-a2f1-4b77-a6dd-14555f74dbbb", "Administrador", "ADMINISTRADOR" },
+                    { 2, "7dbe7600-3bb5-41ef-9a32-1ac4afe6d140", "Diretor", "DIRETOR" },
+                    { 3, "30ae9d49-16ed-4044-89ab-1c7ed56edf97", "Professor", "PROFESSOR" },
+                    { 4, "738d6898-d72b-4c20-b4b0-7c6568d2859c", "Aluno", "ALUNO" }
                 });
 
             migrationBuilder.CreateIndex(

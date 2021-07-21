@@ -113,9 +113,67 @@ namespace Oasis.Web.Areas.Administrador.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<JsonResult> EditarUtilizador([FromForm] int n)
+        public async Task<JsonResult> EditarUtilizador([FromForm] UtilizadoresAdministradorViewModel inserirMembroDirecaoViewModel)
         {
-            return Json(string.Empty);
+             if (!(ModelState.IsValid))
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Os dados indicados não se encontram num formato válido!",
+                    Descricao = "Por favor, introduza os dados corretamente.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+            ApplicationUser userDirecao = new()
+            {
+                Email = inserirMembroDirecaoViewModel.Email,
+                UserName = inserirMembroDirecaoViewModel.Email,
+                PrimeiroNome = inserirMembroDirecaoViewModel.MembroDirecao.PrimeiroNome,
+                Apelido = inserirMembroDirecaoViewModel.MembroDirecao.Apelido,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                EscolaId = inserirMembroDirecaoViewModel.IdEscola,
+                TemaId = 1
+            };
+
+            IDbContextTransaction databaseTransaction = null;
+            try
+            {
+                using (databaseTransaction = await _context.Database.BeginTransactionAsync())
+                {
+                    var passwordGerada = Guid.NewGuid().ToString();
+                    await _userManager.CreateAsync(userDirecao, password: passwordGerada);
+                    await _userManager.AddToRoleAsync(userDirecao, role: TipoUtilizador.Diretor.ToString());
+
+                    await databaseTransaction.CommitAsync();
+
+                    using SmtpClient client = new();
+
+                  
+                    var urlConfirmacaoEmail = $"{Request.Scheme}://{Request.Host}/conta/confirmacao-email/{userDirecao.Email.Encrypt()}";
+                    await client.EnviarEmailAsync("Foste inscrito na oasis", $"Password gerada: {passwordGerada}<hr/><a href='{urlConfirmacaoEmail}'>Confirmar email </a>", userDirecao.Email, client.ConfiguracoesEmail(_configuration));
+
+                    return Json(new Ajax
+                    {
+                        Titulo = "Sucesso ao adicionar o utilizador e a sua respetiva associação à escola!",
+                        Descricao = "Foi enviado um email para o utilizador, de modo a que possa confirmar a sua conta.",
+                        OcorreuAlgumErro = false,
+                        UrlRedirecionar = string.Empty
+                    });
+                }
+            }
+            catch (SqlException)
+            {
+                await databaseTransaction.RollbackAsync();
+                return Json(new Ajax
+                {
+                    Titulo = "Ocorreu um erro na inserção do membro da direção!",
+                    Descricao = "Pedimos desculpa pelo incómodo. Já foi enviado a informação aos nossos técnicos. Por favor, tente novamente mais tarde.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
         }
     }
 }

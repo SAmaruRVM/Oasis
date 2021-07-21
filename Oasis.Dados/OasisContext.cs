@@ -223,6 +223,12 @@ namespace Oasis.Dados
            builder.Entity<Disciplina>()
                   .Property(disciplina => disciplina.DataCriacao)
                   .HasDefaultValueSql("getdate()");
+
+       
+           // RespostasContactos
+           builder.Entity<RespostaContacto>()
+                  .Property(respostaContacto => respostaContacto.DataResposta)
+                  .HasDefaultValueSql("getdate()");
         }
     }
 }

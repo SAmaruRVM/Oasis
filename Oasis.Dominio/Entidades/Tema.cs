@@ -6,13 +6,16 @@ namespace Oasis.Dominio.Entidades
     {
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(20)]
+        [Required(ErrorMessage = "O nome tem que ser obrigatóriamente preenchido!")]
+        [StringLength(20, ErrorMessage = "O {0} tem que ter no máximo {1} caracteres!")]
+        [Display(Name = "Nome", Prompt = "Introduza o nome")] 
         public string Nome { get; set; }
 
-        [Required]
-        [StringLength(100)]
-        [Url]
+        [Required(ErrorMessage = "O link tem que ser obrigatóriamente preenchido!")]
+        [StringLength(100, ErrorMessage = "O {0} tem que ter no máximo {1} caracteres!")]
+        [Display(Name = "Link CDN", Prompt = "Link CDN (Content Delivery Network)")] 
+        [Url(ErrorMessage = "O link introduzido encontra-se num formato inválido!")]
+        [DataType(DataType.Url)]
         public string LinkCdn { get; set; }
 
         public ICollection<ApplicationUser> Utilizadores { get; } = new List<ApplicationUser>();

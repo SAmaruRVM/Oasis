@@ -11,6 +11,7 @@ using Oasis.Web.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Oasis.Aplicacao.Extensions;
+using Oasis.Dominio.Enums;
 
 namespace Oasis.Web.Controllers
 {
@@ -96,7 +97,7 @@ namespace Oasis.Web.Controllers
                 Titulo = "Login foi realizado com sucesso!",
                 Descricao = "Será agora redirecionado para a página da sua escola.",
                 OcorreuAlgumErro = false,
-                UrlRedirecionar = $"escola/{utilizadorTentativaLogin.Escola.NomeEscolaUrl}"
+                UrlRedirecionar = (await _userManager.IsInRoleAsync(user: utilizadorTentativaLogin, role: TipoUtilizador.Administrador.ToString())) ? $"administrador/" : $"escola/{utilizadorTentativaLogin.Escola.NomeEscolaUrl}"
             });
         }
 
@@ -158,7 +159,8 @@ namespace Oasis.Web.Controllers
             var alterarPassword = await _userManager.ChangePasswordAsync(
                 user: user,
                 currentPassword: escolaViewModel.AlterarPasswordViewModel.Password,
-                newPassword: escolaViewModel.AlterarPasswordViewModel.NovaPassword);
+                newPassword: escolaViewModel.AlterarPasswordViewModel.NovaPassword
+            );
 
 
             if(!(alterarPassword.Succeeded))

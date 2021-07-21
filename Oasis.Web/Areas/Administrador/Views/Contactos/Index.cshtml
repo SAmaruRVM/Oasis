@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Contacto>
+﻿@model ContactosViewModel
 @inject IConfiguration configuration
 @{
     ViewBag.Title = $"Administração {configuration["Projeto:Nome"]} - Contactos";
@@ -17,7 +17,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (Contacto contacto in Model)
+            @foreach (Contacto contacto in Model.Contactos)
             {
                 <tr>
                     <td>@contacto.DataContacto</td>
@@ -27,7 +27,8 @@
                     <td>@contacto.PrimeiroNome</td>
                     <td>@contacto.Apelido</td>
                     <td>
-                        <button type="button" class="btn btn-outline-dark">
+                        <button type="button" data-id-contacto="@contacto.Id" class="btn btn-outline-dark"
+                        data-toggle="modal" data-target="#modal-responder-contacto">
                             Responder
                         </button>
                     </td>
@@ -37,11 +38,9 @@
         </tbody>
     </table>
 </div>
-@section Scripts {
-    <partial name="_DataTables" />
-}
 
-<div class="modal fade" id="modal-responder-contacto" tabindex="-1" role="dialog" aria-labelledby="modal-responder-contacto-titulo" aria-hidden="true">
+<div class="modal fade" id="modal-responder-contacto" tabindex="-1" role="dialog"
+    aria-labelledby="modal-responder-contacto-titulo" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -51,12 +50,26 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p id="modal-responder-contacto-descricao"></p>
+                <form id="form-resposta-contacto" asp-action="RespostaContacto" asp-controller="Contactos"
+                    asp-area="Administrador" asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
+                    data-ajax-success="respostaContactoInserida" data-ajax-loading="#loading-icon-resposta-contacto">
+                    <h3 id="modal-responder-contacto-assunto" class="text-center"></h3>
+                    <p id="modal-responder-contacto-descricao" class="font-italic"></p>
+                    <div class="form-group">
+                        <label asp-for="RespostaContactoAdicionar.Resposta"></label>
+                        <textarea class="form-control" rows="10"
+                            asp-for="RespostaContactoAdicionar.Resposta"></textarea>
+                        <span class="text-danger text-center"
+                            asp-validation-for="RespostaContactoAdicionar.Resposta"></span>
+                    </div>
 
-                <button class="btn btn-primary btn-block" type="submit">
-                    <i id="loading-icon-resposta-contacto" style="display: none;" class="fas fa-spinner fa-spin"></i>
-                    Responder ao contacto
-                </button>
+                    <input type="hidden" asp-for="RespostaContactoAdicionar.ContactoId"/>
+                    <button class="btn btn-primary btn-block" type="submit">
+                        <i id="loading-icon-resposta-contacto" style="display: none;"
+                            class="fas fa-spinner fa-spin"></i>
+                        Responder ao contacto
+                    </button>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
@@ -64,3 +77,36 @@
         </div>
     </div>
 </div>
+@section Scripts {
+<partial name="_DataTables" />
+<partial name="~/Views/Shared/_Validacoes.cshtml" />
+<partial name="~/Views/Shared/_Ajax.cshtml" />
+<script>
+
+    function respostaContactoInserida(respostaAjax) {
+        if (!(respostaAjax.ocorreuAlgumErro)) {
+            $('#modal-responder-contacto').modal('hide');
+            document.getElementById('form-resposta-contacto').reset();
+        }
+        ajaxCompleto(respostaAjax);
+    }
+
+
+    const btnsResponderAosContacto = document.querySelectorAll('button[data-id-contacto]');
+
+    btnsResponderAosContacto.forEach(btn => btn.addEventListener('click', async () => {
+        const responderAoContactoDescricao = document.getElementById('modal-responder-contacto-descricao'),
+              responderAoContactoAssunto = document.getElementById('modal-responder-contacto-assunto');
+        const contacto = await contactoPorId(btn.getAttribute('data-id-contacto'));
+
+        responderAoContactoDescricao.innerText = contacto.descricao;
+        responderAoContactoAssunto.innerText = contacto.assunto;
+        document.getElementById('RespostaContactoAdicionar_ContactoId').value = contacto.id;
+    }));
+
+    async function contactoPorId(id) {
+        return await fetch(`${location.protocol}//${location.hostname}:${location.port}/administrador/contactos/Id/${id}`).then(resposta => resposta.json());
+    }
+
+</script>
+}

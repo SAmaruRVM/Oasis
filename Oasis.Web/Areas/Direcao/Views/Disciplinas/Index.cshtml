@@ -115,6 +115,8 @@
 
         const eliminarDisciplinaBtns = document.querySelectorAll('button[data-disciplina-eliminar="true"]');
         const atualizarDisciplinaBtns = document.querySelectorAll('button[data-disciplina-atualizar="true"]');
+
+        
         eliminarDisciplinaBtns.forEach(btn => btn.addEventListener('click', () =>
         {
             const textoConfirmacao = document.getElementById('eliminar-disciplina-texto-confirmacao');
