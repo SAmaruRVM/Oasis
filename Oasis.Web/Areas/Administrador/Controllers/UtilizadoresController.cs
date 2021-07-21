@@ -19,8 +19,7 @@ using System.Threading.Tasks;
 
 namespace Oasis.Web.Areas.Administrador.Controllers
 {
-    [Area("Administrador")]
-    public class UtilizadoresController : Controller
+    public class UtilizadoresController : BaseAdministradorController
     {
         private readonly OasisContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -102,7 +101,7 @@ namespace Oasis.Web.Areas.Administrador.Controllers
                 return Json(new Ajax
                 {
                     Titulo = "Ocorreu um erro na inserção do membro da direção!",
-                    Descricao = "Pedimos desculpa pela incómodo. Já foi enviado a informação aos nossos técnicos. Por favor, tente novamente mais tarde.",
+                    Descricao = "Pedimos desculpa pelo incómodo. Já foi enviado a informação aos nossos técnicos. Por favor, tente novamente mais tarde.",
                     OcorreuAlgumErro = true,
                     UrlRedirecionar = string.Empty
                 });

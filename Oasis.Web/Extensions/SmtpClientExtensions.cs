@@ -6,7 +6,7 @@ using System.Net.Mail;
 
 namespace Oasis.Web.Extensions
 {
-    public static class SmtpClientExtensions
+    internal static class SmtpClientExtensions
     {
         public static Action<ConfiguracoesEmail> ConfiguracoesEmail(this SmtpClient @this, IConfiguration configuration)
             => configuracoesEmail =>

@@ -50,7 +50,9 @@
     <partial name="~/Views/Shared/_Ajax.cshtml" />
     <script>
         function equipamentoInserido(respostaAjax) {
-            document.getElementById('form-inserir-equipamento').reset();
+            if (!(respostaAjax.ocorreuAlgumErro)) {
+                document.getElementById('form-inserir-equipamento').reset();
+            }
             ajaxCompleto(respostaAjax);
         }
     </script>

@@ -150,9 +150,11 @@
         }
 
         function insercaoEscolaConcluidaSucesso(respostaAjax) {
-            $('#modal-inserir-escola').modal('hide');
-            document.getElementById('form-adicionar-escola').reset();
-            inserirEscolaAdicionadaNaTabela(respostaAjax.escola);
+            if (!(respostaAjax.ocorreuAlgumErro)) {
+                $('#modal-inserir-escola').modal('hide');
+                document.getElementById('form-adicionar-escola').reset();
+                inserirEscolaAdicionadaNaTabela(respostaAjax.escola);
+            }
             ajaxCompleto(respostaAjax.ajax);
         }
 

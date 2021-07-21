@@ -167,8 +167,10 @@
 <partial name="~/Views/Shared/_Ajax.cshtml" />
 <script>
     function insercaoMembroDirecaoConcluidaSucesso(respostaAjax) {
-        $('#modal-inserir-utilizador').modal('hide');
-        document.getElementById('form-adicionar-membro-direcao').reset();
+        if (!(respostaAjax.ocorreuAlgumErro)) {
+            $('#modal-inserir-utilizador').modal('hide');
+            document.getElementById('form-adicionar-membro-direcao').reset();
+        }
         ajaxCompleto(respostaAjax);
     }
 </script>

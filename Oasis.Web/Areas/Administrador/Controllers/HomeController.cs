@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 namespace Oasis.Web.Areas.Administrador.Controllers
 {
-    [Area("Administrador")]
-    public class HomeController : Controller
+    public class HomeController : BaseAdministradorController
     {
         [HttpGet]
         public ViewResult Index() => View();

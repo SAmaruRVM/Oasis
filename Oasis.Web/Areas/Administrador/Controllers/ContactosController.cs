@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Oasis.Web.Areas.Administrador.Controllers
 {
-    [Area("Administrador")]
-    public class ContactosController : Controller
+    public class ContactosController : BaseAdministradorController
     {
         private readonly OasisContext _context;
         public ContactosController(OasisContext context) => (_context) = (context);

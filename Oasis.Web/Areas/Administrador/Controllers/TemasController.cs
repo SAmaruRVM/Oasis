@@ -4,9 +4,10 @@ using Oasis.Dados;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Oasis.Web.Areas.Administrador.Controllers {
-    [Area("Administrador")]
-    public class TemasController : Controller {
+namespace Oasis.Web.Areas.Administrador.Controllers
+{
+    public class TemasController : BaseAdministradorController
+    {
         private readonly OasisContext _context;
         public TemasController(OasisContext context) => (_context) = (context);
 
@@ -17,13 +18,15 @@ namespace Oasis.Web.Areas.Administrador.Controllers {
                                                   .ToListAsync());
 
         [HttpPost]
-        public async Task<JsonResult> EditarTemas([FromForm] int n) {
+        public async Task<JsonResult> EditarTemas([FromForm] int n)
+        {
             return Json(string.Empty);
         }
 
 
         [HttpPost]
-        public async Task<JsonResult> Criar([FromForm] TemasController temasController) {
+        public async Task<JsonResult> Criar([FromForm] TemasController temasController)
+        {
             return Json(string.Empty);
         }
     }

@@ -15,8 +15,7 @@ namespace Oasis.Dominio.Entidades
 
         // se for nulo, significa que a página ainda não foi alterada desde a sua criação
         public DateTime? DataUltimaAlteracao { get; set; }
-   
+
         public Escola Escola { get; set; }
-        public int EscolaId { get; set; }
     }
 }

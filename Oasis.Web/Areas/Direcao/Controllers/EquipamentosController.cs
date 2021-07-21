@@ -9,8 +9,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Oasis.Web.Areas.Direcao.Controllers {
-    [Area("Direcao")]
-    public class EquipamentosController : Controller {
+  
+    public class EquipamentosController : BaseDirecaoController
+    {
 
         private readonly OasisContext _context;
         public EquipamentosController(OasisContext context) => (_context) = (context);
@@ -47,7 +48,7 @@ namespace Oasis.Web.Areas.Direcao.Controllers {
 
             return Json(new Ajax {
                 Titulo = "Sucesso ao adicionar o equipamento!",
-                Descricao = "",
+                Descricao = "O equipamento foi adicionado com sucesso!",
                 OcorreuAlgumErro = false,
                 UrlRedirecionar = string.Empty
             });

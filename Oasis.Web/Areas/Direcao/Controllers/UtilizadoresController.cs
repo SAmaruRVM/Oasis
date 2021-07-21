@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
@@ -14,9 +13,11 @@ using Oasis.Dominio.Enums;
 using Oasis.Web.Areas.Direcao.ViewModels;
 using Oasis.Web.Http;
 
-namespace Oasis.Web.Areas.Direcao.Controllers {
-    [Area("Direcao")]
-    public class UtilizadoresController : Controller {
+namespace Oasis.Web.Areas.Direcao.Controllers
+{
+
+    public class UtilizadoresController : BaseDirecaoController
+    {
         private readonly OasisContext _context;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -25,9 +26,11 @@ namespace Oasis.Web.Areas.Direcao.Controllers {
 
 
         [HttpGet]
-        public async Task<ViewResult> Index() {
+        public async Task<ViewResult> Index()
+        {
 
-            UtilizadoresDirecaoViewModel utilizadoresViewModel = new() {
+            UtilizadoresDirecaoViewModel utilizadoresViewModel = new()
+            {
 
 
                 UtilizadoresRoles = await _userManager.Users
@@ -35,17 +38,19 @@ namespace Oasis.Web.Areas.Direcao.Controllers {
                                                   .OrderBy(user => user.UserName)
                                                   .ToListAsync(),
 
-        };
-            
+            };
+
             return View(model: utilizadoresViewModel);
         }
 
 
         [HttpGet]
-        public ViewResult Criar() => View(model: new UtilizadoresDirecaoViewModel {
+        public ViewResult Criar() => View(model: new UtilizadoresDirecaoViewModel
+        {
             TiposUtilizadorDropdownList = _roleManager.Roles
                                                       .Where(role => role.Name == TipoUtilizador.Aluno.ToString() || role.Name == TipoUtilizador.Professor.ToString())
-                                                      .Select(role => new SelectListItem {
+                                                      .Select(role => new SelectListItem
+                                                      {
                                                           Value = role.Id.ToString(),
                                                           Text = role.Name
                                                       })
@@ -54,9 +59,12 @@ namespace Oasis.Web.Areas.Direcao.Controllers {
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> Criar([FromForm] UtilizadoresDirecaoViewModel utilizadorDirecaoViewModel) {
-            if (!(ModelState.IsValid)) {
-                return Json(new Ajax {
+        public async Task<JsonResult> Criar([FromForm] UtilizadoresDirecaoViewModel utilizadorDirecaoViewModel)
+        {
+            if (!(ModelState.IsValid))
+            {
+                return Json(new Ajax
+                {
                     Titulo = "Os dados indicados não se encontram num formato válido!",
                     Descricao = "Por favor, introduza os dados corretamente.",
                     OcorreuAlgumErro = true,
@@ -65,8 +73,10 @@ namespace Oasis.Web.Areas.Direcao.Controllers {
             }
 
             IDbContextTransaction databaseTransaction = null;
-            try {
-                using (databaseTransaction = await _context.Database.BeginTransactionAsync()) {
+            try
+            {
+                using (databaseTransaction = await _context.Database.BeginTransactionAsync())
+                {
                     var passwordGerada = Guid.NewGuid().ToString();
 
                     utilizadorDirecaoViewModel.Utilizador.Email = utilizadorDirecaoViewModel.Email;
@@ -91,16 +101,20 @@ namespace Oasis.Web.Areas.Direcao.Controllers {
                     await databaseTransaction.CommitAsync();
 
                     var tipoUtilizador = role.Name.ToLower();
-                    return Json(new Ajax {
+                    return Json(new Ajax
+                    {
                         Titulo = $"Sucesso ao adicionar um {tipoUtilizador}!",
                         Descricao = $"O seguinte {tipoUtilizador} foi criado com sucesso. Já o poderá adicionar a uma disciplina e/ou grupo.",
                         OcorreuAlgumErro = false,
                         UrlRedirecionar = string.Empty
                     });
                 }
-            } catch (SqlException) {
+            }
+            catch (SqlException)
+            {
                 await databaseTransaction.RollbackAsync();
-                return Json(new Ajax {
+                return Json(new Ajax
+                {
                     Titulo = "Ocorreu um erro na inserção de um novo utilizador.",
                     Descricao = "Pedimos desculpa pela incómodo. Já foi enviado a informação aos nossos técnicos. Por favor, tente novamente mais tarde.",
                     OcorreuAlgumErro = true,

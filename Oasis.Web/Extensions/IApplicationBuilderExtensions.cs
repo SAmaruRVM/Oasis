@@ -16,6 +16,8 @@ namespace Oasis.Web.Extensions
             @this.UseAuthorization();
             @this.UseSession();
 
+            
+
             @this.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

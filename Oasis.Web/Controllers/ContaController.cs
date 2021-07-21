@@ -83,7 +83,7 @@ namespace Oasis.Web.Controllers
                 });
             }
 
-            if(utilizadorTentativaLogin.DataUltimoLogin is null) 
+            if (utilizadorTentativaLogin.DataUltimoLogin is null)
             {
                 HttpContext.Session.SetString("PrimeiraVezLogin", true.ToString());
             }
@@ -93,7 +93,7 @@ namespace Oasis.Web.Controllers
 
             return Json(new Ajax
             {
-                Titulo = "Login foi realizado som ceusso!",
+                Titulo = "Login foi realizado com sucesso!",
                 Descricao = "Será agora redirecionado para a página da sua escola.",
                 OcorreuAlgumErro = false,
                 UrlRedirecionar = $"escola/{utilizadorTentativaLogin.Escola.NomeEscolaUrl}"
@@ -134,6 +134,51 @@ namespace Oasis.Web.Controllers
             await _userManager.UpdateAsync(user);
 
             return RedirectToAction(actionName: "Index", controllerName: "Home", fragment: "Login");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AlterarPassword([FromForm] EscolaViewModel escolaViewModel) 
+        {
+            if (!(ModelState.IsValid))
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Os dados indicados não se encontram num formato válido!",
+                    Descricao = "Por favor, introduza os dados corretamente.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+            ApplicationUser user = await _context.Utilizadores
+                                                       .Include(utilizador => utilizador.Escola)
+                                                       .SingleOrDefaultAsync(utilizador => utilizador.Email == User.Identity.Name);
+
+            var alterarPassword = await _userManager.ChangePasswordAsync(
+                user: user,
+                currentPassword: escolaViewModel.AlterarPasswordViewModel.Password,
+                newPassword: escolaViewModel.AlterarPasswordViewModel.NovaPassword);
+
+
+            if(!(alterarPassword.Succeeded))
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Não foi possível alterar a sua password!",
+                    Descricao = "A password indicada não corresponde à password que está associada à sua conta.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+            return Json(new Ajax
+            {
+                Titulo = "A sua password foi alterada com sucesso!",
+                Descricao = "Recomendamos que altere a sua password com alguma frequência.",
+                OcorreuAlgumErro = false,
+                UrlRedirecionar = string.Empty
+            });
         }
     }
 }

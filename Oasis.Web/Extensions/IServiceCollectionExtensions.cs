@@ -8,7 +8,7 @@ using System;
 
 namespace Oasis.Web.Extensions
 {
-    public static class IServiceCollectionExtensions
+    internal static class IServiceCollectionExtensions
     {
         public static void Adicionar(this IServiceCollection @this, IConfiguration configuration)
         {
@@ -28,6 +28,9 @@ namespace Oasis.Web.Extensions
                 options.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<OasisContext>();
 
+            @this.AddRazorPages()
+                 .AddRazorRuntimeCompilation();
+
 
             @this.ConfigureApplicationCookie(cookieOptions =>
             {
@@ -35,6 +38,8 @@ namespace Oasis.Web.Extensions
                 cookieOptions.Cookie.Path = "/";
                 cookieOptions.Cookie.IsEssential = true;
                 cookieOptions.ExpireTimeSpan = TimeSpan.FromDays(366);
+                cookieOptions.AccessDeniedPath = "/home/acesso-negado";
+                cookieOptions.LoginPath = "/home/acesso-negado";
             });
 
             @this.AddHttpContextAccessor();
@@ -54,6 +59,7 @@ namespace Oasis.Web.Extensions
             {
                 options.AppendTrailingSlash = true;
                 options.LowercaseUrls = true;
+                options.LowercaseQueryStrings = true;
             });
         }
     }

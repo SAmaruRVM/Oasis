@@ -26,23 +26,18 @@ namespace Oasis.Dados.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Escolas",
+                name: "ConteudoPaginaPrincipalEscolas",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Codigo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Rua = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Distrito = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    CodigoPostal = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContactoTelefonico = table.Column<string>(type: "nvarchar(9)", maxLength: 9, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
+                    ConteudoHtml = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
+                    DataUltimaAlteracao = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Escolas", x => x.Id);
+                    table.PrimaryKey("PK_ConteudoPaginaPrincipalEscolas", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -109,23 +104,49 @@ namespace Oasis.Dados.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ConteudoPaginaPrincipalEscolas",
+                name: "Escolas",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ConteudoHtml = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Codigo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Rua = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Distrito = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    CodigoPostal = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContactoTelefonico = table.Column<string>(type: "nvarchar(9)", maxLength: 9, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
-                    DataUltimaAlteracao = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    EscolaId = table.Column<int>(type: "int", nullable: false)
+                    PaginaPrincipalId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ConteudoPaginaPrincipalEscolas", x => x.Id);
+                    table.PrimaryKey("PK_Escolas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ConteudoPaginaPrincipalEscolas_Escolas_EscolaId",
-                        column: x => x.EscolaId,
-                        principalTable: "Escolas",
+                        name: "FK_Escolas_ConteudoPaginaPrincipalEscolas_PaginaPrincipalId",
+                        column: x => x.PaginaPrincipalId,
+                        principalTable: "ConteudoPaginaPrincipalEscolas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetRoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetRoleClaims_TiposUtilizador_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "TiposUtilizador",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -165,27 +186,6 @@ namespace Oasis.Dados.Migrations
                         name: "FK_Utilizadores_Temas_TemaId",
                         column: x => x.TemaId,
                         principalTable: "Temas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetRoleClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_TiposUtilizador_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "TiposUtilizador",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -600,10 +600,10 @@ namespace Oasis.Dados.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "cd6e647d-dcbc-4f96-a14a-5af1c376b7db", "Administrador", "ADMINISTRADOR" },
-                    { 2, "b7e68077-fd57-4cc8-be1d-c2290c9c870a", "Diretor", "DIRETOR" },
-                    { 3, "50e4261e-8ca3-4ba5-974a-3d791b60de84", "Professor", "PROFESSOR" },
-                    { 4, "244a998e-f311-4cd9-b481-02b3cbba32d5", "Aluno", "ALUNO" }
+                    { 1, "c2c7bd09-b29f-4494-99e5-860b6f7525a4", "Administrador", "ADMINISTRADOR" },
+                    { 2, "83638220-85a5-40f5-af45-827359b4a9bf", "Diretor", "DIRETOR" },
+                    { 3, "a5656d9d-9a39-4d2d-815f-188dfc39bde3", "Professor", "PROFESSOR" },
+                    { 4, "4672e010-6257-4f3b-8249-24b904e2015e", "Aluno", "ALUNO" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -632,12 +632,6 @@ namespace Oasis.Dados.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ConteudoPaginaPrincipalEscolas_EscolaId",
-                table: "ConteudoPaginaPrincipalEscolas",
-                column: "EscolaId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Disciplinas_ApplicationUserId",
                 table: "Disciplinas",
                 column: "ApplicationUserId");
@@ -656,6 +650,13 @@ namespace Oasis.Dados.Migrations
                 name: "IX_Equipamentos_EscolaId",
                 table: "Equipamentos",
                 column: "EscolaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Escolas_PaginaPrincipalId",
+                table: "Escolas",
+                column: "PaginaPrincipalId",
+                unique: true,
+                filter: "[PaginaPrincipalId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Grupos_DisciplinaId",
@@ -784,9 +785,6 @@ namespace Oasis.Dados.Migrations
                 name: "ComentariosPostsUtilizadores");
 
             migrationBuilder.DropTable(
-                name: "ConteudoPaginaPrincipalEscolas");
-
-            migrationBuilder.DropTable(
                 name: "GruposAlunos");
 
             migrationBuilder.DropTable(
@@ -839,6 +837,9 @@ namespace Oasis.Dados.Migrations
 
             migrationBuilder.DropTable(
                 name: "Temas");
+
+            migrationBuilder.DropTable(
+                name: "ConteudoPaginaPrincipalEscolas");
         }
     }
 }

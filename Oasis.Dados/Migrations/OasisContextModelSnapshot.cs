@@ -51,28 +51,28 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "cd6e647d-dcbc-4f96-a14a-5af1c376b7db",
+                            ConcurrencyStamp = "c2c7bd09-b29f-4494-99e5-860b6f7525a4",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "b7e68077-fd57-4cc8-be1d-c2290c9c870a",
+                            ConcurrencyStamp = "83638220-85a5-40f5-af45-827359b4a9bf",
                             Name = "Diretor",
                             NormalizedName = "DIRETOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "50e4261e-8ca3-4ba5-974a-3d791b60de84",
+                            ConcurrencyStamp = "a5656d9d-9a39-4d2d-815f-188dfc39bde3",
                             Name = "Professor",
                             NormalizedName = "PROFESSOR"
                         },
                         new
                         {
                             Id = 4,
-                            ConcurrencyStamp = "244a998e-f311-4cd9-b481-02b3cbba32d5",
+                            ConcurrencyStamp = "4672e010-6257-4f3b-8249-24b904e2015e",
                             Name = "Aluno",
                             NormalizedName = "ALUNO"
                         });
@@ -434,12 +434,19 @@ namespace Oasis.Dados.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int?>("PaginaPrincipalId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Rua")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PaginaPrincipalId")
+                        .IsUnique()
+                        .HasFilter("[PaginaPrincipalId] IS NOT NULL");
 
                     b.ToTable("Escolas");
                 });
@@ -544,13 +551,7 @@ namespace Oasis.Dados.Migrations
                     b.Property<DateTime?>("DataUltimaAlteracao")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("EscolaId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("EscolaId")
-                        .IsUnique();
 
                     b.ToTable("ConteudoPaginaPrincipalEscolas");
                 });
@@ -947,6 +948,15 @@ namespace Oasis.Dados.Migrations
                     b.Navigation("Escola");
                 });
 
+            modelBuilder.Entity("Oasis.Dominio.Entidades.Escola", b =>
+                {
+                    b.HasOne("Oasis.Dominio.Entidades.PaginaPrincipal", "ConteudoPaginaPrincipal")
+                        .WithOne("Escola")
+                        .HasForeignKey("Oasis.Dominio.Entidades.Escola", "PaginaPrincipalId");
+
+                    b.Navigation("ConteudoPaginaPrincipal");
+                });
+
             modelBuilder.Entity("Oasis.Dominio.Entidades.Grupo", b =>
                 {
                     b.HasOne("Oasis.Dominio.Entidades.Disciplina", "Disciplina")
@@ -994,17 +1004,6 @@ namespace Oasis.Dados.Migrations
                         .IsRequired();
 
                     b.Navigation("Utilizador");
-                });
-
-            modelBuilder.Entity("Oasis.Dominio.Entidades.PaginaPrincipal", b =>
-                {
-                    b.HasOne("Oasis.Dominio.Entidades.Escola", "Escola")
-                        .WithOne("ConteudoPaginaPrincipal")
-                        .HasForeignKey("Oasis.Dominio.Entidades.PaginaPrincipal", "EscolaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Escola");
                 });
 
             modelBuilder.Entity("Oasis.Dominio.Entidades.Post", b =>
@@ -1174,8 +1173,6 @@ namespace Oasis.Dados.Migrations
 
             modelBuilder.Entity("Oasis.Dominio.Entidades.Escola", b =>
                 {
-                    b.Navigation("ConteudoPaginaPrincipal");
-
                     b.Navigation("Disciplinas");
 
                     b.Navigation("Equipamentos");
@@ -1188,6 +1185,11 @@ namespace Oasis.Dados.Migrations
                     b.Navigation("Alunos");
 
                     b.Navigation("Flairs");
+                });
+
+            modelBuilder.Entity("Oasis.Dominio.Entidades.PaginaPrincipal", b =>
+                {
+                    b.Navigation("Escola");
                 });
 
             modelBuilder.Entity("Oasis.Dominio.Entidades.Post", b =>

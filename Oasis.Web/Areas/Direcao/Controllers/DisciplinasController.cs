@@ -1,25 +1,30 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Oasis.Dados;
 using Oasis.Dominio.Entidades;
+using Oasis.Web.Areas.Direcao.ViewModels;
+using Oasis.Web.Extensions;
 using Oasis.Web.Http;
 
 namespace Oasis.Web.Areas.Direcao.Controllers
 {
-    [Area("Direcao")]
-    public class DisciplinasController : Controller
+
+    public class DisciplinasController : BaseDirecaoController
     {
         private readonly OasisContext _context;
         public DisciplinasController(OasisContext context) => (_context) = (context);
 
 
         [HttpGet]
-        public ViewResult Index() => View();
+        public async Task<ViewResult> Index()
+           => View(model: new DisciplinasViewModel
+           {
+               Disciplinas = (await _context.GetLoggedInApplicationUser(User.Identity.Name)).Escola.Disciplinas.AsEnumerable()
+           });
 
 
-        [HttpGet]
-        public ViewResult Criar() => View();
 
 
         [HttpPost]
@@ -54,6 +59,51 @@ namespace Oasis.Web.Areas.Direcao.Controllers
                 UrlRedirecionar = string.Empty
             });
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> Eliminar([FromForm] int idDisciplina)
+        {
+            if (!(ModelState.IsValid))
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Os dados indicados não se encontram num formato válido!",
+                    Descricao = "Por favor, introduza os dados corretamente.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+            var disciplinaParaEliminar = await _context.Disciplinas.FindAsync(idDisciplina);
+
+            if(disciplinaParaEliminar is null)
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Ocorreu um erro na eliminação da disciplina selecionada!",
+                    Descricao = "Pedimos desculpa pelo incómodo. Já foi enviado a informação aos nossos técnicos. Por favor, tente novamente mais tarde.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+            _context.Disciplinas.Remove(disciplinaParaEliminar);
+            await _context.SaveChangesAsync();
+
+            return Json(new Ajax
+            {
+                Titulo = "Sucesso ao eliminar a disciplina!",
+                Descricao = "A disciplina selecionada foi eliminada com sucesso.",
+                OcorreuAlgumErro = false,
+                UrlRedirecionar = string.Empty
+            });
+        }
+
+
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

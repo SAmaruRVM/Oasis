@@ -15,12 +15,25 @@ namespace Oasis.Web.Controllers
     {
         private readonly OasisContext _context;
         private readonly IConfiguration _configuration;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public HomeController(IConfiguration configuration, OasisContext context, SignInManager<ApplicationUser> signInManager)
             => (_configuration, _context) = (configuration, context);
 
         [HttpGet]
-        public ViewResult Index() => View();
+        public async Task<IActionResult> Index() 
+        {
+            if(User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction(
+                    actionName: nameof(Index), 
+                    controllerName: "Escola", 
+                    routeValues: new { nomeEscola = (await _context.GetLoggedInApplicationUser(User.Identity.Name)).Escola.NomeEscolaUrl }
+                );
+            }
+            
+            return View();
+        }
 
 
         [HttpPost]
@@ -53,6 +66,17 @@ namespace Oasis.Web.Controllers
                 OcorreuAlgumErro = false,
                 UrlRedirecionar = string.Empty
             });
+        }
+
+        [HttpGet("[controller]/Acesso-Negado")]
+        public IActionResult AcessoNegado()
+        {
+            if (!(string.IsNullOrWhiteSpace(Request.QueryString.Value)))
+            {
+                return RedirectToAction(nameof(AcessoNegado));
+            }
+
+            return View();
         }
     }
 }

@@ -5,8 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Oasis.Web.Areas.Direcao.Controllers {
-    [Area("Direcao")]
-    public class ReportsController : Controller {
+
+    public class ReportsController : BaseDirecaoController
+    {
         public IActionResult Index() {
             return View();
         }

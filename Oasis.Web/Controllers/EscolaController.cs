@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Oasis.Dados;
-using Oasis.Web.Areas.Administrador.ViewModels;
 using Oasis.Web.ViewModels;
 
 namespace Oasis.Web.Controllers
 {
     [Route("[controller]")]
+    [Authorize]
     public class EscolaController : Controller
     {
         private readonly OasisContext _context;
@@ -17,17 +18,20 @@ namespace Oasis.Web.Controllers
         [HttpGet]
         [Route("[action]/{nomeEscola}")]
         [Route("{nomeEscola}")]
-        public async Task<ViewResult> Index(string nomeEscola)
+        public async Task<IActionResult> Index(string nomeEscola)
         {
             string nomeEscolaSql = string.Join(' ', nomeEscola.Split('-'));
-            return View(model: new EscolaViewModel
+
+            var utilizadorLogado = await _context.Utilizadores
+                                               .AsNoTracking()
+                                               .SingleOrDefaultAsync(utilizador => utilizador.Email == User.Identity.Name && nomeEscolaSql == utilizador.Escola.Nome);
+
+            if (utilizadorLogado is null) 
             {
-                Escola = await _context.Escolas
-                                        .AsNoTracking()
-                                        .Include(escola => escola.ConteudoPaginaPrincipal)
-                                        .Include(escola => escola.Disciplinas)
-                                        .SingleOrDefaultAsync(escola => nomeEscolaSql == nomeEscola)
-            });
+                return Forbid();
+            }
+
+            return View();
         }
     }
 }   
