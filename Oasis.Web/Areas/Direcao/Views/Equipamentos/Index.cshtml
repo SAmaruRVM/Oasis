@@ -1,0 +1,20 @@
+﻿@inject IConfiguration configuration
+@{
+    Layout = "~/Views/Escola/Shared/_Layout.cshtml";
+    ViewBag.Title = $"Direção {configuration["Projeto:Nome"]} - Equipamentos";
+}
+
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="tab">Equipamentos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" asp-controller="Equipamentos" asp-action="Requisicao" asp-area="Direcao">Equipamentos requisitados</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" asp-controller="Equipamentos" asp-action="Inserir" asp-area="Direcao">Inserir equipamento</a>
+    </li>
+</ul>
+
+<div class="container-fluid m-4">Index</div>

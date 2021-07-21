@@ -1,0 +1,57 @@
+﻿@model Equipamento
+@inject IConfiguration configuration
+@{
+    Layout = "~/Views/Escola/Shared/_Layout.cshtml";
+    ViewBag.Title = $"Direção {configuration["Projeto:Nome"]} - Equipamentos";
+}
+
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link " data-bs-toggle="tab" asp-controller="Equipamentos" asp-action="Index" asp-area="Direcao">Equipamentos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" asp-controller="Equipamentos" asp-action="Requisicao" asp-area="Direcao">Equipamentos requisitados</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="tab">Inserir equipamento</a>
+    </li>
+</ul>
+
+
+
+<div class="container-fluid">
+    <div class="p-5">
+        <form id="form-inserir-equipamento" class="w-100" asp-action="Inserir" asp-controller="Equipamentos" asp-area="Direcao"
+              asp-antiforgery="true" data-ajax="true" data-ajax-method="POST" data-ajax-success="equipamentoInserido"
+              data-ajax-loading="#loading-icon-equipamento">
+            <div class="form-group">
+                <label asp-for="Nome"></label>
+                <input class="form-control" asp-for="Nome" />
+                <span class="text-danger text-center" asp-validation-for="Nome"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantidade"></label>
+                <input class="form-control" asp-for="Quantidade" />
+                <span class="text-danger text-center" asp-validation-for="Quantidade"></span>
+            </div>
+            <hr />
+            <button class="btn btn-primary btn-block" type="submit">
+                <i id="loading-icon-equipamento" style="display: none;" class="fas fa-spinner fa-spin"></i>
+                Inserir equipamento
+            </button>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="~/Views/Shared/_Validacoes.cshtml" />
+    <partial name="~/Views/Shared/_Ajax.cshtml" />
+    <script>
+        function equipamentoInserido(respostaAjax) {
+            document.getElementById('form-inserir-equipamento').reset();
+            ajaxCompleto(respostaAjax);
+        }
+    </script>
+}

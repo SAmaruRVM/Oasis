@@ -192,6 +192,11 @@ namespace Oasis.Dados
                    .Property(requisicao => requisicao.DataRequisicao)
                    .HasDefaultValueSql("getdate()");
 
+            builder.Entity<RequisicaoEquipamento>()
+                   .HasOne(requisicao => requisicao.Aluno)
+                   .WithMany(aluno => aluno.RequisicoesEquipamento)
+                   .OnDelete(DeleteBehavior.NoAction);
+
             // Paginas Principais
             builder.Entity<PaginaPrincipal>()
                    .Property(pagina => pagina.DataCriacao)
@@ -201,6 +206,8 @@ namespace Oasis.Dados
             builder.Entity<Equipamento>()
                    .Property(equipamento => equipamento.Quantidade)
                    .HasDefaultValue(0);
+
+
 
             // Escolas
             builder.Entity<Escola>()

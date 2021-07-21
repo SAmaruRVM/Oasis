@@ -10,8 +10,10 @@ namespace Oasis.Web
         private readonly IConfiguration _configuration;
         public Startup(IConfiguration configuration) => (_configuration) = (configuration);
 
-        public void ConfigureServices(IServiceCollection services) => services.Adicionar(_configuration);
-
+        public void ConfigureServices(IServiceCollection services) {
+            services.Adicionar(_configuration);
+            services.AddRazorPages().AddRazorRuntimeCompilation();
+        }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) => app.Configurar(env);
     }
 }

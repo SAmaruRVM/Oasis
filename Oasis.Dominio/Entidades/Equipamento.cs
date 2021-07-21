@@ -18,6 +18,10 @@ namespace Oasis.Dominio.Entidades
 
         public int EscolaId { get; set; }
 
+        public ApplicationUser DirectorResponsavelInsercao { get; set; }
+
+        public int ApplicationUserId { get; set; }
+
         public ICollection<RequisicaoEquipamento> Requisicoes { get; } = new List<RequisicaoEquipamento>();
     }
 }

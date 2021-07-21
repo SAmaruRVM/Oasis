@@ -1,0 +1,8 @@
+﻿
+@inject IConfiguration configuration
+@{
+    Layout = "~/Views/Escola/Shared/_Layout.cshtml";
+    ViewBag.Title = $"Direção {configuration["Projeto:Nome"]} - Reports";
+}
+
+<h3>reports</h3>

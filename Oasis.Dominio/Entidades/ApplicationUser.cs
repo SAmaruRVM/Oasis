@@ -38,6 +38,7 @@ namespace Oasis.Dominio.Entidades
         public int EscolaId { get; set; }
 
         public ICollection<Disciplina> DisciplinasCriadas { get; } = new List<Disciplina>();
+        public ICollection<Equipamento> EquipamentosInseridos { get; set; } = new List<Equipamento>();
         public ICollection<Grupo> GruposOndeEnsina { get; } = new List<Grupo>();
         public ICollection<GrupoAluno> GruposOndeTemAulas { get; } = new List<GrupoAluno>();
         public ICollection<Post> PostsCriados { get; } = new List<Post>();

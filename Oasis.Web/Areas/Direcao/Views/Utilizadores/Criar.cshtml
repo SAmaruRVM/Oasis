@@ -4,35 +4,45 @@
     Layout = "~/Views/Escola/Shared/_Layout.cshtml";
     ViewBag.Title = $"Direção {configuration["Projeto:Nome"]} - Utilizadores";
 }
-<form id="form-inserir-utilizador" class="w-100" asp-action="Criar" asp-controller="Utilizadores" asp-area="Direcao"
-    asp-antiforgery="true" data-ajax="true" data-ajax-method="POST" data-ajax-success="utilizadorInserido"
-    data-ajax-loading="#loading-icon-utilizador">
-    <div class="form-group">
-        <label asp-for="Utilizador.PrimeiroNome"></label>
-        <input class="form-control" asp-for="Utilizador.PrimeiroNome" />
-        <span class="text-danger text-center" asp-validation-for="Utilizador.PrimeiroNome"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Utilizador.Apelido"></label>
-        <input class="form-control" asp-for="Utilizador.Apelido" />
-        <span class="text-danger text-center" asp-validation-for="Utilizador.Apelido"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input class="form-control" asp-for="Email" />
-        <span class="text-danger text-center" asp-validation-for="Email"></span>
-    </div>
 
-    <select class="wide mb-2" asp-for="TiposUtilizadorId" asp-items="@Model.TiposUtilizadorDropdownList">
-        <option selected disabled value="">-- Selecione o tipo de Utilizador --</option>
-    </select>
-    <span class="text-danger text-center" asp-validation-for="TiposUtilizadorId"></span>
-    </select>
-    <button class="btn btn-primary btn-block" type="submit">
-        <i id="loading-icon-utilizador" style="display: none;" class="fas fa-spinner fa-spin"></i>
-        Inserir utilizador
-    </button>
-</form>
+<div class="p-5">
+    <form id="form-inserir-utilizador" class="w-100" asp-action="Criar" asp-controller="Utilizadores" asp-area="Direcao"
+          asp-antiforgery="true" data-ajax="true" data-ajax-method="POST" data-ajax-success="utilizadorInserido"
+          data-ajax-loading="#loading-icon-utilizador">
+        <div class="form-group">
+            <label asp-for="Utilizador.PrimeiroNome"></label>
+            <input class="form-control" asp-for="Utilizador.PrimeiroNome" />
+            <span class="text-danger text-center" asp-validation-for="Utilizador.PrimeiroNome"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Utilizador.Apelido"></label>
+            <input class="form-control" asp-for="Utilizador.Apelido" />
+            <span class="text-danger text-center" asp-validation-for="Utilizador.Apelido"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input class="form-control" asp-for="Email" />
+            <span class="text-danger text-center" asp-validation-for="Email"></span>
+        </div>
+
+        <select class="wide mb-2" asp-for="TiposUtilizadorId" asp-items="@Model.TiposUtilizadorDropdownList">
+            <option selected disabled value="">-- Selecione o tipo de Utilizador --</option>
+        </select>
+        <span class="text-danger text-center" asp-validation-for="TiposUtilizadorId"></span>
+        </select>
+        <button class="btn btn-primary btn-block" type="submit">
+            <i id="loading-icon-utilizador" style="display: none;" class="fas fa-spinner fa-spin"></i>
+            Inserir utilizador
+        </button>
+        
+            <hr />
+       
+        
+
+        <a class="btn btn-danger" asp-controller="Utilizadores" asp-action="Index" asp-area="Direcao">Concluido</a>
+
+    </form>
+</div>
 
 @section Scripts {
 <partial name="~/Views/Shared/_Validacoes.cshtml" />

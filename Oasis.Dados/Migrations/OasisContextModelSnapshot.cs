@@ -51,28 +51,28 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "8dc84605-4942-4eeb-a936-d98137eb704b",
+                            ConcurrencyStamp = "cd6e647d-dcbc-4f96-a14a-5af1c376b7db",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "e631253a-1fdf-4893-83bd-3d1849a47ee7",
+                            ConcurrencyStamp = "b7e68077-fd57-4cc8-be1d-c2290c9c870a",
                             Name = "Diretor",
                             NormalizedName = "DIRETOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "ea2f4cc2-2256-493c-8598-1575a950f8c3",
+                            ConcurrencyStamp = "50e4261e-8ca3-4ba5-974a-3d791b60de84",
                             Name = "Professor",
                             NormalizedName = "PROFESSOR"
                         },
                         new
                         {
                             Id = 4,
-                            ConcurrencyStamp = "1ac15a95-e2d1-4c2d-b2fe-1d8febb0a8c5",
+                            ConcurrencyStamp = "244a998e-f311-4cd9-b481-02b3cbba32d5",
                             Name = "Aluno",
                             NormalizedName = "ALUNO"
                         });
@@ -350,8 +350,8 @@ namespace Oasis.Dados.Migrations
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -369,6 +369,9 @@ namespace Oasis.Dados.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("int");
+
                     b.Property<int>("EscolaId")
                         .HasColumnType("int");
 
@@ -383,6 +386,8 @@ namespace Oasis.Dados.Migrations
                         .HasDefaultValue(0);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("EscolaId");
 
@@ -925,11 +930,19 @@ namespace Oasis.Dados.Migrations
 
             modelBuilder.Entity("Oasis.Dominio.Entidades.Equipamento", b =>
                 {
+                    b.HasOne("Oasis.Dominio.Entidades.ApplicationUser", "DirectorResponsavelInsercao")
+                        .WithMany("EquipamentosInseridos")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Oasis.Dominio.Entidades.Escola", "Escola")
                         .WithMany("Equipamentos")
                         .HasForeignKey("EscolaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("DirectorResponsavelInsercao");
 
                     b.Navigation("Escola");
                 });
@@ -1081,7 +1094,7 @@ namespace Oasis.Dados.Migrations
                     b.HasOne("Oasis.Dominio.Entidades.ApplicationUser", "Aluno")
                         .WithMany("RequisicoesEquipamento")
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Oasis.Dominio.Entidades.Equipamento", "Equipamento")
@@ -1122,6 +1135,8 @@ namespace Oasis.Dados.Migrations
                     b.Navigation("Comentarios");
 
                     b.Navigation("DisciplinasCriadas");
+
+                    b.Navigation("EquipamentosInseridos");
 
                     b.Navigation("GruposOndeEnsina");
 

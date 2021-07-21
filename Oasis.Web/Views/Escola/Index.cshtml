@@ -4,64 +4,174 @@
     ViewBag.Title = "Nome escola";
 }
 
-@if (bool.TryParse(httpContext.HttpContext.Session.GetString("PrimeiraVezLogin"), out _))
-{
+
+@if (bool.TryParse(httpContext.HttpContext.Session.GetString("PrimeiraVezLogin"), out _)) {
     httpContext.HttpContext.Session.Remove("PrimeiraVezLogin");
     <div class="modal fade" id="modal-alterar-password" tabindex="-1" role="dialog"
-    aria-labelledby="modal-alterar-password-titulo" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal-alterar-password-titulo">Alteração de password</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Notámos que foi a 1º vez pela qual se autenticou. Mudar password?</p>
-                <form class="w-100" asp-action="AlterarPassword" asp-controller="Conta" asp-antiforgery="true"
-                    data-ajax="true" data-ajax-method="POST" data-ajax-success="ajaxCompleto"
-                    data-ajax-loading="#loading-icon-alterar-password">
-                    <div class="form-group mb-3">
-                        <label asp-for="AlterarPasswordViewModel.Password"></label>
-                        <input class="form-control" asp-for="AlterarPasswordViewModel.Password" />
-                        <span class="text-danger text-center"
-                            asp-validation-for="AlterarPasswordViewModel.Password"></span>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label asp-for="AlterarPasswordViewModel.ConfirmacaoPassword"></label>
-                        <input class="form-control" asp-for="AlterarPasswordViewModel.ConfirmacaoPassword" />
-                        <span class="text-danger text-center"
-                            asp-validation-for="AlterarPasswordViewModel.ConfirmacaoPassword"></span>
-                    </div>
-
-                    <button class="btn btn-primary btn-block mt-2" type="submit">
-                        <i id="loading-icon-alterar-password" style="display: none;" class="fas fa-spinner fa-spin"></i>
-                        Alterar password
+         aria-labelledby="modal-alterar-password-titulo" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-alterar-password-titulo">Alteração de password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
                     </button>
-                </form>
+                </div>
+                <div class="modal-body">
+                    <p>Notámos que foi a 1º vez pela qual se autenticou. Mudar password?</p>
+                    <form class="w-100" asp-action="AlterarPassword" asp-controller="Conta" asp-antiforgery="true"
+                          data-ajax="true" data-ajax-method="POST" data-ajax-success="ajaxCompleto"
+                          data-ajax-loading="#loading-icon-alterar-password">
+                        <div class="form-group mb-3">
+                            <label asp-for="AlterarPasswordViewModel.Password"></label>
+                            <input class="form-control" asp-for="AlterarPasswordViewModel.Password" />
+                            <span class="text-danger text-center"
+                                  asp-validation-for="AlterarPasswordViewModel.Password"></span>
+                        </div>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Não pretendo alterar a password
-                    agora</button>
+                        <div class="form-group mb-3">
+                            <label asp-for="AlterarPasswordViewModel.ConfirmacaoPassword"></label>
+                            <input class="form-control" asp-for="AlterarPasswordViewModel.ConfirmacaoPassword" />
+                            <span class="text-danger text-center"
+                                  asp-validation-for="AlterarPasswordViewModel.ConfirmacaoPassword"></span>
+                        </div>
+
+                        <button class="btn btn-primary btn-block mt-2" type="submit">
+                            <i id="loading-icon-alterar-password" style="display: none;" class="fas fa-spinner fa-spin"></i>
+                            Alterar password
+                        </button>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">
+                        Não pretendo alterar a password
+                        agora
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
     @section Scripts {
-<script>
-    $('#modal-alterar-password').modal('show');
-</script>
-}
+        <script>
+            $('#modal-alterar-password').modal('show');
+        </script>
+    }
 }
 
 
-<div class="bg-danger" style="display: flex;">
-    <div class="text-center " style="flex-grow: .90">
-        One of three columns
+
+
+<div class="row no-gutters">
+    <div class="text-center col-10">
+        <nav class="w-100">
+            <ul class="navbar-nav mx-auto">
+                <li>
+                    <h3>Nome Escola</h3>
+                </li>
+            </ul>
+        </nav>
+        <div class="p-4 bg-light" style="position: fixed; height: 80vh; width: 68%; overflow-y: scroll;">
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+            <p>teste</p>One of three columns
+        </div>
     </div>
-    <div class="text-center bg-info" style="flex-grow: .10">
+    <div class="text-center col-2 mt-5">
+        <h3>Grupos</h3>
+        <div class="p-4 bg-info" style="position:fixed;height:60vh;width:15%;overflow-y:scroll;">
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+            <p>teste</p>
+        </div>
     </div>
 </div>
+
+
+
+
+

@@ -14,6 +14,7 @@ namespace Oasis.Web.Areas.Direcao.ViewModels
 
         public int TiposUtilizadorId { get; set; }
 
+        public IEnumerable<ApplicationUser> UtilizadoresRoles { get; set; }
 
         [Required(ErrorMessage = "O email tem que ser obrigatóriamente preenchido!")]
         [EmailAddress(ErrorMessage = "O email introduzido encontra-se num formato inválido!")]
