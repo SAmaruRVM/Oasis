@@ -55,6 +55,7 @@ namespace Oasis.Web.Areas.Administrador.Controllers {
                 UserName = inserirAdministrador.Email,
                 PrimeiroNome = inserirAdministrador.Administrador.PrimeiroNome,
                 Apelido = inserirAdministrador.Administrador.Apelido,
+                TemaId = 1,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 

@@ -45,7 +45,7 @@ namespace Oasis.Web.Areas.Administrador.Controllers
             }
 
             Contacto contacto = await _context.Contactos.FindAsync(contactosViewModel.RespostaContactoAdicionar.ContactoId);
-
+            
 
             if (contacto is null)
             {
@@ -65,6 +65,9 @@ namespace Oasis.Web.Areas.Administrador.Controllers
                 ContactoId = contactosViewModel.RespostaContactoAdicionar.ContactoId
             };
 
+            contacto.Respondido = true;
+
+            _context.Contactos.Update(contacto);
             _context.RespostasContactos.Add(respostaContacto);
             await _context.SaveChangesAsync();
 
