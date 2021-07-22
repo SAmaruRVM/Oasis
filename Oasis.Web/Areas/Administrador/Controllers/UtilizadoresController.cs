@@ -66,7 +66,7 @@ namespace Oasis.Web.Areas.Administrador.Controllers
                 Apelido = inserirMembroDirecaoViewModel.MembroDirecao.Apelido,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 EscolaId = inserirMembroDirecaoViewModel.IdEscola,
-                TemaId = 1
+                TemaId = 3
             };
 
             IDbContextTransaction databaseTransaction = null;

@@ -33,6 +33,9 @@ namespace Oasis.Dominio.Entidades
         [Display(Name = "Apelido", Prompt = "Introduza o seu apelido")]
         public string Apelido { get; set; }
 
+
+        public bool Respondido { get; set; }
+
         // default getdate() <<-- SQL
         public DateTime DataContacto { get; set; }
 

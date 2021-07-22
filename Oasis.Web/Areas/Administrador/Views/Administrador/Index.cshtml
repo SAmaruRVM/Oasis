@@ -1,4 +1,4 @@
-﻿@model UtilizadoresAdministradorViewModel
+﻿@model AdministradoresViewModel
 @inject IConfiguration configuration
 @{
     ViewBag.Title = $"Administração {configuration["Projeto:Nome"]} - Administrador";
@@ -21,23 +21,21 @@
             </tr>
         </thead>
         <tbody>
-            
+            @foreach (ApplicationUser admin in Model.Utilizadores) {
                 <tr>
-                    <td>teste</td>
-                    <td>teste</td>
-                    <td>teste</td>
-                    <td>teste</td>
-                    <td>teste</td>
+                    <td>@admin.PrimeiroNome</td>
+                    <td>@admin.Apelido</td>
+                    <td>@admin.Email</td>
+                    <td>@admin.DataCriacao</td>
+                    <td>@admin.DataUltimoLogin</td>
                     <td>
-                        <a href="#">
+                        <a href="#" data-toggle="modal" data-target="#modal-editar-utilizador" data-id="@admin.Id">
                             <i class="far fa-edit fa-lg ml-1"></i>
                         </a>
-                        <a href="#">
-                        <i class="far fa-trash-alt fa-lg ml-2"></i>
-                        </a>
+                        <a href="#"><i class="far fa-trash-alt fa-lg ml-2"></i></a>
                     </td>
                 </tr>
-            
+            }
         </tbody>
     </table>
 </div>
@@ -57,20 +55,20 @@
             </div>
             <div class="modal-body">
                 <form id="form-adicionar-administrador" asp-action="AdicionarAdministrador"
-                      asp-controller="Utilizadores" asp-area="Administrador" asp-antiforgery="true" data-ajax="true"
+                      asp-controller="Administrador" asp-area="Administrador" asp-antiforgery="true" data-ajax="true"
                       data-ajax-method="POST" data-ajax-success="insercaoAdministradorConcluidaSucesso"
                       data-ajax-loading="#loading-icon-insercao-administrador">
 
                     <div class="form-group">
-                        <label asp-for="MembroDirecao.PrimeiroNome"></label>
-                        <input class="form-control" asp-for="MembroDirecao.PrimeiroNome" />
-                        <span class="text-danger text-center" asp-validation-for="MembroDirecao.PrimeiroNome"></span>
+                        <label asp-for="Administrador.PrimeiroNome"></label>
+                        <input class="form-control" asp-for="Administrador.PrimeiroNome" />
+                        <span class="text-danger text-center" asp-validation-for="Administrador.PrimeiroNome"></span>
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="MembroDirecao.Apelido"></label>
-                        <input class="form-control" asp-for="MembroDirecao.Apelido" />
-                        <span class="text-danger text-center" asp-validation-for="MembroDirecao.Apelido"></span>
+                        <label asp-for="Administrador.Apelido"></label>
+                        <input class="form-control" asp-for="Administrador.Apelido" />
+                        <span class="text-danger text-center" asp-validation-for="Administrador.Apelido"></span>
                     </div>
 
                     <div class="form-group">

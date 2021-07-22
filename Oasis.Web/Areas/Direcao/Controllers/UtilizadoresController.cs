@@ -28,16 +28,12 @@ namespace Oasis.Web.Areas.Direcao.Controllers
         [HttpGet]
         public async Task<ViewResult> Index()
         {
-
             UtilizadoresDirecaoViewModel utilizadoresViewModel = new()
             {
-
-
                 UtilizadoresRoles = await _userManager.Users
                                                   .AsNoTracking()
                                                   .OrderBy(user => user.UserName)
                                                   .ToListAsync(),
-
             };
 
             return View(model: utilizadoresViewModel);
@@ -81,7 +77,7 @@ namespace Oasis.Web.Areas.Direcao.Controllers
 
                     utilizadorDirecaoViewModel.Utilizador.Email = utilizadorDirecaoViewModel.Email;
                     utilizadorDirecaoViewModel.Utilizador.SecurityStamp = Guid.NewGuid().ToString();
-                    utilizadorDirecaoViewModel.Utilizador.TemaId = 1;
+                    utilizadorDirecaoViewModel.Utilizador.TemaId = 3;
                     utilizadorDirecaoViewModel.Utilizador.EscolaId = (await _context.Utilizadores
                                                                                  .AsNoTracking()
                                                                                  .Include(utilizador => utilizador.Escola)
