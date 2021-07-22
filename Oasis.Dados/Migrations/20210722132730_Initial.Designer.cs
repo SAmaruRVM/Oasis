@@ -10,8 +10,8 @@ using Oasis.Dados;
 namespace Oasis.Dados.Migrations
 {
     [DbContext(typeof(OasisContext))]
-    [Migration("20210722081821_adicionadaRespostaBoolContacto")]
-    partial class adicionadaRespostaBoolContacto
+    [Migration("20210722132730_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,28 +53,28 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "233e14ee-a2cd-40c5-b394-5164d188dac3",
+                            ConcurrencyStamp = "c13c360a-c18e-40b0-8ac5-7dc149a77ccd",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "75affd6f-f6a8-428c-8232-7244ea2ce0b9",
+                            ConcurrencyStamp = "d1e7b574-41a0-441d-9ed8-ac33257d61af",
                             Name = "Diretor",
                             NormalizedName = "DIRETOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "e1c71efd-40f0-46f4-8f83-8c625cfac4cf",
+                            ConcurrencyStamp = "5589a7e0-9bf8-40b3-bc6b-8586c6b4cfdd",
                             Name = "Professor",
                             NormalizedName = "PROFESSOR"
                         },
                         new
                         {
                             Id = 4,
-                            ConcurrencyStamp = "484bdd9f-94d1-4899-aac5-b4d19f3c616d",
+                            ConcurrencyStamp = "cd11b899-d419-4479-bf22-09c7c1f7c955",
                             Name = "Aluno",
                             NormalizedName = "ALUNO"
                         });
@@ -216,7 +216,7 @@ namespace Oasis.Dados.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("EscolaId")
+                    b.Property<int?>("EscolaId")
                         .HasColumnType("int");
 
                     b.Property<byte[]>("ImagemPerfil")
@@ -887,8 +887,7 @@ namespace Oasis.Dados.Migrations
                     b.HasOne("Oasis.Dominio.Entidades.Escola", "Escola")
                         .WithMany("Membros")
                         .HasForeignKey("EscolaId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Oasis.Dominio.Entidades.Tema", "Tema")
                         .WithMany("Utilizadores")

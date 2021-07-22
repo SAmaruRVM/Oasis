@@ -27,8 +27,7 @@ namespace Oasis.Web.Controllers
             {
                 return RedirectToAction(
                     actionName: nameof(Index), 
-                    controllerName: "Escola", 
-                    routeValues: new { nomeEscola = (await _context.GetLoggedInApplicationUser(User.Identity.Name)).Escola.NomeEscolaUrl }
+                    controllerName: "Escola"
                 );
             }
             

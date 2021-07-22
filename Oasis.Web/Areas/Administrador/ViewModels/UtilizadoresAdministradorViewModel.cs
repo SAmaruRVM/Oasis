@@ -15,7 +15,8 @@ namespace Oasis.Web.Areas.Administrador.ViewModels
         [Display(Name = "Email", Prompt = "Introduza o email")]
         [Remote(action: "EmailEValido", controller: "Conta", areaName: "", ErrorMessage = "O email indicado já se encontra em uso.")]
         public string Email { get; set; }
-        
+
+        [Range(minimum: 1, maximum: int.MaxValue)]       
         public int IdEscola { get; set; }
 
         public IEnumerable<ApplicationUser> Utilizadores { get; set; }

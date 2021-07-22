@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Oasis.Aplicacao.Extensions;
 using Oasis.Dominio.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Oasis.Web.Controllers
 {
@@ -44,7 +45,6 @@ namespace Oasis.Web.Controllers
             }
 
             var utilizadorTentativaLogin = await _context.Utilizadores
-                                                         .Include(utilizador => utilizador.Escola)
                                                          .SingleOrDefaultAsync(utilizador => utilizador.Email == loginViewModel.Email);
 
 
@@ -97,7 +97,7 @@ namespace Oasis.Web.Controllers
                 Titulo = "Login foi realizado com sucesso!",
                 Descricao = "Será agora redirecionado para a página da sua escola.",
                 OcorreuAlgumErro = false,
-                UrlRedirecionar = (await _userManager.IsInRoleAsync(user: utilizadorTentativaLogin, role: TipoUtilizador.Administrador.ToString())) ? $"administrador/" : $"escola/{utilizadorTentativaLogin.Escola.NomeEscolaUrl}"
+                UrlRedirecionar = (await _userManager.IsInRoleAsync(user: utilizadorTentativaLogin, role: TipoUtilizador.Administrador.ToString())) ? $"administrador/" : $"escola"
             });
         }
 
@@ -182,5 +182,8 @@ namespace Oasis.Web.Controllers
                 UrlRedirecionar = string.Empty
             });
         }
+
+        [Authorize]
+        public ViewResult Perfil() => View();
     }
 }

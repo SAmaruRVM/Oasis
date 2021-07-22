@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Oasis.Dados;
+using Oasis.Web.Extensions;
 using Oasis.Web.ViewModels;
 
 namespace Oasis.Web.Controllers
@@ -16,22 +18,29 @@ namespace Oasis.Web.Controllers
 
 
         [HttpGet]
-        [Route("[action]/{nomeEscola}")]
-        [Route("{nomeEscola}")]
-        public async Task<IActionResult> Index(string nomeEscola)
+        [Route("[action]")]
+        public async Task<IActionResult> Index()
         {
-            string nomeEscolaSql = string.Join(' ', nomeEscola.Split('-'));
-
-            var utilizadorLogado = await _context.Utilizadores
-                                               .AsNoTracking()
-                                               .SingleOrDefaultAsync(utilizador => utilizador.Email == User.Identity.Name && nomeEscolaSql == utilizador.Escola.Nome);
+            var utilizadorLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
 
             if (utilizadorLogado is null) 
             {
                 return Forbid();
             }
 
-            return View();
+            var disciplinaGruposAlunos = utilizadorLogado.GruposOndeTemAulas
+                                   .GroupBy(grupo => grupo.Grupo.Disciplina.Nome)
+                                   .Select(disciplina => new DisciplinaGruposAlunos
+                                   {
+                                       NomeDisciplina = disciplina.Key, 
+                                       Grupos = disciplina
+                                   })
+                                   .OrderBy(disciplina => disciplina.NomeDisciplina);
+
+            return View(model: new EscolaViewModel 
+            {
+                DisciplinaGruposAlunos = disciplinaGruposAlunos
+            });
         }
     }
 }   

@@ -8,12 +8,14 @@ namespace Oasis.Dominio.Entidades
     {
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(20)]
-        public string Titulo { get; set; }
+        [Required(ErrorMessage = "O assunto tem que ser obrigatóriamente preenchido!")]
+        [StringLength(20, ErrorMessage = "O {0} tem que ter no máximo {1} caracteres!")]
+        [Display(Name = "Assunto", Prompt = "Introduza o assunto")]
+        public string Assunto { get; set; }
 
-        [Required]
-        [StringLength(200)]
+        [Required(ErrorMessage = "A descrição tem que ser obrigatóriamente preenchido!")]
+        [StringLength(200, ErrorMessage = "A descrição tem que ter no máximo {1} caracteres!")]
+        [Display(Name = "Descrição", Prompt = "Introduza a descrição")]
         public string Descricao { get; set; }
 
         // default getdate() <<-- SQL
@@ -24,7 +26,7 @@ namespace Oasis.Dominio.Entidades
 
         [ForeignKey(nameof(ProfessorId))]
         public ApplicationUser Professor { get; set; }
- 
+
         public int? AlunoId { get; set; }
 
         public int? ProfessorId { get; set; }

@@ -7,11 +7,14 @@ namespace Oasis.Dominio.Entidades
     {
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(50)]
+        [Required(ErrorMessage = "O nome tem que ser obrigatóriamente preenchido!")]
+        [StringLength(50, ErrorMessage = "O {0} tem que ter no máximo {1} caracteres!")]
+        [Display(Name = "Nome", Prompt = "Introduza o nome")]
         public string Nome { get; set; }
 
-        [StringLength(150)]
+        [Required(ErrorMessage = "A descrição tem que ser obrigatóriamente preenchida!")]
+        [StringLength(150, ErrorMessage = "A {0} tem que ter no máximo {1} caracteres!")]
+        [Display(Name = "Descrição", Prompt = "Introduza a descrição")]
         public string Descricao { get; set; }
 
         public byte[] Banner { get; set; }

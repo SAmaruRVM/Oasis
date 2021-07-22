@@ -8,11 +8,12 @@ namespace Oasis.Dominio.Entidades
     {
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(50)]
+        [Required(ErrorMessage = "O título tem que ser obrigatóriamente preenchido!")]
+        [StringLength(50, ErrorMessage = "O {0} tem que ter no máximo {1} caracteres!")]
+        [Display(Name = "Título", Prompt = "Introduza o título")]
         public string Titulo { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O conteúdo tem que ser obrigatóriamente preenchido!")]
         public string Conteudo { get; set; }
 
         // default getdate() <<-- SQL

@@ -81,13 +81,15 @@ namespace Oasis.Web.Areas.Direcao.Controllers
                     utilizadorDirecaoViewModel.Utilizador.EscolaId = (await _context.Utilizadores
                                                                                  .AsNoTracking()
                                                                                  .Include(utilizador => utilizador.Escola)
-                                                                                 .SingleOrDefaultAsync(utilizador => utilizador.Email == User.Identity.Name)).Id;
+                                                                                 .SingleOrDefaultAsync(utilizador => utilizador.Email == User.Identity.Name)).Escola.Id;
+                                                                                 
                     utilizadorDirecaoViewModel.Utilizador.UserName = utilizadorDirecaoViewModel.Email;
 
 
-                    var role = await _roleManager.Roles.SingleOrDefaultAsync(role => role.Id == utilizadorDirecaoViewModel.TiposUtilizadorId);
+                    var role = await _roleManager.Roles
+                                                 .SingleOrDefaultAsync(role => role.Id == utilizadorDirecaoViewModel.TiposUtilizadorId);
 
-                    await _userManager.CreateAsync(utilizadorDirecaoViewModel.Utilizador, password: passwordGerada);
+                    await _userManager.CreateAsync(user: utilizadorDirecaoViewModel.Utilizador, password: passwordGerada);
 
                     await _userManager.AddToRoleAsync(
                        user: utilizadorDirecaoViewModel.Utilizador,

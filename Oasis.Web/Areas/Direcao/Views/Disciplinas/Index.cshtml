@@ -27,8 +27,16 @@
                             <td>@disciplina.DataCriacao</td>
                             <td>@disciplina.CriadorDirecao.PrimeiroNome @disciplina.CriadorDirecao.Apelido</td>
                             <td>
-                                <a href="#" data-disciplina-id="@disciplina.Id" data-disciplina-atualizar="true"><i class="far fa-edit fa-lg ml-1"></i></a>
-                                <a href="#" data-disciplina-id="@disciplina.Id" data-disciplina-eliminar="true" data-toggle="modal" data-target="#modal-eliminar-disciplina"><i class="far fa-trash-alt fa-lg ml-2"></i></a>
+                                <a href="#" data-disciplina-id="@disciplina.Id" data-disciplina-atualizar="true"><i
+                                    class="far fa-edit fa-lg ml-1"></i></a>
+                                <a href="#" data-disciplina-id="@disciplina.Id" data-disciplina-eliminar="true"
+                                data-toggle="modal" data-target="#modal-eliminar-disciplina"><i
+                                    class="far fa-trash-alt fa-lg ml-2"></i></a>
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#modal-inserir-grupo" data-grupo-inserir="true"
+                                data-disciplina-id="@disciplina.Id">
+                                    Criar grupo
+                                </button>
                             </td>
                         </tr>
                     }
@@ -37,16 +45,9 @@
         </div>
         <div class="col-6">
             <div class="p-5">
-                <form id="form-inserir-disciplina"
-                      class="w-100"
-                      asp-action="Criar"
-                      asp-controller="Disciplinas"
-                      asp-area="Direcao"
-                      asp-antiforgery="true"
-                      data-ajax="true"
-                      data-ajax-method="POST"
-                      data-ajax-success="disciplinaInserida"
-                      data-ajax-loading="#loading-icon-disciplina">
+                <form id="form-inserir-disciplina" class="w-100" asp-action="Criar" asp-controller="Disciplinas"
+                    asp-area="Direcao" asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
+                    data-ajax-success="disciplinaInserida" data-ajax-loading="#loading-icon-disciplina">
                     <div class="form-group">
                         <label asp-for="Disciplina.Nome"></label>
                         <input class="form-control" asp-for="Disciplina.Nome" />
@@ -66,8 +67,11 @@
 
 
 <!-- Modals -->
+
+
+<!-- Modal eliminar disciplina -->
 <div class="modal fade" id="modal-eliminar-disciplina" tabindex="-1" role="dialog"
-     aria-labelledby="modal-eliminar-disciplina-titulo" aria-hidden="true">
+    aria-labelledby="modal-eliminar-disciplina-titulo" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -77,17 +81,64 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form asp-action="Eliminar"
-                      asp-controller="Disciplinas" asp-area="Direcao" asp-antiforgery="true" data-ajax="true"
-                      data-ajax-method="POST" data-ajax-success="disciplinaEliminada"
-                      data-ajax-loading="#loading-icon-eliminacao-disciplina"
-                      asp-route-id="3">
+                <form asp-action="Eliminar" asp-controller="Disciplinas" asp-area="Direcao" asp-antiforgery="true"
+                    data-ajax="true" data-ajax-method="POST" data-ajax-success="disciplinaEliminada"
+                    data-ajax-loading="#loading-icon-eliminacao-disciplina" asp-route-id="3">
                     <p id="eliminar-disciplina-texto-confirmacao">pretende mesmo eliminar x?</p>
                     <button type="submit" class="btn btn-primary">Confirmar eliminação</button>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar eliminação</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal criar grupo -->
+<div class="modal fade" id="modal-inserir-grupo" tabindex="-1" role="dialog"
+    aria-labelledby="modal-inserir-grupo-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-inserir-grupo-titulo">Criação de um grupo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-inserir-grupo"  asp-action="Criar" asp-controller="Grupos" asp-area="Direcao" asp-antiforgery="true"
+                    data-ajax="true" data-ajax-method="POST" data-ajax-success="grupoInserido"
+                    data-ajax-loading="#loading-icon-inserir-grupo">
+
+                    <input type="hidden" asp-for="DisciplinaId"/>
+                    <div class="form-group">
+                        <label asp-for="Grupo.Nome"></label>
+                        <input class="form-control" asp-for="Grupo.Nome" />
+                        <span class="text-danger text-center" asp-validation-for="Grupo.Nome"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Grupo.Descricao"></label>
+                        <textarea class="form-control" rows="10" asp-for="Grupo.Descricao"></textarea>
+                        <span class="text-danger text-center" asp-validation-for="Grupo.Descricao"></span>
+                    </div>
+
+                    <select class="wide mb-2" asp-for="ProfessorId"
+                        asp-items="@Model.DropdownListProfessores">
+                        <option selected disabled value="">-- Selecione o professor --</option>
+                    </select>
+                    <span class="text-danger text-center" asp-validation-for="ProfessorId"></span>
+
+                    <button class="btn btn-primary btn-block" type="submit">
+                        <i id="loading-icon-inserir-grupo" style="display: none;" class="fas fa-spinner fa-spin"></i>
+                        Inserir Grupo
+                    </button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
@@ -96,32 +147,57 @@
 
 
 
+
+
+
+
+
+
+
+
 @section Scripts {
-    <partial name="~/Views/Shared/_Validacoes.cshtml" />
-    <partial name="~/Views/Shared/_Ajax.cshtml" />
-    <script>
-        function disciplinaInserida(respostaAjax) {
-            if (!(respostaAjax.ocorreuAlgumErro)) {
-                document.getElementById('form-inserir-disciplina').reset();
-            }
-            ajaxCompleto(respostaAjax);
+<partial name="~/Views/Shared/_Validacoes.cshtml" />
+<partial name="~/Views/Shared/_Ajax.cshtml" />
+<script>
+    function disciplinaInserida(respostaAjax) {
+        if (!(respostaAjax.ocorreuAlgumErro)) {
+            document.getElementById('form-inserir-disciplina').reset();
         }
-        function disciplinaEliminada(respostaAjax) {
-            if (!(respostaAjax.ocorreuAlgumErro)) {
-                $('#modal-eliminar-disciplina').modal('hide');
-            }
-            ajaxCompleto(respostaAjax);
+        ajaxCompleto(respostaAjax);
+    }
+    function disciplinaEliminada(respostaAjax) {
+        if (!(respostaAjax.ocorreuAlgumErro)) {
+            $('#modal-eliminar-disciplina').modal('hide');
         }
+        ajaxCompleto(respostaAjax);
+    }
 
-        const eliminarDisciplinaBtns = document.querySelectorAll('button[data-disciplina-eliminar="true"]');
-        const atualizarDisciplinaBtns = document.querySelectorAll('button[data-disciplina-atualizar="true"]');
+    const eliminarDisciplinaBtns = document.querySelectorAll('button[data-disciplina-eliminar]');
+    const atualizarDisciplinaBtns = document.querySelectorAll('button[data-disciplina-atualizar]');
 
-        
-        eliminarDisciplinaBtns.forEach(btn => btn.addEventListener('click', () =>
-        {
-            const textoConfirmacao = document.getElementById('eliminar-disciplina-texto-confirmacao');
-            textoConfirmacao.innerText = btn.getAttribute('data-disciplina-id');
 
-        }));
-    </script>
+    eliminarDisciplinaBtns.forEach(btn => btn.addEventListener('click', () => {
+        const textoConfirmacao = document.getElementById('eliminar-disciplina-texto-confirmacao');
+        textoConfirmacao.innerText = btn.getAttribute('data-disciplina-id');
+    }));
+
+
+
+    // Gestão / Criação de grupos
+
+ function grupoInserido(respostaAjax) {
+        if (!(respostaAjax.ocorreuAlgumErro)) {
+            $('#modal-inserir-grupo').modal('hide');
+            document.getElementById('form-inserir-grupo').reset();
+        }
+        ajaxCompleto(respostaAjax);
+    }
+
+    const criacaoGruposBtns = document.querySelectorAll('button[data-grupo-inserir]');
+
+    criacaoGruposBtns.forEach(btn => btn.addEventListener('click', () => 
+    {
+        document.getElementById('DisciplinaId').value = btn.getAttribute('data-disciplina-id');
+    }));
+</script>
 }

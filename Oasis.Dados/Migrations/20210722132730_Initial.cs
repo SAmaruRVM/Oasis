@@ -18,6 +18,7 @@ namespace Oasis.Dados.Migrations
                     EmailContactante = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PrimeiroNome = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Apelido = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Respondido = table.Column<bool>(type: "bit", nullable: false),
                     DataContacto = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
@@ -165,7 +166,7 @@ namespace Oasis.Dados.Migrations
                     DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     DataUltimoLogin = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TemaId = table.Column<int>(type: "int", nullable: false),
-                    EscolaId = table.Column<int>(type: "int", nullable: false),
+                    EscolaId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -601,10 +602,10 @@ namespace Oasis.Dados.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "2f840ea7-a2f1-4b77-a6dd-14555f74dbbb", "Administrador", "ADMINISTRADOR" },
-                    { 2, "7dbe7600-3bb5-41ef-9a32-1ac4afe6d140", "Diretor", "DIRETOR" },
-                    { 3, "30ae9d49-16ed-4044-89ab-1c7ed56edf97", "Professor", "PROFESSOR" },
-                    { 4, "738d6898-d72b-4c20-b4b0-7c6568d2859c", "Aluno", "ALUNO" }
+                    { 1, "c13c360a-c18e-40b0-8ac5-7dc149a77ccd", "Administrador", "ADMINISTRADOR" },
+                    { 2, "d1e7b574-41a0-441d-9ed8-ac33257d61af", "Diretor", "DIRETOR" },
+                    { 3, "5589a7e0-9bf8-40b3-bc6b-8586c6b4cfdd", "Professor", "PROFESSOR" },
+                    { 4, "cd11b899-d419-4479-bf22-09c7c1f7c955", "Aluno", "ALUNO" }
                 });
 
             migrationBuilder.CreateIndex(

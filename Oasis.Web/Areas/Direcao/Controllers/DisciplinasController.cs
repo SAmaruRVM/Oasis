@@ -1,9 +1,12 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Oasis.Dados;
 using Oasis.Dominio.Entidades;
+using Oasis.Dominio.Enums;
 using Oasis.Web.Areas.Direcao.ViewModels;
 using Oasis.Web.Extensions;
 using Oasis.Web.Http;
@@ -14,14 +17,19 @@ namespace Oasis.Web.Areas.Direcao.Controllers
     public class DisciplinasController : BaseDirecaoController
     {
         private readonly OasisContext _context;
-        public DisciplinasController(OasisContext context) => (_context) = (context);
+        private readonly UserManager<ApplicationUser> _userManager;
+        public DisciplinasController(OasisContext context, UserManager<ApplicationUser> userManager) 
+        => (_context, _userManager) = (context, userManager);
 
 
         [HttpGet]
         public async Task<ViewResult> Index()
            => View(model: new DisciplinasViewModel
            {
-               Disciplinas = (await _context.GetLoggedInApplicationUser(User.Identity.Name)).Escola.Disciplinas.AsEnumerable()
+               Disciplinas = (await _context.GetLoggedInApplicationUser(User.Identity.Name)).Escola.Disciplinas,
+               DropdownListProfessores = (await _userManager.GetUsersInRoleAsync(TipoUtilizador.Professor.ToString()))
+                                                           .Select(professor => new SelectListItem($"{professor.PrimeiroNome} {professor.Apelido} - {professor.Email}", professor.Id.ToString()))
+
            });
 
 

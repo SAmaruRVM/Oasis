@@ -51,28 +51,28 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "63966261-fab5-4183-9049-9b9994e3812d",
+                            ConcurrencyStamp = "c13c360a-c18e-40b0-8ac5-7dc149a77ccd",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "44b36502-04b7-4792-a459-49d8307f8633",
+                            ConcurrencyStamp = "d1e7b574-41a0-441d-9ed8-ac33257d61af",
                             Name = "Diretor",
                             NormalizedName = "DIRETOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "0528a216-9497-47fd-8fa1-c61f49c3bef1",
+                            ConcurrencyStamp = "5589a7e0-9bf8-40b3-bc6b-8586c6b4cfdd",
                             Name = "Professor",
                             NormalizedName = "PROFESSOR"
                         },
                         new
                         {
                             Id = 4,
-                            ConcurrencyStamp = "2efd5efe-3449-46b8-a5b3-e5420d1bebf0",
+                            ConcurrencyStamp = "cd11b899-d419-4479-bf22-09c7c1f7c955",
                             Name = "Aluno",
                             NormalizedName = "ALUNO"
                         });
