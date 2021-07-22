@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Oasis.Dados;
+using Oasis.Dominio.Entidades;
 using Oasis.Web.Areas.Direcao.ViewModels;
 using Oasis.Web.Http;
 
@@ -16,7 +17,7 @@ namespace Oasis.Web.Areas.Direcao.Controllers
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> Criar([FromForm] DisciplinasViewModel disciplinasViewModel)
         {
-           if (!(ModelState.IsValid))
+            if (!(ModelState.IsValid))
             {
                 return Json(new Ajax
                 {
@@ -27,16 +28,23 @@ namespace Oasis.Web.Areas.Direcao.Controllers
                 });
             }
 
-             disciplinasViewModel.Grupo.DisciplinaId = disciplinasViewModel.DisciplinaId;
-             disciplinasViewModel.Grupo.ProfessorId = disciplinasViewModel.ProfessorId;
+            disciplinasViewModel.Grupo.DisciplinaId = disciplinasViewModel.DisciplinaId;
+            disciplinasViewModel.Grupo.ProfessorId = disciplinasViewModel.ProfessorId;
+            Notificacao notificacaoProfessorAssociadoGrupo = new()
+            {
+                Titulo = $"Foi adicionado ao grupo {disciplinasViewModel.Grupo.Nome}!",
+                LinkDestino = string.Empty,
+                ApplicationUserId = disciplinasViewModel.ProfessorId
+            };
 
-             _context.Grupos.Add(disciplinasViewModel.Grupo);
-             await _context.SaveChangesAsync();
+            _context.Notificacoes.Add(notificacaoProfessorAssociadoGrupo);
+            _context.Grupos.Add(disciplinasViewModel.Grupo);
+            await _context.SaveChangesAsync();
 
             return Json(new Ajax
             {
                 Titulo = "Sucesso ao adicionar o grupo!",
-                Descricao = "Com o grupo criado, já poderá .",
+                Descricao = "Com o grupo criado, já poderá associar os respetivos alunos ao mesmo.",
                 OcorreuAlgumErro = false,
                 UrlRedirecionar = string.Empty
             });

@@ -5,8 +5,6 @@
     ViewBag.Title = $"Direção {configuration["Projeto:Nome"]} - Disciplinas";
 }
 
-
-
 <div class="container-fluid">
     <div class="row p-5">
         <div class="col-6 border-right">
@@ -108,11 +106,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="form-inserir-grupo"  asp-action="Criar" asp-controller="Grupos" asp-area="Direcao" asp-antiforgery="true"
-                    data-ajax="true" data-ajax-method="POST" data-ajax-success="grupoInserido"
+                <form id="form-inserir-grupo" asp-action="Criar" asp-controller="Grupos" asp-area="Direcao"
+                    asp-antiforgery="true" data-ajax="true" data-ajax-method="POST" data-ajax-success="grupoInserido"
                     data-ajax-loading="#loading-icon-inserir-grupo">
 
-                    <input type="hidden" asp-for="DisciplinaId"/>
+                    <input type="hidden" asp-for="DisciplinaId" />
                     <div class="form-group">
                         <label asp-for="Grupo.Nome"></label>
                         <input class="form-control" asp-for="Grupo.Nome" />
@@ -125,11 +123,17 @@
                         <span class="text-danger text-center" asp-validation-for="Grupo.Descricao"></span>
                     </div>
 
-                    <select class="wide mb-2" asp-for="ProfessorId"
-                        asp-items="@Model.DropdownListProfessores">
+                    <label asp-for="ProfessorId">Qual é o professor responsável por este grupo?</label>
+                    <select class="wide mb-2" asp-for="ProfessorId" asp-items="@Model.DropdownListProfessores">
                         <option selected disabled value="">-- Selecione o professor --</option>
                     </select>
                     <span class="text-danger text-center" asp-validation-for="ProfessorId"></span>
+
+                    <a asp-action="Criar" asp-area="Direcao" asp-controller="Utilizadores"
+                        class="btn btn-secondary float-right mb-3 mt-0">
+                        Criar novo professor
+                    </a>
+
 
                     <button class="btn btn-primary btn-block" type="submit">
                         <i id="loading-icon-inserir-grupo" style="display: none;" class="fas fa-spinner fa-spin"></i>
@@ -185,7 +189,7 @@
 
     // Gestão / Criação de grupos
 
- function grupoInserido(respostaAjax) {
+    function grupoInserido(respostaAjax) {
         if (!(respostaAjax.ocorreuAlgumErro)) {
             $('#modal-inserir-grupo').modal('hide');
             document.getElementById('form-inserir-grupo').reset();
@@ -195,8 +199,7 @@
 
     const criacaoGruposBtns = document.querySelectorAll('button[data-grupo-inserir]');
 
-    criacaoGruposBtns.forEach(btn => btn.addEventListener('click', () => 
-    {
+    criacaoGruposBtns.forEach(btn => btn.addEventListener('click', () => {
         document.getElementById('DisciplinaId').value = btn.getAttribute('data-disciplina-id');
     }));
 </script>

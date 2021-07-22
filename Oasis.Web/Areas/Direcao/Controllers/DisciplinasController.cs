@@ -27,9 +27,13 @@ namespace Oasis.Web.Areas.Direcao.Controllers
            => View(model: new DisciplinasViewModel
            {
                Disciplinas = (await _context.GetLoggedInApplicationUser(User.Identity.Name)).Escola.Disciplinas,
-               DropdownListProfessores = (await _userManager.GetUsersInRoleAsync(TipoUtilizador.Professor.ToString()))
-                                                           .Select(professor => new SelectListItem($"{professor.PrimeiroNome} {professor.Apelido} - {professor.Email}", professor.Id.ToString()))
-
+               DropdownListProfessores = _context.Utilizadores
+                                                 .AsNoTracking()
+                                                 .Include(user => user.Escola)
+                                                 .Where(utilizador => _userManager.GetUsersInRoleAsync(TipoUtilizador.Professor.ToString()).Result.
+                                                                                  Select(user => user.Id).Contains(utilizador.Id))
+                                                 .Where(professor => professor.Escola.Id == _context.GetLoggedInApplicationUser(User.Identity.Name).Result.Escola.Id)
+                                                  .Select(professor => new SelectListItem($"{professor.PrimeiroNome} {professor.Apelido} - {professor.Email}", professor.Id.ToString()))
            });
 
 

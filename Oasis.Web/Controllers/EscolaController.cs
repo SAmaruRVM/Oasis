@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Oasis.Dados;
 using Oasis.Web.Extensions;
 using Oasis.Web.ViewModels;
@@ -19,6 +18,7 @@ namespace Oasis.Web.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        [Route("")]
         public async Task<IActionResult> Index()
         {
             var utilizadorLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
@@ -41,6 +41,14 @@ namespace Oasis.Web.Controllers
             {
                 DisciplinaGruposAlunos = disciplinaGruposAlunos
             });
+        }
+
+        [HttpGet("{nomeGrupo}")]
+        public async Task<ViewResult> Grupo(string nomeGrupo) 
+        {
+            var nomeGrupoSql = string.Join(' ', nomeGrupo.Split('-'));
+
+            return View();
         }
     }
 }   

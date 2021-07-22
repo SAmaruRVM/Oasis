@@ -183,6 +183,7 @@ namespace Oasis.Web.Controllers
             });
         }
 
+        [HttpGet("[action]")]
         [Authorize]
         public ViewResult Perfil() => View();
     }

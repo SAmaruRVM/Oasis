@@ -7,7 +7,11 @@ namespace Oasis.Dominio.Entidades
     {
         public int Id { get; set; }
 
+        [Required]
         public string Titulo { get; set; }
+        
+        [Required]
+        public string LinkDestino { get; set; }
 
         // default getdate() <<-- SQL
         public DateTime DataCriacao { get; set; }

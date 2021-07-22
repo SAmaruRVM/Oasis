@@ -97,6 +97,10 @@ namespace Oasis.Dados
                    .WithMany(post => post.Comentarios)
                    .OnDelete(DeleteBehavior.NoAction);
 
+            builder.Entity<ComentarioPostUtilizador>()
+                   .Property(cpu => cpu.DataCriacao)
+                   .HasDefaultValueSql("getdate()");
+
             // Grupos Alunos
             builder.Entity<GrupoAluno>()
                    .HasKey(grupoAluno => new { grupoAluno.ApplicationUserId, grupoAluno.GrupoId });
@@ -110,6 +114,10 @@ namespace Oasis.Dados
                    .HasOne(grupoAluno => grupoAluno.Aluno)
                    .WithMany(aluno => aluno.GruposOndeTemAulas)
                    .OnDelete(DeleteBehavior.NoAction);
+
+           builder.Entity<GrupoAluno>()
+                  .Property(grupoAluno => grupoAluno.DataInsercao)
+                  .HasDefaultValueSql("getdate()");
 
             // Posts Gostos Utilizadores
             builder.Entity<PostGostoUtilizador>()

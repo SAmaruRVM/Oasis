@@ -7,8 +7,8 @@
 
 <div class="p-5">
     <form id="form-inserir-utilizador" class="w-100" asp-action="Criar" asp-controller="Utilizadores" asp-area="Direcao"
-          asp-antiforgery="true" data-ajax="true" data-ajax-method="POST" data-ajax-success="utilizadorInserido"
-          data-ajax-loading="#loading-icon-utilizador">
+        asp-antiforgery="true" data-ajax="true" data-ajax-method="POST" data-ajax-success="utilizadorInserido"
+        data-ajax-loading="#loading-icon-utilizador">
         <div class="form-group">
             <label asp-for="Utilizador.PrimeiroNome"></label>
             <input class="form-control" asp-for="Utilizador.PrimeiroNome" />
@@ -29,15 +29,15 @@
             <option selected disabled value="">-- Selecione o tipo de Utilizador --</option>
         </select>
         <span class="text-danger text-center" asp-validation-for="TiposUtilizadorId"></span>
-        
+
         <button class="btn btn-primary btn-block" type="submit">
             <i id="loading-icon-utilizador" style="display: none;" class="fas fa-spinner fa-spin"></i>
             Inserir utilizador
         </button>
-        
-            <hr />
-       
-        
+
+        <hr />
+
+
 
         <a class="btn btn-danger" asp-controller="Utilizadores" asp-action="Index" asp-area="Direcao">Concluido</a>
 
