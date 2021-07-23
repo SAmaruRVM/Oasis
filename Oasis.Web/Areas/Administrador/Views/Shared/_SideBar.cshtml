@@ -9,9 +9,15 @@
                             <br />
                             <span class="text-white h6 font-italic">Nome administrador</span>
                         </div>
-                        <a id="userDropdown" class="text-dark ml-1" style="text-decoration: none" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Logout&nbsp&nbsp<i class="fa fa-power-off"></i>
-                        </a>
+
+                        <form asp-controller="Conta" asp-action="Logout" method="POST"
+                              asp-antiforgery="true">
+                            <button type="submit" class="btn btn-link">
+                            logout
+                            <i class="fas fa-sign-out-alt ml-1"></i>
+                                </button>
+                        </form>
+
                     </div>
                     <div class="sb-sidenav-menu-heading text-center">Administração</div>
                     <a class="nav-link" asp-controller="Escolas" asp-action="Index">

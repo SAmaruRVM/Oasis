@@ -17,8 +17,11 @@ namespace Oasis.Web.Areas.Direcao.Controllers {
         public EquipamentosController(OasisContext context) => (_context) = (context);
 
         public IActionResult Index() {
-            return View();
+            IEnumerable<Equipamento> equipamentos = _context.Equipamentos;
+
+            return View(equipamentos);
         }
+    
 
         [HttpGet]
         public IActionResult Inserir() => View();

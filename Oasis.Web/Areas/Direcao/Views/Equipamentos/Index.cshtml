@@ -1,4 +1,5 @@
-﻿@inject IConfiguration configuration
+﻿@model IEnumerable<Equipamento>
+@inject IConfiguration configuration
 @{
     Layout = "~/Views/Escola/Shared/_Layout.cshtml";
     ViewBag.Title = $"Direção {configuration["Projeto:Nome"]} - Equipamentos";
@@ -17,4 +18,27 @@
     </li>
 </ul>
 
-<div class="container-fluid m-4">Index</div>
+<div class="container-fluid">
+    <div class="row p-5">
+        <div class="">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Equipamento</th>
+                        <th scope="col">Quantidade Disponivel</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Equipamento equipamento in Model) {
+                        <tr>
+                            <td>@equipamento.Nome</td>
+                            <td>@equipamento.Quantidade</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</div>

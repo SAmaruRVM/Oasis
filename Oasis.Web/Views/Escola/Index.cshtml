@@ -7,78 +7,77 @@
 }
 
 
-@if (bool.TryParse(httpContext.HttpContext.Session.GetString("PrimeiraVezLogin"), out _))
-{
+@if (bool.TryParse(httpContext.HttpContext.Session.GetString("PrimeiraVezLogin"), out _)) {
     httpContext.HttpContext.Session.Remove("PrimeiraVezLogin");
     <div class="modal fade" id="modal-alterar-password" tabindex="-1" role="dialog"
-    aria-labelledby="modal-alterar-password-titulo" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal-alterar-password-titulo">Alteração de password</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Notámos que foi a 1º vez pela qual se autenticou. Pretende alterar a sua password?</p>
-                <form id="form-alterar-password" class="w-100" asp-action="AlterarPassword" asp-controller="Conta"
-                    asp-antiforgery="true" data-ajax="true" data-ajax-method="POST" data-ajax-success="passwordAlterada"
-                    data-ajax-loading="#loading-icon-alterar-password">
-                    <div class="form-group mb-3">
-                        <label asp-for="AlterarPasswordViewModel.Password"></label>
-                        <input class="form-control" asp-for="AlterarPasswordViewModel.Password" />
-                        <span class="text-danger text-center"
-                            asp-validation-for="AlterarPasswordViewModel.Password"></span>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label asp-for="AlterarPasswordViewModel.NovaPassword"></label>
-                        <input class="form-control" asp-for="AlterarPasswordViewModel.NovaPassword" />
-                        <span class="text-danger text-center"
-                            asp-validation-for="AlterarPasswordViewModel.NovaPassword"></span>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label asp-for="AlterarPasswordViewModel.ConfirmacaoNovaPassword"></label>
-                        <input class="form-control" asp-for="AlterarPasswordViewModel.ConfirmacaoNovaPassword" />
-                        <span class="text-danger text-center"
-                            asp-validation-for="AlterarPasswordViewModel.ConfirmacaoNovaPassword"></span>
-                    </div>
-
-                    <button class="btn btn-primary btn-block mt-2" type="submit">
-                        <i id="loading-icon-alterar-password" style="display: none;" class="fas fa-spinner fa-spin"></i>
-                        Alterar password
+         aria-labelledby="modal-alterar-password-titulo" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-alterar-password-titulo">Alteração de password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
                     </button>
-                </form>
+                </div>
+                <div class="modal-body">
+                    <p>Notámos que foi a 1º vez pela qual se autenticou. Pretende alterar a sua password?</p>
+                    <form id="form-alterar-password" class="w-100" asp-action="AlterarPassword" asp-controller="Conta"
+                          asp-antiforgery="true" data-ajax="true" data-ajax-method="POST" data-ajax-success="passwordAlterada"
+                          data-ajax-loading="#loading-icon-alterar-password">
+                        <div class="form-group mb-3">
+                            <label asp-for="AlterarPasswordViewModel.Password"></label>
+                            <input class="form-control" asp-for="AlterarPasswordViewModel.Password" />
+                            <span class="text-danger text-center"
+                                  asp-validation-for="AlterarPasswordViewModel.Password"></span>
+                        </div>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">
-                    Não pretendo alterar a password agora
-                </button>
+                        <div class="form-group mb-3">
+                            <label asp-for="AlterarPasswordViewModel.NovaPassword"></label>
+                            <input class="form-control" asp-for="AlterarPasswordViewModel.NovaPassword" />
+                            <span class="text-danger text-center"
+                                  asp-validation-for="AlterarPasswordViewModel.NovaPassword"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="AlterarPasswordViewModel.ConfirmacaoNovaPassword"></label>
+                            <input class="form-control" asp-for="AlterarPasswordViewModel.ConfirmacaoNovaPassword" />
+                            <span class="text-danger text-center"
+                                  asp-validation-for="AlterarPasswordViewModel.ConfirmacaoNovaPassword"></span>
+                        </div>
+
+                        <button class="btn btn-primary btn-block mt-2" type="submit">
+                            <i id="loading-icon-alterar-password" style="display: none;" class="fas fa-spinner fa-spin"></i>
+                            Alterar password
+                        </button>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">
+                        Não pretendo alterar a password agora
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
     @section Scripts {
-<script>
-    $('#modal-alterar-password').modal('show');
-</script>
-<script>
-    function passwordAlterada(respostaAjax) {
-        if (!(respostaAjax.ocorreuAlgumErro)) {
-            $('#modal-alterar-password').modal('hide');
-            document.getElementById('form-alterar-password').reset();
-        }
-        ajaxCompleto(respostaAjax);
+        <script>
+            $('#modal-alterar-password').modal('show');
+        </script>
+        <script>
+            function passwordAlterada(respostaAjax) {
+                if (!(respostaAjax.ocorreuAlgumErro)) {
+                    $('#modal-alterar-password').modal('hide');
+                    document.getElementById('form-alterar-password').reset();
+                }
+                ajaxCompleto(respostaAjax);
+            }
+        </script>
+
+        <partial name="_Validacoes" />
+        <partial name="_Ajax" />
+
     }
-</script>
-
-<partial name="_Validacoes" />
-<partial name="_Ajax" />
-
-}
 }
 
 <div class="row no-gutters">
@@ -92,7 +91,7 @@
         </nav>
         <div class="p-2">
             <div class="p-4 bg-light"
-                style="position: fixed; height: 85vh; width: 62%; overflow-y: scroll; scrollbar-width: none; ">
+                 style="position: fixed; height: 85vh; width: 62%; overflow-y: scroll; scrollbar-width: none; ">
                 <div class="container">
                     @Html.Raw(user.Escola.ConteudoPaginaPrincipal?.ConteudoHtml ?? "<h3>Sem conteudo!</h3>")
                 </div>
@@ -104,48 +103,52 @@
         <h3>Grupos</h3>
         <div class="p-2">
             <div class="p-4 bg-info"
-                style="position: fixed; height: 85vh; width: 20%; overflow-y: scroll; scrollbar-width: none;">
+                 style="position: fixed; height: 85vh; width: 20%; overflow-y: scroll; scrollbar-width: none;">
                 <div id="accordion">
+
+
+
+
                     <div class="card">
                         <div class="card-header" id="headingOne">
                             <h5 class="mb-0">
-                                @foreach (var disciplina in Model.DisciplinaGruposAlunos)
-                                {
+                                @foreach (var disciplina in Model.DisciplinaGruposAlunos) {
                                     <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
-                                    aria-expanded="true" aria-controls="collapseOne">
+                                            aria-expanded="true" aria-controls="collapseOne">
                                         @disciplina.NomeDisciplina
                                     </button>
-
-                                    foreach(var grupo in disciplina.Grupos)
-                                    {
-                                        <p>@grupo.Grupo.Nome</p>
-                                    }
                                 }
                             </h5>
                         </div>
 
-                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                            data-parent="#accordion">
-                            <div class="card-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-                                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck
-                                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it
-                                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-                                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
-                                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth
-                                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                            </div>
-                        </div>
+                        @foreach (var disciplina in Model.DisciplinaGruposAlunos) {
+                            foreach (var grupo in disciplina.Grupos) {
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                     data-parent="#accordion">
+                                    <div class="card-body">
+
+                                        <p>@grupo.Grupo.Nome</p>
+
+                                    </div>
+                                </div>
+                            }
+                        }
+
                     </div>
+
+
+
                     <div class="card">
                         <div class="card-header" id="headingTwo">
                             <h5 class="mb-0">
                                 <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
-                                    aria-expanded="false" aria-controls="collapseTwo">
+                                        aria-expanded="false" aria-controls="collapseTwo">
                                     Collapsible Group Item #2
                                 </button>
                             </h5>
                         </div>
+
+
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                             <div class="card-body">
                                 Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
@@ -158,6 +161,11 @@
                             </div>
                         </div>
                     </div>
+
+
+
+
+
                 </div>
             </div>
         </div>

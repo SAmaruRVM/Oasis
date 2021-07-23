@@ -80,10 +80,7 @@
                     </select>
                     <span class="text-danger text-center" asp-validation-for="IdEscola"></span>
 
-                    <a asp-action="Index" asp-area="Administrador" asp-controller="Escolas"
-                        asp-fragment="inserir-escola" class="btn btn-secondary float-right mb-3 mt-0">
-                        Criar nova escola
-                    </a>
+                    
 
                     <button class="btn btn-success btn-block" type="submit">
                         <i id="loading-icon-insercao-membro-direcao" style="display: none;"
@@ -93,6 +90,10 @@
                 </form>
             </div>
             <div class="modal-footer">
+                <a asp-action="Index" asp-area="Administrador" asp-controller="Escolas"
+                   asp-fragment="inserir-escola" class="btn btn-secondary">
+                    Criar nova escola
+                </a>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
             </div>
         </div>
