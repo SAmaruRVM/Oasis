@@ -23,13 +23,39 @@ namespace Oasis.Web.Areas.Administrador.Controllers
         });
 
         [HttpPost]
-        public async Task<JsonResult> EditarTemas([FromForm] int n)
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> Editar([FromForm] TemasViewModel temasViewModel)
         {
-            return Json(string.Empty);
+            if (!(ModelState.IsValid))
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Erro ao atualizar o tema!",
+                    Descricao = "Os dados indicados não se encontram num formato válido!",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+            _context.Temas.Update(temasViewModel.TemaAtualizar);
+            await _context.SaveChangesAsync();
+
+            return Json(new
+            {
+                Ajax = new Ajax
+                {
+                    Titulo = "Sucesso ao atualizar o tema!",
+                    Descricao = "O tema foi atualizado com sucesso.",
+                    OcorreuAlgumErro = false,
+                    UrlRedirecionar = string.Empty
+                },
+                Tema = temasViewModel.TemaAdicionar
+            });
         }
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<JsonResult> Criar([FromForm] TemasViewModel temasViewModel)
         {
             if (!(ModelState.IsValid))
@@ -46,7 +72,6 @@ namespace Oasis.Web.Areas.Administrador.Controllers
             _context.Temas.Add(temasViewModel.TemaAdicionar);
             await _context.SaveChangesAsync();
 
-
             return Json(new
             {
                 Ajax = new Ajax
@@ -59,5 +84,55 @@ namespace Oasis.Web.Areas.Administrador.Controllers
                 Tema = temasViewModel.TemaAdicionar
             });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> Eliminar([FromForm] TemasViewModel temasViewModel)
+        {
+            if (!(ModelState.IsValid))
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Erro ao eliminar o tema!",
+                    Descricao = "Os dados indicados não se encontram num formato válido!",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+            var temaParaEliminar = await _context.Temas.FindAsync(temasViewModel.TemaEliminarId);
+
+            if (temaParaEliminar is null) 
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Ocorreu um erro na inserção do membro da direção!",
+                    Descricao = "Pedimos desculpa pelo incómodo. Já foi enviado a informação aos nossos técnicos. Por favor, tente novamente mais tarde.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+
+            _context.Temas.Remove(temasViewModel.TemaAdicionar);
+            await _context.SaveChangesAsync();
+
+            return Json(new
+            {
+                Ajax = new Ajax
+                {
+                    Titulo = "Sucesso ao eliminar o tema!",
+                    Descricao = "O tema eliminado com sucesso.",
+                    OcorreuAlgumErro = false,
+                    UrlRedirecionar = string.Empty
+                },
+            });
+        }
+
+
+
+
+        [HttpGet("[area]/[controller]/[action]/{id}")]
+        public async Task<JsonResult> Id(int id) => Json(await _context.Temas.FindAsync(id));
     }
 }

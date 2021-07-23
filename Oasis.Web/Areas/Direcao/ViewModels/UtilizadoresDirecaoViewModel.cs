@@ -12,6 +12,7 @@ namespace Oasis.Web.Areas.Direcao.ViewModels
 
         public IEnumerable<SelectListItem> TiposUtilizadorDropdownList { get; set; }
 
+        [Range(minimum: 1, maximum: int.MaxValue)]
         public int TiposUtilizadorId { get; set; }
 
         public IEnumerable<ApplicationUser> UtilizadoresRoles { get; set; }

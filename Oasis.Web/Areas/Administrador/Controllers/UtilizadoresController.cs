@@ -36,8 +36,10 @@ namespace Oasis.Web.Areas.Administrador.Controllers
                                                   .AsNoTracking()
                                                   .OrderByDescending(user => user.DataCriacao)
                                                   .ToListAsync(),
-                EscolasDropdownList = await _context.Escolas.AsNoTracking().OrderBy(escola => escola.Nome)
-                                     .Select(escola => new SelectListItem { Value = escola.Id.ToString(), Text = $"{escola.Nome}, {escola.Distrito} - {escola.CodigoPostal}" }).ToListAsync()
+                EscolasDropdownList = await _context.Escolas
+                                                    .AsNoTracking()
+                                                    .OrderBy(escola => escola.Nome)
+                                                    .Select(escola => new SelectListItem { Value = escola.Id.ToString(), Text = $"{escola.Nome}, {escola.Distrito} - {escola.CodigoPostal}" }).ToListAsync()
             };
             return View(model: utilizadoresViewModel);
         }
@@ -58,24 +60,25 @@ namespace Oasis.Web.Areas.Administrador.Controllers
                 });
             }
 
-            ApplicationUser userDirecao = new()
-            {
-                Email = inserirMembroDirecaoViewModel.Email,
-                UserName = inserirMembroDirecaoViewModel.Email,
-                PrimeiroNome = inserirMembroDirecaoViewModel.MembroDirecao.PrimeiroNome,
-                Apelido = inserirMembroDirecaoViewModel.MembroDirecao.Apelido,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                EscolaId = inserirMembroDirecaoViewModel.IdEscola,
-                TemaId = 3
-            };
-
             IDbContextTransaction databaseTransaction = null;
             try
             {
                 using (databaseTransaction = await _context.Database.BeginTransactionAsync())
                 {
-                    var passwordGerada = Guid.NewGuid().ToString();
-                    await _userManager.CreateAsync(userDirecao, password: passwordGerada);
+                    var guidGerado = Guid.NewGuid().ToString();
+
+                    ApplicationUser userDirecao = new()
+                    {
+                        Email = inserirMembroDirecaoViewModel.Email,
+                        UserName = inserirMembroDirecaoViewModel.Email,
+                        PrimeiroNome = inserirMembroDirecaoViewModel.MembroDirecao.PrimeiroNome,
+                        Apelido = inserirMembroDirecaoViewModel.MembroDirecao.Apelido,
+                        SecurityStamp = guidGerado,
+                        EscolaId = inserirMembroDirecaoViewModel.IdEscola,
+                        TemaId = 3
+                    };
+
+                    await _userManager.CreateAsync(userDirecao, password: guidGerado);
                     await _userManager.AddToRoleAsync(userDirecao, role: TipoUtilizador.Diretor.ToString());
 
                     await databaseTransaction.CommitAsync();
@@ -84,7 +87,7 @@ namespace Oasis.Web.Areas.Administrador.Controllers
 
                   
                     var urlConfirmacaoEmail = $"{Request.Scheme}://{Request.Host}/conta/confirmacao-email/{userDirecao.Email.Encrypt()}";
-                    await client.EnviarEmailAsync("Foste inscrito na oasis", $"Password gerada: {passwordGerada}<hr/><a href='{urlConfirmacaoEmail}'>Confirmar email </a>", userDirecao.Email, client.ConfiguracoesEmail(_configuration));
+                    await client.EnviarEmailAsync("Foste inscrito na oasis", $"Password gerada: {guidGerado}<hr/><a href='{urlConfirmacaoEmail}'>Confirmar email </a>", userDirecao.Email, client.ConfiguracoesEmail(_configuration));
 
                     return Json(new Ajax
                     {

@@ -7,8 +7,8 @@
 
 <div class="p-5">
     <form id="form-inserir-utilizador" class="w-100" asp-action="Criar" asp-controller="Utilizadores" asp-area="Direcao"
-        asp-antiforgery="true" data-ajax="true" data-ajax-method="POST" data-ajax-success="utilizadorInserido"
-        data-ajax-loading="#loading-icon-utilizador">
+          asp-antiforgery="true" data-ajax="true" data-ajax-method="POST" data-ajax-success="utilizadorInserido"
+          data-ajax-loading="#loading-icon-utilizador">
         <div class="form-group">
             <label asp-for="Utilizador.PrimeiroNome"></label>
             <input class="form-control" asp-for="Utilizador.PrimeiroNome" />
@@ -45,12 +45,14 @@
 </div>
 
 @section Scripts {
-<partial name="~/Views/Shared/_Validacoes.cshtml" />
-<partial name="~/Views/Shared/_Ajax.cshtml" />
-<script>
-    function utilizadorInserido(respostaAjax) {
-        document.getElementById('form-inserir-utilizador').reset();
-        ajaxCompleto(respostaAjax);
-    }
-</script>
+    <partial name="~/Views/Shared/_Validacoes.cshtml" />
+    <partial name="~/Views/Shared/_Ajax.cshtml" />
+    <script>
+        function utilizadorInserido(respostaAjax) {
+            if (!(resposta.ocorreuAlgumErro)) {
+                document.getElementById('form-inserir-utilizador').reset();
+            }
+            ajaxCompleto(respostaAjax);
+        }
+    </script>
 }

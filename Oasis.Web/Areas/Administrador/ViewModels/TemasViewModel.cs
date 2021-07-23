@@ -7,5 +7,7 @@ namespace Oasis.Web.Areas.Administrador.ViewModels
     {
         public IEnumerable<Tema> Temas { get; set; }
         public Tema TemaAdicionar { get; set; }
+        public Tema TemaAtualizar { get; set; }
+        public int TemaEliminarId { get; set; }
     }
 }

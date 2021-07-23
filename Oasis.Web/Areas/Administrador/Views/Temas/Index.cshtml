@@ -20,8 +20,8 @@
                     <td>@tema.Nome</td>
                     <td>@tema.LinkCdn</td>
                     <td>
-                        <a href="#" data-toggle="modal" data-target="#modal-editar-tema"><i class="far fa-edit fa-lg ml-1"></i></a>
-                        <a href="#"><i class="far fa-trash-alt fa-lg ml-2"></i></a>
+                        <a href="#" data-toggle="modal" data-target="#modal-atualizacao-tema" data-id-tema-atualizar="@tema.Id"><i class="far fa-edit fa-lg ml-1"></i></a>
+                        <a href="#"><i class="far fa-trash-alt fa-lg ml-2" data-toggle="modal" data-target="#modal-eliminar-tema" data-id-tema-eliminar="@tema.Id"></i></a>
                     </td>
                 </tr>
             }
@@ -30,6 +30,7 @@
 </div>
 
 
+<!-- Modals -->
 <!-- Modal inserção tema -->
 <div class="modal fade" id="modal-inserir-tema" tabindex="-1" role="dialog" aria-labelledby="modal-inserir-tema-titulo" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -41,7 +42,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id=""
+                <form id="form-adicionar-tema"
                       asp-action="Criar"
                       asp-controller="Temas"
                       asp-area="Administrador"
@@ -57,7 +58,7 @@
                         <span class="text-danger text-center" asp-validation-for="TemaAdicionar.Nome"></span>
                     </div>
 
-                      <div class="form-group">
+                    <div class="form-group">
                         <label asp-for="TemaAdicionar.LinkCdn"></label>
                         <input class="form-control" asp-for="TemaAdicionar.LinkCdn" />
                         <span class="text-danger text-center" asp-validation-for="TemaAdicionar.LinkCdn"></span>
@@ -66,7 +67,7 @@
 
                     <button class="btn btn-success btn-block" type="submit">
                         <i id="loading-icon-insercao-tema" style="display: none;" class="fas fa-spinner fa-spin"></i>
-                        Inserir tema
+                        Inserir
                     </button>
                 </form>
             </div>
@@ -76,6 +77,85 @@
         </div>
     </div>
 </div>
+
+<!-- Modal eliminação tema  -->
+<div class="modal fade" id="modal-eliminar-tema" tabindex="-1" role="dialog"
+     aria-labelledby="modal-eliminar-tema-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-eliminar-tema-titulo">Eliminação do tema selecionado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-eliminacao-tema" asp-action="Eliminar" asp-controller="Temas" asp-area="Administrador" asp-antiforgery="true"
+                      data-ajax="true" data-ajax-method="POST" data-ajax-success="temaEliminado"
+                      data-ajax-loading="#loading-icon-eliminacao-tema">
+
+                    <input type="hidden" asp-for="TemaEliminarId"/> 
+                    <p id="eliminar-tema-texto-confirmacao">Tem a certeza que pretende apagar o tema selecionado?</p>
+                    <button type="submit" class="btn btn-primary btn-block">Confirmar eliminação</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal atualização tema -->
+<div class="modal fade" id="modal-atualizacao-tema" tabindex="-1" role="dialog" aria-labelledby="modal-atualizacao-tema-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-atualizacao-tema-titulo">Editar tema</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-atualizacao-tema"
+                      asp-action="Atualizar"
+                      asp-controller="Temas"
+                      asp-area="Administrador"
+                      asp-antiforgery="true"
+                      data-ajax="true"
+                      data-ajax-method="POST"
+                      data-ajax-success="atualizacaoTema"
+                      data-ajax-loading="#loading-icon-atualizacao-tema">
+
+                    <input type="hidden" asp-for="TemaAtualizar.Id" />
+
+                    <div class="form-group">
+                        <label asp-for="TemaAtualizar.Nome"></label>
+                        <input class="form-control" asp-for="TemaAtualizar.Nome" />
+                        <span class="text-danger text-center" asp-validation-for="TemaAtualizar.Nome"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="TemaAtualizar.LinkCdn"></label>
+                        <input class="form-control" asp-for="TemaAtualizar.LinkCdn" />
+                        <span class="text-danger text-center" asp-validation-for="TemaAtualizar.LinkCdn"></span>
+                    </div>
+
+
+                    <button class="btn btn-success btn-block" type="submit">
+                        <i id="loading-icon-atualizacao-tema" style="display: none;" class="fas fa-spinner fa-spin"></i>
+                        Atualizar
+                    </button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fim Modals -->
 
 @section Scripts {
     <partial name="_DataTables" />
@@ -89,56 +169,43 @@
             }
             ajaxCompleto(respostaAjax.ajax);
         }
+
+
+        const btnsEliminarTemas = document.querySelectorAll('button[data-id-tema-eliminar]');
+
+        btnsEliminarTemas.forEach(btn => btn.addEventListener('click', async () => {
+            const tema = temaPorId(btn.getAttribute('data-id-tema-eliminar'));
+            document.getElementById('TemaEliminarId').value = tema.id;
+        }));
+
+        function temaEliminado(respostaAjax) {
+            $('#modal-eliminar-tema').modal('hide');
+            document.getElementById('form-eliminacao-tema').reset();
+            ajaxCompleto(respostaAjax.ajax);
+        }
+
+        const btnsAtualizarTemas = document.querySelectorAll('button[data-id-tema-atualizar]');
+
+        btnsAtualizarTemas.forEach(btn => btn.addEventListener('click', async () => {
+            const tema = temaPorId(btn.getAttribute('data-id-tema-atualizar'));
+            document.getElementById('TemaAtualizar.Id').value = tema.id;
+            document.getElementById('TemaAtualizar.Nome').value = tema.nome;
+            document.getElementById('TemaAtualizar.LinkCdn').value = tema.linkCdn;
+        }));
+
+        function atualizacaoTema(respostaAjax) {
+            if (!(respostaAjax.ocorreuAlgumErro)) {
+                $('#modal-atualizacao-tema').modal('hide');
+                document.getElementById('form-atualizacao-tema').reset();
+            }
+            ajaxCompleto(respostaAjax.ajax);
+        }
+
+
+        async function temaPorId(id) {
+            return await fetch(`${location.protocol}//${location.hostname}:${location.port}/administrador/temas/Id/${id}`).then(resposta => resposta.json());
+        }
     </script>
 }
 
 
-
-
-
-<!-- Modal atualização tema -->
-<div class="modal fade" id="modal-editar-tema" tabindex="-1" role="dialog" aria-labelledby="modal-editar-tema-titulo" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal-editar-tema-titulo">Editar tema</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-
-            <div class="modal-body">
-                <form id="form-editar-tema"
-                      asp-action="EditarTemas"
-                      asp-controller="Temas"
-                      asp-area="Administrador"
-                      data-ajax="true"
-                      data-ajax-method="POST"
-                      data-ajax-success="insercaoMembroDirecaoConcluidaSucesso"
-                      data-ajax-loading="#loading-icon-insercao-membro-direcao">
-
-                    <div class="form-group">
-                        <label>Nome</label>
-                        <input class="form-control" value="" />
-
-                    </div>
-
-                    <div class="form-group">
-                        <label>Link cdn</label>
-                        <input class="form-control" />
-                    </div>
-
-
-                    <button class="btn btn-success btn-block" type="submit">
-                        <i id="loading-icon-insercao-membro-direcao" style="display: none;" class="fas fa-spinner fa-spin"></i>
-                        Actualizar
-                    </button>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
-            </div>
-        </div>
-    </div>
-</div>

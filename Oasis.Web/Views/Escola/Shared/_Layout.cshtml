@@ -1,6 +1,9 @@
 ﻿@{
     var user = await GetUtilizadorLogadoAsync();
     var imagemUser = user.ImagemPerfil is null ? "https://rapidapi-prod-apis.s3.amazonaws.com/b42aa17d-8ae0-4a28-b29f-587af5454390.png" : "data:image/png;base64,@Convert.ToBase64String(user.ImagemPerfil)";
+
+    int numeroNotificacoesNaoVistas = user.Notificacoes
+                                          .Count(notificacao => !(notificacao.FoiVista));
 }
 <!DOCTYPE html>
 <html>
@@ -27,24 +30,26 @@
                     <div class="m-4">
                         <div class="sb-sidenav-footer bg-transparent text-center mt-3 mb-3">
                             <div class="small ml-1 mb-2">
-                                <p>Bem-Vindo, <h5><em>@user.PrimeiroNome @user.Apelido</em></h5></p>
+                                <p>Bem-Vindo/a, <h5><em>@user.PrimeiroNome @user.Apelido</em></h5></p>
 
                                 <img class="p-1"
-                                    src="@imagemUser"
-                                    style="width:100px;height:100px;border-radius:100%" />
+                                     src="@imagemUser"
+                                     style="width:100px;height:100px;border-radius:100%" />
                             </div>
                             <hr />
                         </div>
 
                         <a class="nav-link" asp-controller="Escola" asp-action="Index">
-                            <div class="d-flex align-items-baseline"><i class="fas fa-home mr-2"></i>
+                            <div class="d-flex align-items-baseline">
+                                <i class="fas fa-home mr-2"></i>
                                 <p>Home</p>
                             </div>
                         </a>
 
 
                         <a class="nav-link" asp-controller="Conta" asp-action="Perfil">
-                            <div class="d-flex align-items-baseline"><i class="fas fa-user-cog mr-2"></i>
+                            <div class="d-flex align-items-baseline">
+                                <i class="fas fa-user-cog mr-2"></i>
                                 <p>Perfil</p>
                             </div>
                         </a>
@@ -64,37 +69,47 @@
                         else if (User.IsInRole(TipoUtilizador.Diretor.ToString()))
                         {
                             <a class="nav-link" asp-controller="Utilizadores" asp-action="Index" asp-area="Direcao">
-                                <div class="d-flex align-items-baseline"><i class="fas fa-users mr-2"></i>
+                                <div class="d-flex align-items-baseline">
+                                    <i class="fas fa-users mr-2"></i>
                                     <p>Utilizadores</p>
                                 </div>
 
                             </a>
 
                             <a class="nav-link" asp-controller="Disciplinas" asp-action="Index" asp-area="Direcao">
-                                <div class="d-flex align-items-baseline"><i class="fas fa-book-open mr-2"></i>
+                                <div class="d-flex align-items-baseline">
+                                    <i class="fas fa-book-open mr-2"></i>
                                     <p>Disciplinas</p>
                                 </div>
 
                             </a>
 
                             <a class="nav-link" asp-controller="Equipamentos" asp-action="Index" asp-area="Direcao">
-                                <div class="d-flex align-items-baseline"><i class="fas fa-laptop mr-2"></i>
+                                <div class="d-flex align-items-baseline">
+                                    <i class="fas fa-laptop mr-2"></i>
                                     <p>Equipamentos</p>
                                 </div>
                             </a>
                         }
 
-                        <a class="nav-link mb-5" asp-controller="Reports" asp-action="Index" asp-area="Direcao">
-                            <div class="d-flex align-items-baseline"><i class="fas fa-bullhorn mr-2"></i>
+                        <a class="nav-link" asp-controller="Reports" asp-action="Index" asp-area="Direcao">
+                            <div class="d-flex align-items-baseline">
+                                <i class="fas fa-bullhorn mr-2"></i>
                                 <p>Reports</p>
+                            </div>
+                        </a>
+                        <a class="nav-link mb-5" asp-controller="Escola" asp-action="Index">
+                            <div class="d-flex align-items-baseline">
+                                <p>Notificações</p>
+                                <span class="badge badge-secondary">@numeroNotificacoesNaoVistas</span>
                             </div>
                         </a>
 
                         <form class="mt-5 text-center" asp-controller="Conta" asp-action="Logout" method="POST"
-                            asp-antiforgery="true">
+                              asp-antiforgery="true">
                             <button type="submit" class="btn btn-link" />
                             <i class="fas fa-sign-out-alt"></i>
-                            <p>logout</p>
+                            <p>Logout</p>
                         </form>
                     </div>
                 </div>
