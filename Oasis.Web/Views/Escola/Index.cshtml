@@ -7,7 +7,8 @@
 }
 
 
-@if (bool.TryParse(httpContext.HttpContext.Session.GetString("PrimeiraVezLogin"), out _)) {
+@if (bool.TryParse(httpContext.HttpContext.Session.GetString("PrimeiraVezLogin"), out _))
+{
     httpContext.HttpContext.Session.Remove("PrimeiraVezLogin");
     <div class="modal fade" id="modal-alterar-password" tabindex="-1" role="dialog"
          aria-labelledby="modal-alterar-password-titulo" aria-hidden="true">
@@ -92,108 +93,123 @@
         <div class="p-2">
             <div class="p-4 bg-light"
                  style="position: fixed; height: 80vh; width: 62%; overflow-y: scroll; scrollbar-width: none; ">
-                <div class="container">
-                    @Html.Raw(user.Escola.ConteudoPaginaPrincipal?.ConteudoHtml ?? "<h3>Sem conteudo!</h3>")
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                    <p>teste</p>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <div class="text-center col-3 mt-5">
-        <h3>Grupos</h3>
-        <div class="p-2">
-            <div class="p-4 bg-light"
-                 style="position: fixed; height: 80vh; width: 20%; overflow-y: scroll; scrollbar-width: none;">
-                <div id="accordion">
-
+                
+                <div class="">
                     <div class="card">
-                        <div class="card-header" id="headingOne">
-                            <h5 class="mb-0">
-
-                                @foreach (var disciplina in Model.DisciplinaGruposAlunos) {
-                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
-                                            aria-expanded="true" aria-controls="collapseOne">
-                                        @disciplina.NomeDisciplina
-                                    </button>
-                                }
-                            </h5>
+                        <div class="card-body">
+                            <h4 class="card-title">Inserir conteúdo</h4>
+                            <textarea class="form-control m-2" rows="2"></textarea>
+                            <a href="#" class="card-link">foto</a>
+                            <a href="#" class="card-link">comentar</a>
+                            <a href="#" class="card-link">publicar</a>
                         </div>
-
-                        @foreach (var disciplina in Model.DisciplinaGruposAlunos) {
-                            foreach (var grupo in disciplina.Grupos) {
-                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                     data-parent="#accordion">
-                                    <div class="card-body">
-
-                                        <p>@grupo.Grupo.Nome</p>
-
-                                    </div>
-                                </div>
-                            }
-                        }
-
                     </div>
+                    <div class="card mt-4 text-left">
+                        <div class="card-body">
+                            <h5 class="card-title">Damiao falou:</h5>
+                            <h6 class="card-subtitle text-muted">Some quick example text to build on the card title and make up the bulk of the card's content.</h6>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%" height="200" aria-label="Placeholder: Image cap" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180" style="font-size:1.125rem;text-anchor:middle">
+                            <rect width="100%" height="100%" fill="#868e96"></rect>
+                            <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
+                        </svg>
+                        <div class="card-body">
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Cras justo odio</li>
+                            <li class="list-group-item">Dapibus ac facilisis in</li>
+                            <li class="list-group-item">Vestibulum at eros</li>
+                        </ul>
+                        <div class="card-body">
+                            <a href="#" class="card-link">Reagir</a>
+                            <a href="#" class="card-link">Comentar</a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            2 days ago
+                        </div>
+                    </div>
+                    
+                    @Html.Raw(user.Escola.ConteudoPaginaPrincipal?.ConteudoHtml ?? "<h3>Sem conteudo!</h3>")
+
+                </div>
+
+            </div>
+        </div>
 
 
 
-                    <div class="card">
-                        <div class="card-header" id="headingTwo">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
-                                        aria-expanded="false" aria-controls="collapseTwo">
-                                    Collapsible Group Item #2
-                                </button>
-                            </h5>
+        @*<div class="text-center col-3 mt-5">
+            <h3>Grupos</h3>
+            <div class="p-2">
+                <div class="p-4 bg-light"
+                     style="position: fixed; height: 80vh; width: 20%; overflow-y: scroll; scrollbar-width: none;">
+                    <div id="accordion">
+
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+
+                                    @foreach (var disciplina in Model.DisciplinaGruposAlunos)
+                                    {
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
+                                                aria-expanded="true" aria-controls="collapseOne">
+                                            @disciplina.NomeDisciplina
+                                        </button>
+                                    }
+                                </h5>
+                            </div>
+
+                            @foreach (var disciplina in Model.DisciplinaGruposAlunos)
+                            {
+                                foreach (var grupo in disciplina.Grupos)
+                                {
+                                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                         data-parent="#accordion">
+                                        <div class="card-body">
+
+                                            <p>@grupo.Grupo.Nome</p>
+
+                                        </div>
+                                    </div>
+                                }
+                            }
+
                         </div>
 
 
-                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                            <div class="card-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-                                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck
-                                quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it
-                                squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-                                craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
-                                butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth
-                                nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+
+                        <div class="card">
+                            <div class="card-header" id="headingTwo">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
+                                            aria-expanded="false" aria-controls="collapseTwo">
+                                        Collapsible Group Item #2
+                                    </button>
+                                </h5>
+                            </div>
+
+
+                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                                <div class="card-body">
+                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
+                                    squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck
+                                    quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it
+                                    squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
+                                    craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
+                                    butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth
+                                    nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                </div>
                             </div>
                         </div>
+
+
+
+
+
                     </div>
-
-
-
-
-
                 </div>
             </div>
-        </div>
+        </div>*@
     </div>
-</div>
+    </div>

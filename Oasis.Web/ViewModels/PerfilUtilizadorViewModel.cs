@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Oasis.Web.ViewModels {
-    public class PerfilUtilizadorViewModel {
+namespace Oasis.Web.ViewModels
+{
+    public class PerfilUtilizadorViewModel
+    {
 
 
         public IEnumerable<ApplicationUser> UtilizadoresEscola { get; set; }
