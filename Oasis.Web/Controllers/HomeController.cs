@@ -8,6 +8,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Oasis.Web.Extensions;
+using Oasis.Dominio.Enums;
 
 namespace Oasis.Web.Controllers
 {
@@ -21,16 +22,26 @@ namespace Oasis.Web.Controllers
             => (_configuration, _context) = (configuration, context);
 
         [HttpGet]
-        public async Task<IActionResult> Index() 
+        public async Task<IActionResult> Index()
         {
-            if(User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated)
             {
+                if (User.IsInRole(TipoUtilizador.Administrador.ToString()))
+                {
+                    return RedirectToAction(
+                                       actionName: "Index",
+                                       controllerName: "Home",
+                                       new { area = "Administrador" }
+                                   );
+                }
+
+
                 return RedirectToAction(
-                    actionName: nameof(Index), 
+                    actionName: nameof(Index),
                     controllerName: "Escola"
                 );
             }
-            
+
             return View();
         }
 

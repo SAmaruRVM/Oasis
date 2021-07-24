@@ -21,7 +21,7 @@
                     <td>@tema.LinkCdn</td>
                     <td>
                         <a href="#" data-toggle="modal" data-target="#modal-atualizacao-tema" data-id-tema-atualizar="@tema.Id"><i class="far fa-edit fa-lg ml-1"></i></a>
-                        <a href="#"><i class="far fa-trash-alt fa-lg ml-2" data-toggle="modal" data-target="#modal-eliminar-tema" data-id-tema-eliminar="@tema.Id"></i></a>
+                        <a href="#" data-id-tema-eliminar="@tema.Id"><i class="far fa-trash-alt fa-lg ml-2" data-toggle="modal" data-target="#modal-eliminar-tema" ></i></a>
                     </td>
                 </tr>
             }
@@ -60,7 +60,8 @@
 
                     <div class="form-group">
                         <label asp-for="TemaAdicionar.LinkCdn"></label>
-                        <input class="form-control" asp-for="TemaAdicionar.LinkCdn" />
+                                        <textarea class="form-control" rows="6"
+                                  asp-for="TemaAdicionar.LinkCdn"></textarea>
                         <span class="text-danger text-center" asp-validation-for="TemaAdicionar.LinkCdn"></span>
                     </div>
 
@@ -119,7 +120,7 @@
             </div>
             <div class="modal-body">
                 <form id="form-atualizacao-tema"
-                      asp-action="Atualizar"
+                      asp-action="Editar"
                       asp-controller="Temas"
                       asp-area="Administrador"
                       asp-antiforgery="true"
@@ -138,7 +139,8 @@
 
                     <div class="form-group">
                         <label asp-for="TemaAtualizar.LinkCdn"></label>
-                        <input class="form-control" asp-for="TemaAtualizar.LinkCdn" />
+                            <textarea class="form-control" rows="6"
+                                  asp-for="TemaAtualizar.LinkCdn"></textarea>
                         <span class="text-danger text-center" asp-validation-for="TemaAtualizar.LinkCdn"></span>
                     </div>
 
@@ -171,26 +173,26 @@
         }
 
 
-        const btnsEliminarTemas = document.querySelectorAll('button[data-id-tema-eliminar]');
+        const btnsEliminarTemas = document.querySelectorAll('a[data-id-tema-eliminar]');
 
         btnsEliminarTemas.forEach(btn => btn.addEventListener('click', async () => {
-            const tema = temaPorId(btn.getAttribute('data-id-tema-eliminar'));
+            const tema = await temaPorId(btn.getAttribute('data-id-tema-eliminar'));
             document.getElementById('TemaEliminarId').value = tema.id;
         }));
 
         function temaEliminado(respostaAjax) {
             $('#modal-eliminar-tema').modal('hide');
             document.getElementById('form-eliminacao-tema').reset();
-            ajaxCompleto(respostaAjax.ajax);
+            ajaxCompleto(respostaAjax);
         }
 
-        const btnsAtualizarTemas = document.querySelectorAll('button[data-id-tema-atualizar]');
+        const btnsAtualizarTemas = document.querySelectorAll('a[data-id-tema-atualizar]');
 
         btnsAtualizarTemas.forEach(btn => btn.addEventListener('click', async () => {
-            const tema = temaPorId(btn.getAttribute('data-id-tema-atualizar'));
-            document.getElementById('TemaAtualizar.Id').value = tema.id;
-            document.getElementById('TemaAtualizar.Nome').value = tema.nome;
-            document.getElementById('TemaAtualizar.LinkCdn').value = tema.linkCdn;
+            const tema = await temaPorId(btn.getAttribute('data-id-tema-atualizar'));
+            document.getElementById('TemaAtualizar_Id').value = tema.id;
+            document.getElementById('TemaAtualizar_Nome').value = tema.nome;
+            document.getElementById('TemaAtualizar_LinkCdn').value = tema.linkCdn;
         }));
 
         function atualizacaoTema(respostaAjax) {

@@ -178,5 +178,39 @@ namespace Oasis.Web.Areas.Administrador.Controllers
                 });
             }
         }
+
+
+       [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> Eliminar([FromForm] UtilizadoresAdministradorViewModel utilizadoresAdministradorViewModel)
+        {
+            var userParaEliminar = await _context.Utilizadores
+                                                 .FindAsync(utilizadoresAdministradorViewModel.UtilizadorEliminarId);
+
+            if (userParaEliminar is null)
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Ocorreu um erro na eliminação do utilizador!",
+                    Descricao = "Pedimos desculpa pelo incómodo. Já foi enviado a informação aos nossos técnicos. Por favor, tente novamente mais tarde.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+            await _userManager.DeleteAsync(userParaEliminar);
+
+            return Json(new Ajax
+            {
+                Titulo = "Sucesso ao eliminar o utilizador!",
+                Descricao = "O utilizador eliminado com sucesso.",
+                OcorreuAlgumErro = false,
+                UrlRedirecionar = string.Empty
+            });
+        }
+
+
+        [HttpGet("[area]/[controller]/[action]/{id}")]
+        public async Task<JsonResult> Id(int id) => Json(await _context.Utilizadores.FindAsync(id));
     }
 }

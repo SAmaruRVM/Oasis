@@ -1,4 +1,66 @@
-﻿<div id="layoutSidenav">
+﻿@inject IHttpContextAccessor httpContext
+@{
+    var user = await GetUtilizadorLogadoAsync();
+}
+@if (bool.TryParse(httpContext.HttpContext.Session.GetString("PrimeiraVezLogin"), out _))
+{
+    httpContext.HttpContext.Session.Remove("PrimeiraVezLogin");
+    <div class="modal fade" id="modal-alterar-password" tabindex="-1" role="dialog"
+    aria-labelledby="modal-alterar-password-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-alterar-password-titulo">Alteração de password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Notámos que foi a 1º vez pela qual se autenticou. Pretende alterar a sua password?</p>
+                <form id="form-alterar-password" class="w-100" asp-action="AlterarPassword" asp-controller="Conta"
+                    asp-antiforgery="true" data-ajax="true" data-ajax-method="POST" data-ajax-success="passwordAlterada"
+                    data-ajax-loading="#loading-icon-alterar-password">
+                   
+
+                    <button class="btn btn-primary btn-block mt-2" type="submit">
+                        <i id="loading-icon-alterar-password" style="display: none;" class="fas fa-spinner fa-spin"></i>
+                        Alterar password
+                    </button>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">
+                    Não pretendo alterar a password agora
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+    @section Scripts {
+<script>
+    $('#modal-alterar-password').modal('show');
+</script>
+<script>
+    function passwordAlterada(respostaAjax) {
+        if (!(respostaAjax.ocorreuAlgumErro)) {
+            $('#modal-alterar-password').modal('hide');
+            document.getElementById('form-alterar-password').reset();
+        }
+        ajaxCompleto(respostaAjax);
+    }
+</script>
+
+<partial name="_Validacoes" />
+<partial name="_Ajax" />
+}
+}
+
+
+
+
+
+<div id="layoutSidenav">
     <div id="layoutSidenav_nav">
         <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
@@ -7,13 +69,12 @@
                         <div class="small ml-1 mb-2">
                             <h4>Bem-Vindo</h4>
                             <br />
-                            <span class="text-white h6 font-italic">Nome administrador</span>
+                            @* <span class="text-white h6 font-italic">@user.PrimeiroNome @user.Apelido</span> *@
                         </div>
 
-                        <form asp-controller="Conta" asp-action="Logout" method="POST"
-                              asp-antiforgery="true">
+                        <form asp-controller="Conta" asp-action="Logout" method="POST" asp-antiforgery="true">
                             <button type="submit" class="btn btn-link">
-                                logout
+                                Logout
                                 <i class="fas fa-sign-out-alt ml-1"></i>
                             </button>
                         </form>
@@ -44,10 +105,10 @@
             </div>
             <div class="container footer-bottom clearfix text-center mb-4">
                 <div class="copyright">
-                    &copy; Copyright <strong><span><img src="~/assets/img/logoOasisLogo.png" style="height:14px; width:auto; margin:0 2px 2px 0" />OASIS</span></strong>.
+                    &copy; Copyright <strong><span><img src="~/assets/img/logoOasisLogo.png"
+                                style="height:14px; width:auto; margin:0 2px 2px 0" />OASIS</span></strong>.
                 </div>
             </div>
         </nav>
-        
+
     </div>
-    

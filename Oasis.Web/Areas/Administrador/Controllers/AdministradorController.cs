@@ -17,8 +17,10 @@ using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
-namespace Oasis.Web.Areas.Administrador.Controllers {
-    public class AdministradorController : BaseAdministradorController {
+namespace Oasis.Web.Areas.Administrador.Controllers
+{
+    public class AdministradorController : BaseAdministradorController
+    {
 
         private readonly OasisContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -28,21 +30,24 @@ namespace Oasis.Web.Areas.Administrador.Controllers {
 
 
         [HttpGet]
-        public async Task<ViewResult> Index() {
-            AdministradoresViewModel utilizadoresViewModel = new() {
-                Utilizadores = await _context.Utilizadores
-                                                  .AsNoTracking()
-                                                  .OrderBy(user => user.PrimeiroNome)
-                                                  .ToListAsync(),
+        public async Task<ViewResult> Index()
+        {
+            AdministradoresViewModel utilizadoresViewModel = new()
+            {
+                Utilizadores = (await _userManager.GetUsersInRoleAsync(TipoUtilizador.Administrador.ToString()))
+                                                  .OrderByDescending(utilizador => utilizador.DataCriacao)
             };
             return View(model: utilizadoresViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AdicionarAdministrador([FromForm] AdministradoresViewModel inserirAdministrador) {
-            if (!(ModelState.IsValid)) {
-                return Json(new Ajax {
+        public async Task<JsonResult> AdicionarAdministrador([FromForm] AdministradoresViewModel inserirAdministrador)
+        {
+            if (!(ModelState.IsValid))
+            {
+                return Json(new Ajax
+                {
                     Titulo = "Os dados indicados não se encontram num formato válido!",
                     Descricao = "Por favor, introduza os dados corretamente.",
                     OcorreuAlgumErro = true,
@@ -50,20 +55,24 @@ namespace Oasis.Web.Areas.Administrador.Controllers {
                 });
             }
 
-            ApplicationUser userAdministracao = new() {
-                Email = inserirAdministrador.Email,
-                UserName = inserirAdministrador.Email,
-                PrimeiroNome = inserirAdministrador.Administrador.PrimeiroNome,
-                Apelido = inserirAdministrador.Administrador.Apelido,
-                TemaId = 1,
-                SecurityStamp = Guid.NewGuid().ToString()
-            };
-
             IDbContextTransaction databaseTransaction = null;
-            try {
-                using (databaseTransaction = await _context.Database.BeginTransactionAsync()) {
-                    var passwordGerada = Guid.NewGuid().ToString();
-                    await _userManager.CreateAsync(userAdministracao, password: passwordGerada);
+            try
+            {
+                using (databaseTransaction = await _context.Database.BeginTransactionAsync())
+                {
+                    var guidGerado = Guid.NewGuid().ToString();
+
+                    ApplicationUser userAdministracao = new()
+                    {
+                        Email = inserirAdministrador.Email,
+                        UserName = inserirAdministrador.Email,
+                        PrimeiroNome = inserirAdministrador.Administrador.PrimeiroNome,
+                        Apelido = inserirAdministrador.Administrador.Apelido,
+                        TemaId = 1,
+                        SecurityStamp = guidGerado
+                    };
+
+                    await _userManager.CreateAsync(userAdministracao, password: guidGerado);
                     await _userManager.AddToRoleAsync(userAdministracao, role: TipoUtilizador.Administrador.ToString());
 
                     await databaseTransaction.CommitAsync();
@@ -72,18 +81,22 @@ namespace Oasis.Web.Areas.Administrador.Controllers {
 
 
                     var urlConfirmacaoEmail = $"{Request.Scheme}://{Request.Host}/conta/confirmacao-email/{userAdministracao.Email.Encrypt()}";
-                    await client.EnviarEmailAsync("Foste inscrito na oasis", $"Password gerada: {passwordGerada}<hr/><a href='{urlConfirmacaoEmail}'>Confirmar email </a>", userAdministracao.Email, client.ConfiguracoesEmail(_configuration));
+                    await client.EnviarEmailAsync("Foste inscrito na oasis", $"Password gerada: {guidGerado}<hr/><a href='{urlConfirmacaoEmail}'>Confirmar email </a>", userAdministracao.Email, client.ConfiguracoesEmail(_configuration));
 
-                    return Json(new Ajax {
+                    return Json(new Ajax
+                    {
                         Titulo = "Sucesso ao adicionar administrador!",
                         Descricao = "Foi enviado um email para o utilizador, de modo a que possa confirmar a sua conta.",
                         OcorreuAlgumErro = false,
                         UrlRedirecionar = string.Empty
                     });
                 }
-            } catch (SqlException) {
+            }
+            catch (SqlException)
+            {
                 await databaseTransaction.RollbackAsync();
-                return Json(new Ajax {
+                return Json(new Ajax
+                {
                     Titulo = "Ocorreu um erro na criação de administrador!",
                     Descricao = "Pedimos desculpa pelo incómodo. Já foi enviado a informação aos nossos técnicos. Por favor, tente novamente mais tarde.",
                     OcorreuAlgumErro = true,

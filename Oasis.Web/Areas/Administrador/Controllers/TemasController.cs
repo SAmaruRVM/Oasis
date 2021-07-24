@@ -14,7 +14,7 @@ namespace Oasis.Web.Areas.Administrador.Controllers
         public TemasController(OasisContext context) => (_context) = (context);
 
         [HttpGet]
-        public async Task<ViewResult> Index() => View(model: new TemasViewModel 
+        public async Task<ViewResult> Index() => View(model: new TemasViewModel
         {
             Temas = await _context.Temas
                                   .AsNoTracking()
@@ -100,9 +100,10 @@ namespace Oasis.Web.Areas.Administrador.Controllers
                 });
             }
 
-            var temaParaEliminar = await _context.Temas.FindAsync(temasViewModel.TemaEliminarId);
+            var temaParaEliminar = await _context.Temas
+                                                 .FindAsync(temasViewModel.TemaEliminarId);
 
-            if (temaParaEliminar is null) 
+            if (temaParaEliminar is null)
             {
                 return Json(new Ajax
                 {
@@ -114,18 +115,15 @@ namespace Oasis.Web.Areas.Administrador.Controllers
             }
 
 
-            _context.Temas.Remove(temasViewModel.TemaAdicionar);
+            _context.Temas.Remove(temaParaEliminar);
             await _context.SaveChangesAsync();
 
-            return Json(new
+            return Json(new Ajax
             {
-                Ajax = new Ajax
-                {
-                    Titulo = "Sucesso ao eliminar o tema!",
-                    Descricao = "O tema eliminado com sucesso.",
-                    OcorreuAlgumErro = false,
-                    UrlRedirecionar = string.Empty
-                },
+                Titulo = "Sucesso ao eliminar o tema!",
+                Descricao = "O tema eliminado com sucesso.",
+                OcorreuAlgumErro = false,
+                UrlRedirecionar = string.Empty
             });
         }
 

@@ -54,10 +54,11 @@
                 <a class=" dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                     <i class="far fa-map fa-lg"></i>
                 </a>
-                <div class="dropdown-menu" >
-                    <a class="dropdown-item" href="#">tema1</a>
-                    <a class="dropdown-item" href="#">tema2</a>
-                    <a class="dropdown-item" href="#">tema3</a>
+                <div class="dropdown-menu">
+                    @foreach(Tema tema in await GetTemasAsync()) 
+                    {
+                       <button class="dropdown-item">@tema.Nome</button>
+                    }
                 </div>
             </div>
         </div>

@@ -16,10 +16,12 @@ namespace Oasis.Web.Areas.Administrador.ViewModels
         [Remote(action: "EmailEValido", controller: "Conta", areaName: "", ErrorMessage = "O email indicado já se encontra em uso.")]
         public string Email { get; set; }
 
-        [Range(minimum: 1, maximum: int.MaxValue)]       
+        [Range(minimum: 1, maximum: int.MaxValue)]
         public int IdEscola { get; set; }
 
         public IEnumerable<ApplicationUser> Utilizadores { get; set; }
         public IEnumerable<SelectListItem> EscolasDropdownList { get; set; }
+
+        public int UtilizadorEliminarId { get; set; }
     }
 }
