@@ -37,22 +37,19 @@
 
         <hr />
 
-
-
         <a class="btn btn-danger" asp-controller="Utilizadores" asp-action="Index" asp-area="Direcao">Concluido</a>
 
     </form>
 </div>
 
 @section Scripts {
+  
     <partial name="~/Views/Shared/_Validacoes.cshtml" />
     <partial name="~/Views/Shared/_Ajax.cshtml" />
     <script>
         function utilizadorInserido(respostaAjax) {
-            if (!(resposta.ocorreuAlgumErro)) {
-                document.getElementById('form-inserir-utilizador').reset();
-            }
-            ajaxCompleto(respostaAjax);
+            ajaxCompleto(respostaAjax)
+            document.getElementById('form-inserir-utilizador').reset();
         }
     </script>
 }

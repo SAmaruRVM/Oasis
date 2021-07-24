@@ -13,16 +13,56 @@
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="@user.Tema.LinkCdn" />
 
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.0.2/vapor/bootstrap.min.css" />*@
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+          integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css"
-        integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css"
+          integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
+
+    <nav class="sb-topnav navbar navbar-dark bg-light">
+        <div class="container">
+
+            <a class="navbar-brand" asp-controller="Escola" asp-action="Index">
+                <img src="~/assets/img/logoOasis.png" style="height:30px; width:auto">
+            </a>
+
+            <div class="ml-auto">
+                <a class="nav-link" asp-controller="Escola" asp-action="Index">
+                    <i class="far fa-bell fa-lg position-relative"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">@numeroNotificacoesNaoVistas</span>
+                </a>
+            </div>
+            <div class="">
+                <a class="nav-link" asp-controller="Escola" asp-action="Index">
+                    <i class="far fa-heart fa-lg"></i>
+                </a>
+            </div>
+            <div class="">
+                <a class="nav-link" asp-controller="Escola" asp-action="Index">
+                    <i class="far fa-bookmark fa-lg"></i>
+                </a>
+            </div>
+
+            <div class="dropdown ml-3">
+                <a class=" dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <i class="far fa-map fa-lg"></i>
+                </a>
+                <div class="dropdown-menu" >
+                    <a class="dropdown-item" href="#">tema1</a>
+                    <a class="dropdown-item" href="#">tema2</a>
+                    <a class="dropdown-item" href="#">tema3</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <div id="layoutSidenav" class="row no-gutters">
         <div id="layoutSidenav_nav" class="col-12 col-md-2 col-xl-2">
             <nav class="sb-sidenav accordion sb-sidenav-light border-right min-vh-100" id="sidebar">
@@ -30,7 +70,7 @@
                     <div class="m-4">
                         <div class="sb-sidenav-footer bg-transparent text-center mt-3 mb-3">
                             <div class="small ml-1 mb-2">
-                                <p>Bem-Vindo/a, <h5><em>@user.PrimeiroNome @user.Apelido</em></h5></p>
+                                <p>Bem-Vindo/a, <h5>@user.PrimeiroNome @user.Apelido</h5></p>
 
                                 <img class="p-1"
                                      src="@imagemUser"
@@ -39,14 +79,6 @@
                             <hr />
                         </div>
 
-                        <a class="nav-link" asp-controller="Escola" asp-action="Index">
-                            <div class="d-flex align-items-baseline">
-                                <i class="fas fa-home mr-2"></i>
-                                <p>Home</p>
-                            </div>
-                        </a>
-
-
                         <a class="nav-link" asp-controller="Conta" asp-action="Perfil">
                             <div class="d-flex align-items-baseline">
                                 <i class="fas fa-user-cog mr-2"></i>
@@ -54,8 +86,7 @@
                             </div>
                         </a>
 
-                        @if (User.IsInRole(TipoUtilizador.Aluno.ToString()))
-                        {
+                        @if (User.IsInRole(TipoUtilizador.Aluno.ToString())) {
                             <a class="nav-link">
                                 <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
                                 Posts
@@ -65,9 +96,7 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
                                 Requisitar equipamentos
                             </a>
-                        }
-                        else if (User.IsInRole(TipoUtilizador.Diretor.ToString()))
-                        {
+                        } else if (User.IsInRole(TipoUtilizador.Diretor.ToString())) {
                             <a class="nav-link" asp-controller="Utilizadores" asp-action="Index" asp-area="Direcao">
                                 <div class="d-flex align-items-baseline">
                                     <i class="fas fa-users mr-2"></i>
@@ -98,12 +127,7 @@
                                 <p>Reports</p>
                             </div>
                         </a>
-                        <a class="nav-link mb-5" asp-controller="Escola" asp-action="Index">
-                            <div class="d-flex align-items-baseline">
-                                <p>Notificações</p>
-                                <span class="badge badge-secondary">@numeroNotificacoesNaoVistas</span>
-                            </div>
-                        </a>
+
 
                         <form class="mt-5 text-center" asp-controller="Conta" asp-action="Logout" method="POST"
                               asp-antiforgery="true">
@@ -111,6 +135,11 @@
                             <i class="fas fa-sign-out-alt"></i>
                             <p>Logout</p>
                         </form>
+                    </div>
+                </div>
+                <div class="container footer-bottom clearfix text-center">
+                    <div class="copyright">
+                        &copy; Copyright <strong><span><img src="~/assets/img/logoOasisLogo.png" style="height:14px; width:auto; margin:0 2px 2px 0" />OASIS</span></strong>.
                     </div>
                 </div>
             </nav>
@@ -124,13 +153,13 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"
-        integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"
-        integrity="sha512-NqYds8su6jivy1/WLoW8x1tZMRD7/1ZfhWG/jcRQLOzV1k1rIODCpMgoBnar5QXshKJGV7vi0LXLNXPoFsM5Zg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            integrity="sha512-NqYds8su6jivy1/WLoW8x1tZMRD7/1ZfhWG/jcRQLOzV1k1rIODCpMgoBnar5QXshKJGV7vi0LXLNXPoFsM5Zg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="~/assets/js/main.js"></script>
     <script>
         $('select').niceSelect();

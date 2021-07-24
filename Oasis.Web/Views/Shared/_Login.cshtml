@@ -18,11 +18,17 @@
         <span class="text-danger text-center" asp-validation-for="Password"></span>
     </div>
 
-    <input class="js-switch mb-4" asp-for="LembrarDeMim" />
-    <label asp-for="LembrarDeMim"></label>
-
+    <div class="form-group mb-3">
+        <input class="js-switch mb-4" asp-for="LembrarDeMim" />
+        <label asp-for="LembrarDeMim"></label>
+    </div>
+    <div class="form-group mb-3">
+        <a href="#" data-toggle="modal" data-target="#modal-recuperar-pass" id="recuperar_pass">Recuperar password</a>
+    </div>
     <button class="btn btn-primary btn-block mt-2" type="submit">
         <i id="loading-icon-login" style="display: none;" class="fas fa-spinner fa-spin"></i>
         Autenticar-me
     </button>
 </form>
+
+

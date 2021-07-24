@@ -83,7 +83,7 @@
 <div class="row no-gutters">
     <div class="text-center col-9">
         <nav class="w-100">
-            <ul class="navbar-nav mx-auto p-4">
+            <ul class="navbar-nav mx-auto mt-5">
                 <li>
                     <h3>@user.Escola.Nome</h3>
                 </li>
@@ -91,9 +91,37 @@
         </nav>
         <div class="p-2">
             <div class="p-4 bg-light"
-                 style="position: fixed; height: 85vh; width: 62%; overflow-y: scroll; scrollbar-width: none; ">
+                 style="position: fixed; height: 80vh; width: 62%; overflow-y: scroll; scrollbar-width: none; ">
                 <div class="container">
                     @Html.Raw(user.Escola.ConteudoPaginaPrincipal?.ConteudoHtml ?? "<h3>Sem conteudo!</h3>")
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
+                    <p>teste</p>
                 </div>
             </div>
 
@@ -102,16 +130,14 @@
     <div class="text-center col-3 mt-5">
         <h3>Grupos</h3>
         <div class="p-2">
-            <div class="p-4 bg-info"
-                 style="position: fixed; height: 85vh; width: 20%; overflow-y: scroll; scrollbar-width: none;">
+            <div class="p-4 bg-light"
+                 style="position: fixed; height: 80vh; width: 20%; overflow-y: scroll; scrollbar-width: none;">
                 <div id="accordion">
-
-
-
 
                     <div class="card">
                         <div class="card-header" id="headingOne">
                             <h5 class="mb-0">
+
                                 @foreach (var disciplina in Model.DisciplinaGruposAlunos) {
                                     <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
                                             aria-expanded="true" aria-controls="collapseOne">

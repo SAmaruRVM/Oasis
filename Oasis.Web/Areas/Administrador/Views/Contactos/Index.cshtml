@@ -27,12 +27,12 @@
                     <td>@contacto.Apelido</td>
                     <td>
                         @if (!(contacto.Respondido)) {
-                            <button type="button" data-id-contacto="@contacto.Id" class="btn btn-outline-dark ml-4"
+                            <button type="button" data-id-contacto="@contacto.Id" class="btn btn-outline-danger btn-block"
                                     data-toggle="modal" data-target="#modal-responder-contacto">
                                 Responder
                             </button>
                         } else {
-                            <button type="button" data-id-contacto="@contacto.Id" class="btn btn-outline-success ml-4"
+                            <button type="button" data-id-contacto="@contacto.Id" class="btn btn-outline-success btn-block"
                                     data-toggle="modal" data-target="#modal-responder-contacto">
                                 Verificar resposta
                             </button>
@@ -71,7 +71,7 @@
                     </div>
 
                     <input type="hidden" asp-for="RespostaContactoAdicionar.ContactoId" />
-                    <button class="btn btn-primary btn-block" type="submit">
+                    <button class="btn btn-dark btn-block" type="submit">
                         <i id="loading-icon-resposta-contacto" style="display: none;"
                            class="fas fa-spinner fa-spin"></i>
                         Responder

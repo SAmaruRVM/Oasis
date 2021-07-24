@@ -8,6 +8,7 @@
 <div class="container-fluid">
     <div class="row p-5">
         <div class="col-8 border-right">
+            <h3 class="m-3">Area Disciplinas</h3>
             <table class="table">
                 <thead class="thead-light">
                     <tr>
@@ -48,7 +49,7 @@
                     data-ajax-success="disciplinaInserida" data-ajax-loading="#loading-icon-disciplina">
                     <div class="form-group">
                         <label asp-for="Disciplina.Nome"></label>
-                        <textarea class="form-control" rows="10"
+                        <textarea class="form-control" rows="6"
                                   asp-for="Disciplina.Nome"></textarea>
                         <span class="text-danger text-center" asp-validation-for="Disciplina.Nome"></span>
                     </div>
@@ -153,15 +154,8 @@
 
 
 
-
-
-
-
-
-
-
-
 @section Scripts {
+
 <partial name="~/Views/Shared/_Validacoes.cshtml" />
 <partial name="~/Views/Shared/_Ajax.cshtml" />
 <script>
@@ -170,6 +164,7 @@
             document.getElementById('form-inserir-disciplina').reset();
         }
         ajaxCompleto(respostaAjax);
+        location.reload();
     }
     function disciplinaEliminada(respostaAjax) {
         if (!(respostaAjax.ocorreuAlgumErro)) {

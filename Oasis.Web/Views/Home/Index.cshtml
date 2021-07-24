@@ -1,24 +1,59 @@
-﻿@inject IConfiguration configuration
+﻿@model LoginViewModel
+@inject IConfiguration configuration
 @inject IHttpContextAccessor httpContext
 @{
     ViewBag.Title = configuration["Projeto:Nome"];
     bool emailConfirmado = false;
 }
 
-@if (bool.TryParse(httpContext.HttpContext.Session.GetString("EmailConfirmado"), out _))
-{
+@if (bool.TryParse(httpContext.HttpContext.Session.GetString("EmailConfirmado"), out _)) {
     httpContext.HttpContext.Session.Remove("EmailConfirmado");
     emailConfirmado = true;
 }
+
+
+<div class="modal fade" id="modal-recuperar-pass" tabindex="-1" role="dialog" aria-labelledby="modal-recuperar-pass-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-recuperar-pass-titulo">Recuperar password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input class="form-control" asp-for="Email" />
+                    <span class="text-danger text-center" asp-validation-for="Email"></span>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-info btn-block" data-dismiss="modal">Recuperar</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @section Scripts {
     <script>
         if (location.hash.toLowerCase().trim() === '#login') {
             $('#modal-login').modal('show');
         }
+
+        $("#recuperar_pass").on("click", function () {
+            $("#modal-login").modal("hide");
+            $("#modal-login").on("hidden.bs.modal", function () {
+                $("#modal-recuperar-pass").modal("show");
+            });
+        });
+
     </script>
-    @if (emailConfirmado)
-    {
+    @if (emailConfirmado) {
         <script>
             ajaxCompleto
                 ({
