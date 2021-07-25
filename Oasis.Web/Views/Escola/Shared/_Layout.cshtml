@@ -7,6 +7,7 @@
     int numeroNotificacoesNaoVistas = user.Notificacoes
     .Count(notificacao => !(notificacao.FoiVista));
 }
+
 <!DOCTYPE html>
 <html>
 
@@ -29,7 +30,7 @@
 
 <body>
 
-    
+
 
     <nav class="sb-topnav navbar navbar-dark bg-light sticky-top" id="navBar">
         <div class="container">
@@ -42,8 +43,8 @@
                 <button type="button" id="alertsDropdown" class="btn btn-link" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     <i class="far fa-bell fa-lg position-relative"></i>
-                    <span
-                        class="position-absolute badge rounded-pill bg-secondary" style=" font-size:10px; margin-top:10px; margin-left:-5px;">@numeroNotificacoesNaoVistas</span>
+                    <span class="position-absolute badge rounded-pill bg-secondary"
+                        style=" font-size:10px; margin-top:10px; margin-left:-5px;">@numeroNotificacoesNaoVistas</span>
                 </button>
 
                 <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -51,10 +52,10 @@
                     <h6 class="dropdown-header">
                         Notificações
                     </h6>
-                    <hr/>
+                    <hr />
                     @if (user.Notificacoes.Any())
                     {
-                        foreach (Notificacao notificacao in user.Notificacoes)
+                        foreach (Notificacao notificacao in user.Notificacoes.Take(5))
                         {
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <div class="mr-3">
@@ -71,7 +72,9 @@
                                 </div>
                             </a>
                         }
-                       <a class="dropdown-item text-center small text-gray-500" href="#">Ver todas as minhas notificações</a>
+                        <hr />
+                        <a class="dropdown-item text-center small text-gray-500 mb-2 p-2" href="#">Ver todas as minhas
+                            notificações</a>
                     }
                     else
                     {
@@ -91,7 +94,7 @@
             </div>
 
             <div class="dropdown ml-3">
-                <a class=" dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                     aria-expanded="false">
                     <i class="far fa-map fa-lg"></i>
                 </a>
@@ -214,9 +217,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"
-        integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha512-kBFfSXuTKZcABVouRYGnUo35KKa1FBrYgwG4PAx7Z2Heroknm0ca2Fm2TosdrrI356EDHMW383S3ISrwKcVPUw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"
         integrity="sha512-NqYds8su6jivy1/WLoW8x1tZMRD7/1ZfhWG/jcRQLOzV1k1rIODCpMgoBnar5QXshKJGV7vi0LXLNXPoFsM5Zg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -232,6 +233,29 @@
     @await RenderSectionAsync(name: "Scripts", required: false)
     <script>
         $('select').niceSelect();
+
+
+
+        // Marcar notificacoes como vistas
+
+        const btnNotificacoes = document.getElementById('alertsDropdown');
+        btnNotificacoes.addEventListener('click', async () =>
+        {
+            const respostaAjax = await marcarNotificacoesComoVistas();
+            if(!(respostaAjax.ocorreuAlgumErro))
+            {
+                btnNotificacoes.querySelector('span').innerText = 0;
+            }
+        });
+
+
+        async function marcarNotificacoesComoVistas() {
+                return await fetch(`${location.protocol}//${location.hostname}:${location.port}/conta/marcarNotificacoesComoVistas`,
+                    {
+                        method: 'POST'
+                    }).then(response => response.json());
+            }
+        // -------------------------- 
 
         const btnsTemas = document.querySelectorAll('button[data-id-tema]');
         let btnTemaSelecionado = document.querySelector('button.bg-secondary[data-id-tema]')

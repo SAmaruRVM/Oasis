@@ -79,9 +79,22 @@ namespace Oasis.Dados
                    }));
 
             // Inserção de reações
-            int indexReacoes = 0;
-            builder.Entity<Reacao>()
-                   .HasData(Enumerable.Empty<Reacao>());
+       //      int indexReacoes = 0;
+       //      builder.Entity<Reacao>()
+       //             .HasData(new Dictionary<string, string>
+       //             {
+       //                 ["Esclarecedor"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/yeti/bootstrap.min.css",
+       //                 ["Darkly"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css",
+       //                 ["Minty"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css",
+       //                 ["Sketchy"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sketchy/bootstrap.min.css",
+       //                 ["Sandstone"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sandstone/bootstrap.min.css"
+       //             }.Select(reacao => new Reacao
+       //             {
+       //                 Id = ++indexReacoes,
+       //                 Titulo = string.Empty,
+       //                 Icone = string.Empty
+       //             }));
+
 
             // Comentarios Posts Utilizadores
             builder.Entity<ComentarioPostUtilizador>()

@@ -46,11 +46,44 @@ namespace Oasis.Web.Controllers
         }
 
         [HttpGet("[action]/{nomeGrupo}")]
-        public async Task<ViewResult> Grupo(string nomeGrupo)
+        public async Task<IActionResult> Grupo(string nomeGrupo)
         {
             var nomeGrupoSql = string.Join(' ', nomeGrupo.Split('-'));
 
-            return View();
+
+            if(_context.Grupos.Count(grupo => grupo.Nome == nomeGrupoSql) == 0)
+            {
+                return NotFound();
+            }
+
+
+            var utilizadorLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
+
+            if (!(utilizadorLogado.GruposOndeEnsina.Any(grupo => grupo.Nome == nomeGrupoSql)) && !(utilizadorLogado.GruposOndeTemAulas.Any(grupo => grupo.Grupo.Nome == nomeGrupoSql)
+            ))
+            {
+                return Forbid();
+            }
+
+            var disciplinaGruposAlunos = utilizadorLogado.GruposOndeEnsina
+                                   .GroupBy(grupo => grupo.Disciplina.Nome)
+                                   .Select(disciplina => new DisciplinaGruposAlunos
+                                   {
+                                       NomeDisciplina = disciplina.Key,
+                                       GruposOndeEnsina = disciplina
+                                   })
+                                   .OrderBy(disciplina => disciplina.NomeDisciplina);
+
+            return View(model: new GrupoDisciplinaViewModel
+            {
+                EscolaViewModel = new EscolaViewModel 
+                {
+                    DisciplinaGruposAlunos = disciplinaGruposAlunos
+                },
+                Reacoes = await _context.Reacoes
+                                  .AsNoTracking()
+                                  .ToListAsync()
+            });
         }
 
         [HttpGet("[action]")]
@@ -90,12 +123,16 @@ namespace Oasis.Web.Controllers
             _context.Grupos.Update(grupoParaAtualizar);
             await _context.SaveChangesAsync();
 
-            return Json(new Ajax
+            return Json(new
             {
-                Titulo = "O grupo foi alterado com sucesso!",
-                Descricao = string.Empty,
-                OcorreuAlgumErro = false,
-                UrlRedirecionar = string.Empty
+                Ajax = new Ajax
+                {
+                    Titulo = "O grupo foi alterado com sucesso!",
+                    Descricao = string.Empty,
+                    OcorreuAlgumErro = false,
+                    UrlRedirecionar = string.Empty
+                },
+                GrupoAtualizado = grupoParaAtualizar
             });
         }
 

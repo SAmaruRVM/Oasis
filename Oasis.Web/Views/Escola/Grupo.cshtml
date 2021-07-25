@@ -1,1 +1,79 @@
-<p>grupo</p>
+@model GrupoDisciplinaViewModel
+@inject IConfiguration configuration
+@{
+    var user = await GetUtilizadorLogadoAsync();
+    ViewBag.Title = $"{configuration["Projeto:Nome"]} - nomegrupo ";
+}
+<div class="row no-gutters container-fluid">
+    <div class="text-center col-9">
+        <div class="p-2">
+            <div class="p-4 bg-light"
+                style="position: fixed; height: 90vh; width: 60%; overflow-y: scroll; scrollbar-width: none; ">
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title">Post</h4>
+                        <textarea id="inserir-conteudo" class="form-control m-2" rows="2"></textarea>
+                        <div class="font-weight-bold">
+                            <button type="button" class="btn btn-primary btn-block mt-3">Inserir post</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 text-left">
+                    <div class="card-body">
+                        <h4> <span class="badge badge-secondary mr-2">Dúvida</span>António Pacheco</h4>
+                        <hr />
+                        <h5 class="card-subtitle text-muted mt-2 ">Alguém sabe gerar xml do c#</h5>
+                    </div>
+                    @* <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%"
+                        height="200"
+                        aria-label="Placeholder: Image cap" focusable="false" role="img"
+                        preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180"
+                        style="font-size:1.125rem;text-anchor:middle">
+                        <rect width="100%" height="100%" fill="#868e96"></rect>
+                        <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
+                        </svg> *@
+                    <div class="card-body">
+                        <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maiores, eligendi
+                            cumque itaque est sunt consequuntur aliquam voluptatibus excepturi, optio blanditiis ipsa
+                            exercitationem quibusdam ipsam voluptate distinctio dignissimos unde aperiam ex!</p>
+                    </div>
+                    <div class="card-body d-flex mb-0 pb-0">
+                        <div class="dropdown mr-3">
+                            <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="far fa-map fa-lg"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                @foreach (Reacao reacao in Model.Reacoes)
+                                {
+
+                                    <button type="button" class="dropdown-item">
+                                        <i class="fas fa-lg @reacao.CssClassIcone">
+
+                                        </i>
+                                        @reacao.Titulo
+                                    </button>
+
+                                }
+
+                            </ul>
+                        </div>
+                        <p class="mr-3">30 likes</p>
+                        <a href="#" class="card-link">Comentar</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Há 3 dias atrás
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- partial grupos -->
+    <partial name="_Grupos" model="@Model.EscolaViewModel" />
+</div>

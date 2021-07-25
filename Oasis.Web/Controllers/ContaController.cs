@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Http;
 using Oasis.Aplicacao.Extensions;
 using Oasis.Dominio.Enums;
 using Microsoft.AspNetCore.Authorization;
+using Oasis.Web.Extensions;
+using System.Linq;
 
 namespace Oasis.Web.Controllers
 {
@@ -139,7 +141,7 @@ namespace Oasis.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AlterarPassword([FromForm] EscolaViewModel escolaViewModel) 
+        public async Task<JsonResult> AlterarPassword([FromForm] EscolaViewModel escolaViewModel)
         {
             if (!(ModelState.IsValid))
             {
@@ -163,7 +165,7 @@ namespace Oasis.Web.Controllers
             );
 
 
-            if(!(alterarPassword.Succeeded))
+            if (!(alterarPassword.Succeeded))
             {
                 return Json(new Ajax
                 {
@@ -185,6 +187,84 @@ namespace Oasis.Web.Controllers
 
         [HttpGet("[action]")]
         [Authorize]
-        public ViewResult Perfil() => View();
+        public async Task<ViewResult> Perfil()
+        {
+            var utilizadorLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
+
+            var disciplinaGruposAlunos = utilizadorLogado.GruposOndeEnsina
+                                  .GroupBy(grupo => grupo.Disciplina.Nome)
+                                  .Select(disciplina => new DisciplinaGruposAlunos
+                                  {
+                                      NomeDisciplina = disciplina.Key,
+                                      GruposOndeEnsina = disciplina
+                                  })
+                                  .OrderBy(disciplina => disciplina.NomeDisciplina);
+
+
+            return View(model: new PerfilViewModel
+            {
+                EscolaViewModel = new EscolaViewModel
+                {
+                    DisciplinaGruposAlunos = disciplinaGruposAlunos
+                }
+            });
+        }
+
+
+        [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AtualizarPerfil([FromForm] PerfilViewModel perfilViewModel)
+        {
+            if (!(ModelState.IsValid))
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Os dados indicados não se encontram num formato válido!",
+                    Descricao = "Por favor, introduza os dados corretamente.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+            var userLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
+
+            userLogado.DescricaoPerfil = perfilViewModel.Descricao;
+            // to do: upload imagem bd
+
+            await _userManager.UpdateAsync(user: userLogado);
+
+
+            return Json(new Ajax
+            {
+                Titulo = "O seu perfil foi atualizado com sucesso!",
+                Descricao = string.Empty,
+                OcorreuAlgumErro = false,
+                UrlRedirecionar = string.Empty
+            });
+        }
+
+
+        [HttpPost("[action]")]
+        public async Task<JsonResult> MarcarNotificacoesComoVistas() 
+        {
+            var userLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
+
+            foreach(Notificacao notificacao in userLogado.Notificacoes)
+            {
+                notificacao.FoiVista = true;
+            }
+
+            _context.Notificacoes.UpdateRange(userLogado.Notificacoes);
+
+            await _context.SaveChangesAsync();
+
+           return Json(new Ajax
+            {
+                Titulo = string.Empty,
+                Descricao = string.Empty,
+                OcorreuAlgumErro = false,
+                UrlRedirecionar = string.Empty
+            });
+        }
     }
 }

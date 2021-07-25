@@ -10,8 +10,6 @@ namespace Oasis.Web.ViewModels
 {
     public class PerfilUtilizadorViewModel
     {
-
-
         public IEnumerable<ApplicationUser> UtilizadoresEscola { get; set; }
 
         public int TemasId { get; set; }

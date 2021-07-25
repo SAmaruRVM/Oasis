@@ -1,6 +1,7 @@
 @model GruposViewModel
+@inject IConfiguration configuration
 @{
-    ViewBag.Title = "Teste";
+    ViewBag.Title = $"{configuration["Projeto:Nome"]} - Grupos";
 }
 
 @if (Model.Grupos.Any())
@@ -133,23 +134,26 @@ else
 
         }));
 
+        let descricaoCarregada = undefined;
 
         function atualizacaoDescricaoGrupo(respostaAjax) {
             if (!(respostaAjax.ocorreuAlgumErro)) {
                 $('#modal-descricao').modal('hide');
                 document.getElementById('form-atualizacao-descricao-grupo').reset();
+                descricaoCarregada.innerText = respostaAjax.grupoAtualizado.descricao;
             }
-            ajaxCompleto(respostaAjax);
+            ajaxCompleto(respostaAjax.ajax);
         }
 
 
+  
         const descricoes = document.querySelectorAll('p[data-id-descricao]');
         descricoes.forEach(descricao => descricao.addEventListener('click', async () => {
             const grupo = await grupoPorId(descricao.getAttribute('data-id-descricao'));
 
             document.getElementById('GrupoAlterar_Id').value = grupo.id;
             document.getElementById('GrupoAlterar_Descricao').value = grupo.descricao;
-
+            descricaoCarregada = descricao;
         }));
 
         async function grupoPorId(id) {
