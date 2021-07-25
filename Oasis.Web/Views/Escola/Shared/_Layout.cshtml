@@ -29,7 +29,9 @@
 
 <body>
 
-    <nav class="sb-topnav navbar navbar-dark bg-light">
+    
+
+    <nav class="sb-topnav navbar navbar-dark bg-light sticky-top" id="navBar">
         <div class="container">
 
             <a class="navbar-brand" asp-controller="Escola" asp-action="Index">
@@ -37,11 +39,11 @@
             </a>
 
             <div class="ml-auto">
-                <button type="button" id="alertsDropdown" class="btn btn-info" role="button" data-toggle="dropdown"
+                <button type="button" id="alertsDropdown" class="btn btn-link" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     <i class="far fa-bell fa-lg position-relative"></i>
                     <span
-                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">@numeroNotificacoesNaoVistas</span>
+                        class="position-absolute badge rounded-pill bg-secondary" style=" font-size:10px; margin-top:10px; margin-left:-5px;">@numeroNotificacoesNaoVistas</span>
                 </button>
 
                 <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -69,8 +71,7 @@
                                 </div>
                             </a>
                         }
-                                                    <a class="dropdown-item text-center small text-gray-500" href="#">Ver todas as minhas
-                                notificações</a>
+                       <a class="dropdown-item text-center small text-gray-500" href="#">Ver todas as minhas notificações</a>
                     }
                     else
                     {
@@ -173,7 +174,7 @@
                         {
                             <a class="nav-link" asp-controller="Escola" asp-action="Grupos" asp-area="">
                                 <div class="d-flex align-items-baseline">
-                                    <i class="fas fa-bullhorn mr-2"></i>
+                                    <i class="fas fa-users mr-2"></i>
                                     <p>Grupos</p>
                                 </div>
                             </a>
@@ -195,7 +196,7 @@
                         </form>
                     </div>
                 </div>
-                <div class="container footer-bottom clearfix text-center">
+                <div class="container footer-bottom clearfix text-center mt-5">
                     <div class="copyright">
                         &copy; Copyright <strong><span><img src="~/assets/img/logoOasisLogo.png"
                                     style="height:14px; width:auto; margin:0 2px 2px 0" />OASIS</span></strong>.
