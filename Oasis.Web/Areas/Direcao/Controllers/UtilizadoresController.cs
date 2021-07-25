@@ -87,7 +87,7 @@ namespace Oasis.Web.Areas.Direcao.Controllers
                                                                                  .AsNoTracking()
                                                                                  .Include(utilizador => utilizador.Escola)
                                                                                  .SingleOrDefaultAsync(utilizador => utilizador.Email == User.Identity.Name)).Escola.Id;
-                                                                                 
+
                     utilizadorDirecaoViewModel.Utilizador.UserName = utilizadorDirecaoViewModel.Email;
 
 
@@ -100,6 +100,17 @@ namespace Oasis.Web.Areas.Direcao.Controllers
                        user: utilizadorDirecaoViewModel.Utilizador,
                        role: role.Name
                     );
+
+
+                    var administradores = await _userManager.GetUsersInRoleAsync(TipoUtilizador.Administrador.ToString());
+
+                    _context.Notificacoes.AddRange(administradores.Select(administrador => new Notificacao
+                    {
+                        Titulo = "Uma nova disciplina foi criada",
+                        LinkDestino = "teste!",
+                        ApplicationUserId = administrador.Id
+                    }));
+
 
                     await databaseTransaction.CommitAsync();
 

@@ -7,6 +7,7 @@ namespace Oasis.Web.ViewModels
     {
        public string NomeDisciplina { get; set; }
  
-       public IEnumerable<GrupoAluno> Grupos { get; set; }
+       public IEnumerable<Grupo> GruposOndeEnsina { get; set; }
+       public IEnumerable<GrupoAluno> GruposOndeTemAulas { get; set; }
     }
 }

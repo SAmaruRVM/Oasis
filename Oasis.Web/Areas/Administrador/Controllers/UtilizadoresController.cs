@@ -209,6 +209,24 @@ namespace Oasis.Web.Areas.Administrador.Controllers
             });
         }
 
+        [HttpPost]
+        public async Task<JsonResult> AtualizarTema([FromForm] int idTema) 
+        {    
+            var userLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
+            userLogado.TemaId = idTema;
+
+            await _userManager.UpdateAsync(user: userLogado);
+
+            return Json(new Ajax
+            {
+                Titulo = "O tema foi alterado com sucesso!",
+                Descricao = string.Empty,
+                OcorreuAlgumErro = false,
+                UrlRedirecionar = string.Empty
+            }); 
+        }
+
+
 
         [HttpGet("[area]/[controller]/[action]/{id}")]
         public async Task<JsonResult> Id(int id) => Json(await _context.Utilizadores.FindAsync(id));

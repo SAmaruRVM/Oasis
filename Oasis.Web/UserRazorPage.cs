@@ -30,7 +30,7 @@ namespace Oasis.Web
         public async Task<IEnumerable<Tema>> GetTemasAsync() 
         => await DatabaseContext.Temas
                                 .AsNoTracking()
-                                 .ToListAsync();
+                                .ToListAsync();
 
 
 

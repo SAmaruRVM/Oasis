@@ -1,9 +1,11 @@
 ﻿@{
     var user = await GetUtilizadorLogadoAsync();
-    var imagemUser = user.ImagemPerfil is null ? "https://rapidapi-prod-apis.s3.amazonaws.com/b42aa17d-8ae0-4a28-b29f-587af5454390.png" : "data:image/png;base64,@Convert.ToBase64String(user.ImagemPerfil)";
+    var imagemUser = user.ImagemPerfil is null ?
+    "https://rapidapi-prod-apis.s3.amazonaws.com/b42aa17d-8ae0-4a28-b29f-587af5454390.png" :
+    "data:image/png;base64,@Convert.ToBase64String(user.ImagemPerfil)";
 
     int numeroNotificacoesNaoVistas = user.Notificacoes
-                                          .Count(notificacao => !(notificacao.FoiVista));
+    .Count(notificacao => !(notificacao.FoiVista));
 }
 <!DOCTYPE html>
 <html>
@@ -11,17 +13,18 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    <link rel="stylesheet" href="@user.Tema.LinkCdn" />
+    <link rel="stylesheet" id="link-tema-user" href="@user.Tema.LinkCdn" />
+    <link href="~/assets/img/logoOasisLogo.png" rel="icon">
 
     @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.0.2/vapor/bootstrap.min.css" />*@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-          integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css"
-          integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css"
+        integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -34,10 +37,46 @@
             </a>
 
             <div class="ml-auto">
-                <a class="nav-link" asp-controller="Escola" asp-action="Index">
+                <button type="button" id="alertsDropdown" class="btn btn-info" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
                     <i class="far fa-bell fa-lg position-relative"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">@numeroNotificacoesNaoVistas</span>
-                </a>
+                    <span
+                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">@numeroNotificacoesNaoVistas</span>
+                </button>
+
+                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                    aria-labelledby="alertsDropdown">
+                    <h6 class="dropdown-header">
+                        Notificações
+                    </h6>
+                    <hr/>
+                    @if (user.Notificacoes.Any())
+                    {
+                        foreach (Notificacao notificacao in user.Notificacoes)
+                        {
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-primary">
+                                        <i class="fas fa-file-alt text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="small text-gray-500">@notificacao.DataCriacao.Day de
+                                        @notificacao.DataCriacao.ToString("MMMM",
+                                System.Globalization.CultureInfo.CreateSpecificCulture("pt-PT")),
+                                        @notificacao.DataCriacao.Year</div>
+                                    <span class="font-weight-bold">@notificacao.Titulo</span>
+                                </div>
+                            </a>
+                        }
+                                                    <a class="dropdown-item text-center small text-gray-500" href="#">Ver todas as minhas
+                                notificações</a>
+                    }
+                    else
+                    {
+                        <h3>Sem notificações!</h3>
+                    }
+                </div>
             </div>
             <div class="">
                 <a class="nav-link" asp-controller="Escola" asp-action="Index">
@@ -51,13 +90,15 @@
             </div>
 
             <div class="dropdown ml-3">
-                <a class=" dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <a class=" dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                    aria-expanded="false">
                     <i class="far fa-map fa-lg"></i>
                 </a>
                 <div class="dropdown-menu">
-                    @foreach(Tema tema in await GetTemasAsync()) 
+                    @foreach (Tema tema in await GetTemasAsync())
                     {
-                       <button class="dropdown-item">@tema.Nome</button>
+                        <button type="button" data-id-tema="@tema.Id"
+                        class="dropdown-item @(tema.Id == user.TemaId ? "bg-secondary text-white" : string.Empty)">@tema.Nome</button>
                     }
                 </div>
             </div>
@@ -71,11 +112,12 @@
                     <div class="m-4">
                         <div class="sb-sidenav-footer bg-transparent text-center mt-3 mb-3">
                             <div class="small ml-1 mb-2">
-                                <p>Bem-Vindo/a, <h5>@user.PrimeiroNome @user.Apelido</h5></p>
+                                <p>Bem-Vindo/a,
+                                <h5>@user.PrimeiroNome @user.Apelido</h5>
+                                </p>
 
-                                <img class="p-1"
-                                     src="@imagemUser"
-                                     style="width:100px;height:100px;border-radius:100%" />
+                                <img class="p-1" src="@imagemUser"
+                                    style="width:100px;height:100px;border-radius:100%" />
                             </div>
                             <hr />
                         </div>
@@ -87,7 +129,8 @@
                             </div>
                         </a>
 
-                        @if (User.IsInRole(TipoUtilizador.Aluno.ToString())) {
+                        @if (User.IsInRole(TipoUtilizador.Aluno.ToString()))
+                        {
                             <a class="nav-link">
                                 <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
                                 Posts
@@ -97,7 +140,9 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
                                 Requisitar equipamentos
                             </a>
-                        } else if (User.IsInRole(TipoUtilizador.Diretor.ToString())) {
+                        }
+                        else if (User.IsInRole(TipoUtilizador.Diretor.ToString()))
+                        {
                             <a class="nav-link" asp-controller="Utilizadores" asp-action="Index" asp-area="Direcao">
                                 <div class="d-flex align-items-baseline">
                                     <i class="fas fa-users mr-2"></i>
@@ -121,6 +166,15 @@
                                 </div>
                             </a>
                         }
+                        else
+                        {
+                            <a class="nav-link" asp-controller="Escola" asp-action="Grupos" asp-area="">
+                                <div class="d-flex align-items-baseline">
+                                    <i class="fas fa-bullhorn mr-2"></i>
+                                    <p>Grupos</p>
+                                </div>
+                            </a>
+                        }
 
                         <a class="nav-link" asp-controller="Reports" asp-action="Index" asp-area="Direcao">
                             <div class="d-flex align-items-baseline">
@@ -131,7 +185,7 @@
 
 
                         <form class="mt-5 text-center" asp-controller="Conta" asp-action="Logout" method="POST"
-                              asp-antiforgery="true">
+                            asp-antiforgery="true">
                             <button type="submit" class="btn btn-link" />
                             <i class="fas fa-sign-out-alt"></i>
                             <p>Logout</p>
@@ -140,7 +194,8 @@
                 </div>
                 <div class="container footer-bottom clearfix text-center">
                     <div class="copyright">
-                        &copy; Copyright <strong><span><img src="~/assets/img/logoOasisLogo.png" style="height:14px; width:auto; margin:0 2px 2px 0" />OASIS</span></strong>.
+                        &copy; Copyright <strong><span><img src="~/assets/img/logoOasisLogo.png"
+                                    style="height:14px; width:auto; margin:0 2px 2px 0" />OASIS</span></strong>.
                     </div>
                 </div>
             </nav>
@@ -154,17 +209,130 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"
-            integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"
-            integrity="sha512-NqYds8su6jivy1/WLoW8x1tZMRD7/1ZfhWG/jcRQLOzV1k1rIODCpMgoBnar5QXshKJGV7vi0LXLNXPoFsM5Zg=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        integrity="sha512-NqYds8su6jivy1/WLoW8x1tZMRD7/1ZfhWG/jcRQLOzV1k1rIODCpMgoBnar5QXshKJGV7vi0LXLNXPoFsM5Zg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="~/assets/js/main.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css"
+        integrity="sha512-O03ntXoVqaGUTAeAmvQ2YSzkCvclZEcPQu1eqloPaHfJ5RuNGiS4l+3duaidD801P50J28EHyonCV06CUlTSag=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"
+        integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    @await RenderSectionAsync(name: "Scripts", required: false)
     <script>
         $('select').niceSelect();
+
+        const btnsTemas = document.querySelectorAll('button[data-id-tema]');
+        let btnTemaSelecionado = document.querySelector('button.bg-secondary[data-id-tema]')
+
+        btnsTemas.forEach(btn => btn.addEventListener('click', async () => {
+            const linkTemaUser = document.getElementById('link-tema-user');
+            const tema = await temaPorId(btn.getAttribute('data-id-tema'));
+            const resposta = await atualizarTemaUser(tema.id);
+
+
+            ajaxCompleto2(resposta);
+
+            if (resposta.ocorreuAlgumErro) {
+                return;
+            }
+
+
+            btn.classList.add('bg-secondary', 'text-white');
+            btnTemaSelecionado.classList.remove('bg-secondary', 'text-white');
+            btnTemaSelecionado = btn;
+            linkTemaUser.href = tema.linkCdn;
+        }));
+
+
+        function mostrarNotificacao2(respostaAjax) {
+            iziToast.show({
+                id: null,
+                class: '',
+                title: respostaAjax.titulo,
+                titleColor: '#000',
+                titleSize: '',
+                titleLineHeight: '',
+                message: respostaAjax.descricao,
+                messageColor: '#000',
+                messageSize: '',
+                messageLineHeight: '',
+                backgroundColor: '',
+                theme: 'dark', // dark
+                color: !(respostaAjax.ocorreuAlgumErro) ? 'green' : 'red',
+                icon: !(respostaAjax.ocorreuAlgumErro) ? 'fas fa-check-circle' : 'fas fa-exclamation-circle',
+                iconText: '',
+                iconColor: '#000',
+                iconUrl: null,
+                image: '',
+                imageWidth: 50,
+                maxWidth: null,
+                zindex: null,
+                layout: 2,
+                balloon: false,
+                close: true,
+                closeOnEscape: false,
+                closeOnClick: false,
+                displayMode: 0, // once, replace
+                position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
+                target: '',
+                targetFirst: true,
+                timeout: 10000,
+                rtl: false,
+                animateInside: true,
+                drag: true,
+                pauseOnHover: true,
+                resetOnHover: false,
+                progressBar: true,
+                progressBarColor: '',
+                progressBarEasing: 'linear',
+                overlay: true,
+                overlayClose: true,
+                overlayColor: 'rgba(0, 0, 0, 0.6)',
+                transitionIn: 'fadeInUp',
+                transitionOut: 'fadeOut',
+                transitionInMobile: 'fadeInUp',
+                transitionOutMobile: 'fadeOutDown',
+                buttons: {},
+                inputs: {},
+                onOpening: function () { },
+                onOpened: function () { },
+                onClosing: function () { },
+                onClosed: function () { }
+            });
+        }
+
+
+        function ajaxCompleto2(respostaAjax) {
+            if (respostaAjax.urlRedirecionar !== '') {
+                location.href = `${urlDefaultPath + respostaAjax.urlRedirecionar}`;
+            }
+            mostrarNotificacao2(respostaAjax);
+            /*    btnDesativoAposSubmissaoForm.removeAttribute('disabled');*/
+        }
+
+
+        async function atualizarTemaUser(idTema) {
+            const formData = new FormData();
+            formData.append('idTema', idTema);
+            return await fetch(`${location.protocol}//${location.hostname}:${location.port}/administrador/utilizadores/AtualizarTema`,
+                {
+                    method: 'POST',
+                    body: formData
+                }).then(resposta => resposta.json());
+        }
+
+        async function temaPorId(id) {
+            return await fetch(`${location.protocol}//${location.hostname}:${location.port}/administrador/temas/Id/${id}`).then(resposta => resposta.json());
+        }
     </script>
-    @await RenderSectionAsync(name: "Scripts", required: false)
 </body>
+
 </html>

@@ -22,7 +22,7 @@ namespace Oasis.Web.Controllers
             => (_configuration, _context) = (configuration, context);
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -31,8 +31,8 @@ namespace Oasis.Web.Controllers
                     return RedirectToAction(
                                        actionName: "Index",
                                        controllerName: "Home",
-                                       new { area = "Administrador" }
-                                   );
+                                       routeValues: new { area = "Administrador" }
+                    );
                 }
 
 

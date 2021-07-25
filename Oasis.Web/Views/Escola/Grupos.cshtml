@@ -1,0 +1,133 @@
+@model GruposViewModel
+@{
+    ViewBag.Title = "Teste";
+}
+
+@if (Model.Grupos.Any())
+{
+    <div class="d-flex flex-wrap">
+    @foreach (Grupo grupo in Model.Grupos)
+        {
+            var imagemGrupo = grupo.Banner is null ?
+            "https://www.quasetudo.eu/wp-content/themes/consultix/images/no-image-found-360x260.png" :
+            "data:image/png;base64,@Convert.ToBase64String(grupo.Banner)";
+            <div class="card m-2 p-2" style="flex-grow: 0.3">
+                <img data-id-banner="@grupo.Id" class="card-img-top" src="@imagemGrupo" alt="Card image cap" role="button"
+            data-toggle="modal" data-target="#modal-banner">
+                <div class="card-body">
+                    <h5 class="card-title">@grupo.Nome</h5>
+                    <p data-id-descricao="@grupo.Id" role="button" class="card-text" data-toggle="modal"
+                data-target="#modal-descricao">@grupo.Descricao</p>
+                    <a asp-controller="Escola" asp-action="Grupo" asp-area="" class="btn btn-primary btn-block">Detalhes</a>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <h3>Ainda não foi inserido em nenhum grupo. Por favor, contacte a administração caso exista algum erro.</h3>
+}
+
+
+
+
+<!-- Modals -->
+<!-- Modal Banner -->
+<div class="modal fade" id="modal-banner" tabindex="-1" role="dialog" aria-labelledby="modal-banner-titulo"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-banner-titulo">Inserção ou alteração do banner</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Descrição -->
+<div class="modal fade" id="modal-descricao" tabindex="-1" role="dialog" aria-labelledby="modal-descricao-titulo"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-descricao-titulo">Alteração da descrição</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-atualizacao-descricao-grupo" asp-action="EditarGrupo" asp-controller="Escola" asp-area=""
+                    asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
+                    data-ajax-success="atualizacaoDescricaoGrupo"
+                    data-ajax-loading="#loading-icon-atualizar-descricao-grupo">
+                    <input type="hidden" asp-for="GrupoAlterar.Id" />
+                    <div class="form-group">
+                        <label asp-for="GrupoAlterar.Descricao"></label>
+                        <textarea class="form-control" rows="10" asp-for="GrupoAlterar.Descricao"></textarea>
+                        <span class="text-danger text-center" asp-validation-for="GrupoAlterar.Descricao"></span>
+                    </div>
+
+                    <button class="btn btn-success btn-block" type="submit">
+                        <i id="loading-icon-atualizar-descricao-grupo" style="display: none;"
+                            class="fas fa-spinner fa-spin"></i>
+                        Atualizar descrição
+                    </button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+<partial name="~/Views/Shared/_Validacoes.cshtml" />
+<partial name="~/Views/Shared/_Ajax.cshtml" />
+<script>
+
+    const imagensBanner = document.querySelectorAll('img[data-id-banner]');
+    imagensBanner.forEach(imgBanner => imgBanner.addEventListener('click', async () => {
+
+    }));
+
+
+    function atualizacaoDescricaoGrupo(respostaAjax) {
+        if (!(respostaAjax.ocorreuAlgumErro)) {
+            $('#modal-descricao').modal('hide');
+            document.getElementById('form-atualizacao-descricao-grupo').reset();
+        }
+        ajaxCompleto(respostaAjax);
+    }
+
+
+    const descricoes = document.querySelectorAll('p[data-id-descricao]');
+    descricoes.forEach(descricao => descricao.addEventListener('click', async () => {
+        const grupo = await grupoPorId(descricao.getAttribute('data-id-descricao'));
+
+        document.getElementById('GrupoAlterar_Id').value = grupo.id;
+        document.getElementById('GrupoAlterar_Descricao').value = grupo.descricao;
+
+    }));
+
+    async function grupoPorId(id) {
+        return await fetch(`${location.protocol}//${location.hostname}:${location.port}/escola/grupo/Id/${id}`).then(resposta => resposta.json());
+    }
+</script>
+}

@@ -1,0 +1,43 @@
+@model EscolaViewModel
+<div class="text-center col-3 mt-5">
+
+        <div class="p-2 ">
+            <h3>Grupos</h3>
+            <div class="p-4 bg-light"
+                style="position: fixed; height: 83vh; width: 20%; overflow-y: scroll; scrollbar-width: none;">
+             
+                    @{
+                        int index = 0;
+                    }
+                    @foreach (var disciplina in Model.DisciplinaGruposAlunos)
+                    {
+                           <div id=@string.Format("accordion{0}", index)>
+                        <div class="card">
+                            <div class="card-header" id=@string.Format("heading{0}", index)>
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse"
+                                    data-target=@string.Format("#collapse{0}", index) aria-expanded="true"
+                                    aria-controls=@string.Format("collapse{0}", index)>
+                                        <h4>@disciplina.NomeDisciplina</h4>
+                                    </button>
+                                
+                                </h5>
+                            </div>
+                            @foreach (var grupo in disciplina.GruposOndeEnsina)
+                            {
+                                <div id=@string.Format("collapse{0}", index) class="collapse show"
+                            aria-labelledby=@string.Format("heading{0}", index) data-parent=@string.Format("#accordion{0}", index)>
+                                    <div class="card-body">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        <a asp-area="" asp-controller="Escola" asp-action="Grupo" asp-route-nomeGrupo="@string.Join('-', grupo.Nome.ToLower().Split(' '))" class="text-success">@grupo.Nome</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                          </div>
+                          index++;
+                    }
+                </div>
+            </div>
+        </div>
+    </div>

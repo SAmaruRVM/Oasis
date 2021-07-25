@@ -1,12 +1,11 @@
 ﻿@inject IConfiguration configuration
 @{
     ViewBag.Title = $"Administração {configuration["Projeto:Nome"]}";
+    @* var user = await GetUtilizadorLogadoAsync();
+
+     int numeroNotificacoesNaoVistas = user.Notificacoes
+    .Count(notificacao => !(notificacao.FoiVista)); *@
 }
-
-
-
-
-
 
 <div id="wrapper" >
 
@@ -71,7 +70,7 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-bell fa-fw"></i>
                             <!-- Counter - Alerts -->
-                            <span class="badge badge-danger badge-counter">3+</span>
+                            @* <span class="badge badge-danger badge-counter">@numeroNotificacoesNaoVistas</span> *@
                         </a>
                         <!-- Dropdown - Alerts -->
                         <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -116,7 +115,7 @@
                         </div>
                     </li>
 
-                    <!-- Nav Item - Messages -->
+                    @* <!-- Nav Item - Messages -->
                     <li class="nav-item dropdown no-arrow mx-1">
                         <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -188,7 +187,7 @@
                             </a>
                             <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
                         </div>
-                    </li>
+                    </li> *@
 
                 </ul>
 

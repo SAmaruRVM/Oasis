@@ -8,7 +8,7 @@
 <div class="container-fluid">
     <div class="row p-5">
         <div class="col-8 border-right">
-            <h3 class="m-3">Area Disciplinas</h3>
+            <h3 class="m-3">Disciplinas</h3>
             <table class="table">
                 <thead class="thead-light">
                     <tr>
@@ -159,12 +159,11 @@
 <partial name="~/Views/Shared/_Validacoes.cshtml" />
 <partial name="~/Views/Shared/_Ajax.cshtml" />
 <script>
-    function disciplinaInserida(respostaAjax) {
+    function disciplinaInserida(respostaAjax) { 
         if (!(respostaAjax.ocorreuAlgumErro)) {
             document.getElementById('form-inserir-disciplina').reset();
         }
         ajaxCompleto(respostaAjax);
-        location.reload();
     }
     function disciplinaEliminada(respostaAjax) {
         if (!(respostaAjax.ocorreuAlgumErro)) {

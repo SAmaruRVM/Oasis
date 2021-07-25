@@ -39,7 +39,7 @@ namespace Oasis.Web.Extensions
                 cookieOptions.Cookie.IsEssential = true;
                 cookieOptions.ExpireTimeSpan = TimeSpan.FromDays(366);
                 cookieOptions.AccessDeniedPath = "/home/acesso-negado";
-                cookieOptions.LoginPath = "/home/acesso-negado";
+                cookieOptions.LoginPath = "/";
             });
 
             @this.AddHttpContextAccessor();

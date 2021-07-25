@@ -35,6 +35,7 @@ namespace Oasis.Web.Areas.Administrador.Controllers
             AdministradoresViewModel utilizadoresViewModel = new()
             {
                 Utilizadores = (await _userManager.GetUsersInRoleAsync(TipoUtilizador.Administrador.ToString()))
+                                                  .Where(utilizador => utilizador.Email != User.Identity.Name)
                                                   .OrderByDescending(utilizador => utilizador.DataCriacao)
             };
             return View(model: utilizadoresViewModel);

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Oasis.Dados;
 using Oasis.Dominio.Entidades;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ namespace Oasis.Web.Extensions
                            .Include(utilizador => utilizador.Escola)
                            .ThenInclude(escola => escola.Disciplinas)
                            .ThenInclude(disciplina => disciplina.CriadorDirecao)
+                           .Include(utilizador => utilizador.GruposOndeEnsina)
+                           .Include(utilizador => utilizador.GruposOndeTemAulas)
                            .SingleOrDefaultAsync(utilizador => utilizador.Email == emailUtilizadorLogado);
 
     }
