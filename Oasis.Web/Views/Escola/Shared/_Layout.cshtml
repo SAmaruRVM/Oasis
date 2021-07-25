@@ -29,14 +29,14 @@
 
 <body>
 
-    <nav class="sb-topnav navbar navbar-dark bg-light sticky-top">
+    <nav class="sb-topnav navbar navbar-dark bg-light">
         <div class="container">
 
             <a class="navbar-brand" asp-controller="Escola" asp-action="Index">
                 <img src="~/assets/img/logoOasis.png" style="height:30px; width:auto">
             </a>
+
             <div class="ml-auto">
-<<<<<<< HEAD
                 <button type="button" id="alertsDropdown" class="btn btn-info" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     <i class="far fa-bell fa-lg position-relative"></i>
@@ -79,8 +79,6 @@
                 </div>
             </div>
             <div class="">
-=======
->>>>>>> 7c4020c3ef1aa6fb88a2c1e483f8a08a0edec8d5
                 <a class="nav-link" asp-controller="Escola" asp-action="Index">
                     <i class="far fa-heart fa-lg"></i>
                 </a>
@@ -90,38 +88,20 @@
                     <i class="far fa-bookmark fa-lg"></i>
                 </a>
             </div>
+
             <div class="dropdown ml-3">
-<<<<<<< HEAD
                 <a class=" dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                     aria-expanded="false">
-=======
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
->>>>>>> 7c4020c3ef1aa6fb88a2c1e483f8a08a0edec8d5
                     <i class="far fa-map fa-lg"></i>
                 </a>
                 <div class="dropdown-menu">
                     @foreach (Tema tema in await GetTemasAsync())
                     {
-<<<<<<< HEAD
                         <button type="button" data-id-tema="@tema.Id"
                         class="dropdown-item @(tema.Id == user.TemaId ? "bg-secondary text-white" : string.Empty)">@tema.Nome</button>
-=======
-                        <button class="dropdown-item">@tema.Nome</button>
->>>>>>> 7c4020c3ef1aa6fb88a2c1e483f8a08a0edec8d5
                     }
                 </div>
             </div>
-
-            <div class="dropdown ml-3">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    <i class="far fa-bell fa-lg"></i>
-                    <span class="badge badge-secondary rounded-pill" style="float:left; font-size:10px; margin-right:-6px;">@numeroNotificacoesNaoVistas</span>
-                </a>
-                <div class="dropdown-menu">
-                    <button class="dropdown-item">teste</button>
-                </div>
-            </div>
-
         </div>
     </nav>
 
