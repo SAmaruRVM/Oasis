@@ -26,20 +26,13 @@
 
 <body>
 
-    <nav class="sb-topnav navbar navbar-dark bg-light">
+    <nav class="sb-topnav navbar navbar-dark bg-light sticky-top">
         <div class="container">
 
             <a class="navbar-brand" asp-controller="Escola" asp-action="Index">
                 <img src="~/assets/img/logoOasis.png" style="height:30px; width:auto">
             </a>
-
             <div class="ml-auto">
-                <a class="nav-link" asp-controller="Escola" asp-action="Index">
-                    <i class="far fa-bell fa-lg position-relative"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">@numeroNotificacoesNaoVistas</span>
-                </a>
-            </div>
-            <div class="">
                 <a class="nav-link" asp-controller="Escola" asp-action="Index">
                     <i class="far fa-heart fa-lg"></i>
                 </a>
@@ -49,20 +42,33 @@
                     <i class="far fa-bookmark fa-lg"></i>
                 </a>
             </div>
-
             <div class="dropdown ml-3">
-                <a class=" dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                     <i class="far fa-map fa-lg"></i>
                 </a>
                 <div class="dropdown-menu">
-                    @foreach(Tema tema in await GetTemasAsync()) 
+                    @foreach (Tema tema in await GetTemasAsync())
                     {
-                       <button class="dropdown-item">@tema.Nome</button>
+                        <button class="dropdown-item">@tema.Nome</button>
                     }
                 </div>
             </div>
+
+            <div class="dropdown ml-3">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <i class="far fa-bell fa-lg"></i>
+                    <span class="badge badge-secondary rounded-pill" style="float:left; font-size:10px; margin-right:-6px;">@numeroNotificacoesNaoVistas</span>
+                </a>
+                <div class="dropdown-menu">
+                    <button class="dropdown-item">teste</button>
+                </div>
+            </div>
+
         </div>
     </nav>
+
+
+
 
     <div id="layoutSidenav" class="row no-gutters">
         <div id="layoutSidenav_nav" class="col-12 col-md-2 col-xl-2">
@@ -87,7 +93,8 @@
                             </div>
                         </a>
 
-                        @if (User.IsInRole(TipoUtilizador.Aluno.ToString())) {
+                        @if (User.IsInRole(TipoUtilizador.Aluno.ToString()))
+                        {
                             <a class="nav-link">
                                 <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
                                 Posts
@@ -97,7 +104,9 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-box"></i></div>
                                 Requisitar equipamentos
                             </a>
-                        } else if (User.IsInRole(TipoUtilizador.Diretor.ToString())) {
+                        }
+                        else if (User.IsInRole(TipoUtilizador.Diretor.ToString()))
+                        {
                             <a class="nav-link" asp-controller="Utilizadores" asp-action="Index" asp-area="Direcao">
                                 <div class="d-flex align-items-baseline">
                                     <i class="fas fa-users mr-2"></i>

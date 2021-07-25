@@ -48,7 +48,8 @@ namespace Oasis.Web.Areas.Direcao.Controllers
                                                                     .SingleOrDefaultAsync(utilizador => utilizador.Email == User.Identity.Name);
 
             equipamento.Escola = equipamento.DirectorResponsavelInsercao.Escola;
-
+            equipamento.Quantidade = 1;
+            equipamento.DataEntrada = DateTime.Now;
 
             _context.Equipamentos.Add(equipamento);
             await _context.SaveChangesAsync();

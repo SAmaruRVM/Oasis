@@ -81,22 +81,20 @@
     }
 }
 
-<div class="row no-gutters">
+<div class="row no-gutters container-fluid">
     <div class="text-center col-9">
-        <nav class="w-100">
-            <ul class="navbar-nav mx-auto mt-5">
-                <li>
-                    <h3>@user.Escola.Nome</h3>
-                </li>
-            </ul>
-        </nav>
+        <div class="mt-5 ml-3 position-fixed">
+            <div class="navbar-nav">
+                <h3>@user.Escola.Nome</h3>
+            </div>
+        </div>
         <div class="p-2">
             <div class="p-4 bg-light"
-                 style="position: fixed; height: 80vh; width: 62%; overflow-y: scroll; scrollbar-width: none; ">
-                
+                 style="margin-top:90px; position: fixed; height: 83vh; width: 62%; overflow-y: scroll; scrollbar-width: none; ">
+
                 <div class="">
-                    <div class="card">
-                        <div class="card-body">
+                    <div class="card mb-4">
+                        <div class="card-body ">
                             <h4 class="card-title">Inserir conteúdo</h4>
                             <textarea class="form-control m-2" rows="2"></textarea>
                             <a href="#" class="card-link">foto</a>
@@ -104,7 +102,7 @@
                             <a href="#" class="card-link">publicar</a>
                         </div>
                     </div>
-                    <div class="card mt-4 text-left">
+                    <div class="card mb-4 text-left">
                         <div class="card-body">
                             <h5 class="card-title">Damiao falou:</h5>
                             <h6 class="card-subtitle text-muted">Some quick example text to build on the card title and make up the bulk of the card's content.</h6>
@@ -129,21 +127,22 @@
                             2 days ago
                         </div>
                     </div>
-                    
+
                     @Html.Raw(user.Escola.ConteudoPaginaPrincipal?.ConteudoHtml ?? "<h3>Sem conteudo!</h3>")
 
                 </div>
 
             </div>
         </div>
+        </div>
 
 
-
-        @*<div class="text-center col-3 mt-5">
-            <h3>Grupos</h3>
-            <div class="p-2">
+        <div class="text-center col-3 mt-5">
+                
+            <div class="p-2 ">
+                <h3>Grupos</h3>
                 <div class="p-4 bg-light"
-                     style="position: fixed; height: 80vh; width: 20%; overflow-y: scroll; scrollbar-width: none;">
+                     style="position: fixed; height: 83vh; width: 20%; overflow-y: scroll; scrollbar-width: none;">
                     <div id="accordion">
 
                         <div class="card">
@@ -204,12 +203,8 @@
                         </div>
 
 
-
-
-
                     </div>
                 </div>
             </div>
-        </div>*@
-    </div>
+            </div>
     </div>

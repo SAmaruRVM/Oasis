@@ -51,28 +51,28 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "9847066c-081c-4373-b3ac-4f486bf933b7",
+                            ConcurrencyStamp = "83e498f0-bf64-4af0-b787-8713bc24f2b1",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "c1de57f9-434a-4974-a56f-5ae03d7a8556",
+                            ConcurrencyStamp = "7948eb05-ea97-49cc-a8bf-ca0c17a68ce6",
                             Name = "Diretor",
                             NormalizedName = "DIRETOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "b2968051-d68a-4616-8ce5-21ee048cca80",
+                            ConcurrencyStamp = "7163149e-d89d-4353-93ca-5cc2575492e9",
                             Name = "Professor",
                             NormalizedName = "PROFESSOR"
                         },
                         new
                         {
                             Id = 4,
-                            ConcurrencyStamp = "2473a294-fb27-4efb-a3df-5630a1ea0575",
+                            ConcurrencyStamp = "541e6d29-d436-4394-8d90-7aaaf7b78904",
                             Name = "Aluno",
                             NormalizedName = "ALUNO"
                         });
@@ -377,6 +377,12 @@ namespace Oasis.Dados.Migrations
                     b.Property<int>("ApplicationUserId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("DataEntrada")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DataSaida")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("EscolaId")
                         .HasColumnType("int");
 
@@ -390,11 +396,21 @@ namespace Oasis.Dados.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(0);
 
+                    b.Property<int?>("RequisicaoEquipamentoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("codigoEquipamento")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("EscolaId");
+
+                    b.HasIndex("RequisicaoEquipamentoId");
 
                     b.ToTable("Equipamentos");
                 });
@@ -718,17 +734,12 @@ namespace Oasis.Dados.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<int>("EquipamentoId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("EstaAprovado")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("EquipamentoId");
 
                     b.ToTable("RequisicaoEquipamentos");
                 });
@@ -958,6 +969,10 @@ namespace Oasis.Dados.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Oasis.Dominio.Entidades.RequisicaoEquipamento", null)
+                        .WithMany("Equipamentos")
+                        .HasForeignKey("RequisicaoEquipamentoId");
+
                     b.Navigation("DirectorResponsavelInsercao");
 
                     b.Navigation("Escola");
@@ -1111,15 +1126,7 @@ namespace Oasis.Dados.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Oasis.Dominio.Entidades.Equipamento", "Equipamento")
-                        .WithMany("Requisicoes")
-                        .HasForeignKey("EquipamentoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Aluno");
-
-                    b.Navigation("Equipamento");
                 });
 
             modelBuilder.Entity("Oasis.Dominio.Entidades.RespostaContacto", b =>
@@ -1181,11 +1188,6 @@ namespace Oasis.Dados.Migrations
                     b.Navigation("Grupos");
                 });
 
-            modelBuilder.Entity("Oasis.Dominio.Entidades.Equipamento", b =>
-                {
-                    b.Navigation("Requisicoes");
-                });
-
             modelBuilder.Entity("Oasis.Dominio.Entidades.Escola", b =>
                 {
                     b.Navigation("Disciplinas");
@@ -1219,6 +1221,11 @@ namespace Oasis.Dados.Migrations
             modelBuilder.Entity("Oasis.Dominio.Entidades.Reacao", b =>
                 {
                     b.Navigation("PostsQueFizeramUsoDestaReacao");
+                });
+
+            modelBuilder.Entity("Oasis.Dominio.Entidades.RequisicaoEquipamento", b =>
+                {
+                    b.Navigation("Equipamentos");
                 });
 
             modelBuilder.Entity("Oasis.Dominio.Entidades.Tema", b =>
