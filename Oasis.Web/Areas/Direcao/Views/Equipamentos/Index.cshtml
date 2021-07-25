@@ -11,7 +11,7 @@
         <a class="nav-link active" data-bs-toggle="tab">Equipamentos</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="tab" asp-controller="Equipamentos" asp-action="Requisicao" asp-area="Direcao">Equipamentos requisitados</a>
+        <a class="nav-link" data-bs-toggle="tab" asp-controller="Equipamentos" asp-action="Requisicao" asp-area="Direcao">Requisições</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" data-bs-toggle="tab" asp-controller="Equipamentos" asp-action="Inserir" asp-area="Direcao">Inserir equipamento</a>
@@ -20,25 +20,51 @@
 
 <div class="container-fluid">
     <div class="row p-5">
-        <div class="">
+        
+        <div class="col-10 border-right">
             <table class="table">
                 <thead class="thead-light">
                     <tr>
                         <th scope="col">Equipamento</th>
-                        <th scope="col">Quantidade Disponivel</th>
-                        
+                        <th scope="col">Codigo</th>
+                        <th scope="col">Data saida</th>
+                        <th scope="col">Data entrada</th>
+                        <th scope="col">Responsavel</th>
+                        <th scope="col">Confirmar</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (Equipamento equipamento in Model) {
+                    @foreach (Equipamento equipamento in Model)
+                    {
                         <tr>
                             <td>@equipamento.Nome</td>
-                            <td>@equipamento.Quantidade</td>
+                            <td>@equipamento.codigoEquipamento</td>
+                            <td>@equipamento.DataSaida</td>
+                            <td>@equipamento.DataEntrada</td>
+                            <td>@equipamento.DirectorResponsavelInsercao</td>
+                            <td>
+                                <button class="btn btn-success ml-2">saida</button>
+                            </td>
                         </tr>
                     }
                 </tbody>
             </table>
+
+        </div>
+        <div class="col-2">
+            <h5 class="text-center">Stock</h5>
+
+            <ul>
+                @foreach (Equipamento equipamento in Model)
+                {
+                    <li>@equipamento.Quantidade - @equipamento.Nome</li>
+                }
+                </ul>
+
         </div>
         
+
+
+
     </div>
 </div>

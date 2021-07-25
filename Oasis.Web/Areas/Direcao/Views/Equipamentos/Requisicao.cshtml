@@ -10,7 +10,7 @@
         <a class="nav-link" data-bs-toggle="tab" asp-controller="Equipamentos" asp-action="Index" asp-area="Direcao">Equipamentos</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active" data-bs-toggle="tab">Equipamentos requisitados</a>
+        <a class="nav-link active" data-bs-toggle="tab">Requisições</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" data-bs-toggle="tab" asp-controller="Equipamentos" asp-action="Inserir" asp-area="Direcao">Inserir equipamento</a>
@@ -21,7 +21,9 @@
 
 <div class="container-fluid">
     <div class="row p-5">
-        <div class="">
+        
+        <div class="col-12">
+          
             <table class="table">
                 <thead class="thead-light">
                     <tr>
@@ -29,7 +31,7 @@
                         <th scope="col">Data da requisição</th>
                         <th scope="col">Data devolução</th>
                         <th scope="col">Requisitor</th>
-                        <th scope="col">Aprovado</th>
+                        <th scope="col">Estado</th>
                     </tr>
                 </thead>
             </table>

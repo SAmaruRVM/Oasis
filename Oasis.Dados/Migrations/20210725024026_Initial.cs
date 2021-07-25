@@ -306,34 +306,6 @@ namespace Oasis.Dados.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Equipamentos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Quantidade = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    EscolaId = table.Column<int>(type: "int", nullable: false),
-                    ApplicationUserId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Equipamentos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Equipamentos_Escolas_EscolaId",
-                        column: x => x.EscolaId,
-                        principalTable: "Escolas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Equipamentos_Utilizadores_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "Utilizadores",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Notificacoes",
                 columns: table => new
                 {
@@ -384,6 +356,27 @@ namespace Oasis.Dados.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RequisicaoEquipamentos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DataRequisicao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
+                    DataEntrega = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EstaAprovado = table.Column<bool>(type: "bit", nullable: false),
+                    ApplicationUserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequisicaoEquipamentos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RequisicaoEquipamentos_Utilizadores_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "Utilizadores",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Grupos",
                 columns: table => new
                 {
@@ -412,31 +405,41 @@ namespace Oasis.Dados.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RequisicaoEquipamentos",
+                name: "Equipamentos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DataRequisicao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
-                    DataEntrega = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EstaAprovado = table.Column<bool>(type: "bit", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Quantidade = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    codigoEquipamento = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    DataSaida = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DataEntrada = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EscolaId = table.Column<int>(type: "int", nullable: false),
                     ApplicationUserId = table.Column<int>(type: "int", nullable: false),
-                    EquipamentoId = table.Column<int>(type: "int", nullable: false)
+                    RequisicaoEquipamentoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RequisicaoEquipamentos", x => x.Id);
+                    table.PrimaryKey("PK_Equipamentos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RequisicaoEquipamentos_Equipamentos_EquipamentoId",
-                        column: x => x.EquipamentoId,
-                        principalTable: "Equipamentos",
+                        name: "FK_Equipamentos_Escolas_EscolaId",
+                        column: x => x.EscolaId,
+                        principalTable: "Escolas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RequisicaoEquipamentos_Utilizadores_ApplicationUserId",
+                        name: "FK_Equipamentos_RequisicaoEquipamentos_RequisicaoEquipamentoId",
+                        column: x => x.RequisicaoEquipamentoId,
+                        principalTable: "RequisicaoEquipamentos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Equipamentos_Utilizadores_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "Utilizadores",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -603,10 +606,10 @@ namespace Oasis.Dados.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "9847066c-081c-4373-b3ac-4f486bf933b7", "Administrador", "ADMINISTRADOR" },
-                    { 2, "c1de57f9-434a-4974-a56f-5ae03d7a8556", "Diretor", "DIRETOR" },
-                    { 3, "b2968051-d68a-4616-8ce5-21ee048cca80", "Professor", "PROFESSOR" },
-                    { 4, "2473a294-fb27-4efb-a3df-5630a1ea0575", "Aluno", "ALUNO" }
+                    { 1, "83e498f0-bf64-4af0-b787-8713bc24f2b1", "Administrador", "ADMINISTRADOR" },
+                    { 2, "7948eb05-ea97-49cc-a8bf-ca0c17a68ce6", "Diretor", "DIRETOR" },
+                    { 3, "7163149e-d89d-4353-93ca-5cc2575492e9", "Professor", "PROFESSOR" },
+                    { 4, "541e6d29-d436-4394-8d90-7aaaf7b78904", "Aluno", "ALUNO" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -653,6 +656,11 @@ namespace Oasis.Dados.Migrations
                 name: "IX_Equipamentos_EscolaId",
                 table: "Equipamentos",
                 column: "EscolaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Equipamentos_RequisicaoEquipamentoId",
+                table: "Equipamentos",
+                column: "RequisicaoEquipamentoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Escolas_PaginaPrincipalId",
@@ -722,11 +730,6 @@ namespace Oasis.Dados.Migrations
                 column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RequisicaoEquipamentos_EquipamentoId",
-                table: "RequisicaoEquipamentos",
-                column: "EquipamentoId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RespostasContactos_ContactoId",
                 table: "RespostasContactos",
                 column: "ContactoId",
@@ -788,6 +791,9 @@ namespace Oasis.Dados.Migrations
                 name: "ComentariosPostsUtilizadores");
 
             migrationBuilder.DropTable(
+                name: "Equipamentos");
+
+            migrationBuilder.DropTable(
                 name: "GruposAlunos");
 
             migrationBuilder.DropTable(
@@ -803,22 +809,19 @@ namespace Oasis.Dados.Migrations
                 name: "Reports");
 
             migrationBuilder.DropTable(
-                name: "RequisicaoEquipamentos");
-
-            migrationBuilder.DropTable(
                 name: "RespostasContactos");
 
             migrationBuilder.DropTable(
                 name: "TiposUtilizador");
 
             migrationBuilder.DropTable(
+                name: "RequisicaoEquipamentos");
+
+            migrationBuilder.DropTable(
                 name: "Reacoes");
 
             migrationBuilder.DropTable(
                 name: "Posts");
-
-            migrationBuilder.DropTable(
-                name: "Equipamentos");
 
             migrationBuilder.DropTable(
                 name: "Contactos");

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Oasis.Web.Extensions;
 using Oasis.Dominio.Enums;
+using Oasis.Web.Areas.Administrador.ViewModels;
 
 namespace Oasis.Web.Controllers
 {
@@ -16,14 +17,19 @@ namespace Oasis.Web.Controllers
     {
         private readonly OasisContext _context;
         private readonly IConfiguration _configuration;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public HomeController(IConfiguration configuration, OasisContext context, SignInManager<ApplicationUser> signInManager)
-            => (_configuration, _context) = (configuration, context);
+
+        public HomeController(IConfiguration configuration, OasisContext context, SignInManager<ApplicationUser> signInManager, 
+            UserManager<ApplicationUser> userManager)
+            => (_configuration, _context, _userManager) = (configuration, context, userManager);
 
         [HttpGet]
         public IActionResult Index()
         {
+
+
             if (User.Identity.IsAuthenticated)
             {
                 if (User.IsInRole(TipoUtilizador.Administrador.ToString()))
@@ -35,12 +41,13 @@ namespace Oasis.Web.Controllers
                     );
                 }
 
-
                 return RedirectToAction(
                     actionName: nameof(Index),
                     controllerName: "Escola"
                 );
             }
+
+            
 
             return View();
         }

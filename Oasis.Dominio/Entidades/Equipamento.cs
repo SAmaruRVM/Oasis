@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Oasis.Dominio.Entidades
@@ -18,6 +19,15 @@ namespace Oasis.Dominio.Entidades
         [Range(minimum: 0, maximum: int.MaxValue)]
         public int Quantidade { get; set; }
 
+        [Required(ErrorMessage = "O código tem que ser obrigatóriamente preenchido!")]
+        [StringLength(50, ErrorMessage = "O {0} tem que ter no máximo {1} caracteres!")]
+        [Display(Name = "Codigo", Prompt = "Introduza o código para o equipamento")]
+        public string codigoEquipamento { get; set; }
+
+        public DateTime? DataSaida { get; set; }
+
+        public DateTime DataEntrada { get; set; }
+
         public Escola Escola { get; set; }
 
         public int EscolaId { get; set; }
@@ -26,6 +36,8 @@ namespace Oasis.Dominio.Entidades
 
         public int ApplicationUserId { get; set; }
 
-        public ICollection<RequisicaoEquipamento> Requisicoes { get; } = new List<RequisicaoEquipamento>();
+        public RequisicaoEquipamento Requisicao { get; }
+
+        public int? RequisicaoEquipamentoId { get; set; }
     }
 }
