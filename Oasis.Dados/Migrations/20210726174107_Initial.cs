@@ -48,7 +48,7 @@ namespace Oasis.Dados.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Titulo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    CssClassIcone = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                    Icone = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -496,17 +496,23 @@ namespace Oasis.Dados.Migrations
                     DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     Ficheiro = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     TipoPostId = table.Column<int>(type: "int", nullable: false),
-                    ApplicationUserId = table.Column<int>(type: "int", nullable: false)
+                    ApplicationUserId = table.Column<int>(type: "int", nullable: false),
+                    GrupoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Posts", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Posts_Grupos_GrupoId",
+                        column: x => x.GrupoId,
+                        principalTable: "Grupos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Posts_TiposPosts_TipoPostId",
                         column: x => x.TipoPostId,
                         principalTable: "TiposPosts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Posts_Utilizadores_ApplicationUserId",
                         column: x => x.ApplicationUserId,
@@ -590,17 +596,30 @@ namespace Oasis.Dados.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Reacoes",
+                columns: new[] { "Id", "Icone", "Titulo" },
+                values: new object[,]
+                {
+                    { 5, "~/assets/iconesReacoes/interessante.png", "Interessante" },
+                    { 1, "~/assets/iconesReacoes/gosto.png", "Gosto" },
+                    { 2, "~/assets/iconesReacoes/emCheio.png", "Em Cheio!" },
+                    { 3, "~/assets/iconesReacoes/contente.png", "Contente" },
+                    { 4, "~/assets/iconesReacoes/adoro.png", "Adoro" },
+                    { 6, "~/assets/iconesReacoes/supreendente.png", "Supreendente" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Temas",
                 columns: new[] { "Id", "LinkCdn", "Nome" },
                 values: new object[,]
                 {
-                    { 1, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css", "Minty" },
-                    { 2, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cerulean/bootstrap.min.css", "Cerulean" },
-                    { 3, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css", "Darkly" },
-                    { 4, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sketchy/bootstrap.min.css", "Sketchy" },
                     { 5, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cyborg/bootstrap.min.css", "Cyborg" },
+                    { 4, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sketchy/bootstrap.min.css", "Sketchy" },
+                    { 3, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css", "Darkly" },
+                    { 2, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cerulean/bootstrap.min.css", "Cerulean" },
+                    { 7, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/solar/bootstrap.min.css", "Solar" },
                     { 6, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/journal/bootstrap.min.css", "Journal" },
-                    { 7, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/solar/bootstrap.min.css", "Solar" }
+                    { 1, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css", "Minty" }
                 });
 
             migrationBuilder.InsertData(
@@ -608,10 +627,10 @@ namespace Oasis.Dados.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "2f40de81-756e-40da-a2ed-828c37c685f9", "Administrador", "ADMINISTRADOR" },
-                    { 2, "411ef19b-fb69-4766-b82f-51beae968b46", "Diretor", "DIRETOR" },
-                    { 3, "5070fba3-184c-46e5-8b24-67e8b171c07c", "Professor", "PROFESSOR" },
-                    { 4, "ea904216-3a83-4f56-a881-58c54259f3ee", "Aluno", "ALUNO" }
+                    { 4, "bd03bcb5-cd0b-43be-88e5-afa3bd16d01c", "Aluno", "ALUNO" },
+                    { 3, "e6adcc10-a177-4657-a362-6216b7fa1352", "Professor", "PROFESSOR" },
+                    { 2, "47f69e4b-b34b-4ae4-836d-453da3855fca", "Diretor", "DIRETOR" },
+                    { 1, "3ab40fd6-ba1d-4734-b00a-f61c27a644da", "Administrador", "ADMINISTRADOR" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -695,6 +714,11 @@ namespace Oasis.Dados.Migrations
                 name: "IX_Posts_ApplicationUserId",
                 table: "Posts",
                 column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Posts_GrupoId",
+                table: "Posts",
+                column: "GrupoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_TipoPostId",

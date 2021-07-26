@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
 namespace Oasis.Dominio.Entidades
 {
     public class Tema
@@ -18,6 +20,7 @@ namespace Oasis.Dominio.Entidades
         [DataType(DataType.Url)]
         public string LinkCdn { get; set; }
 
+        [JsonIgnore]
         public ICollection<ApplicationUser> Utilizadores { get; } = new List<ApplicationUser>();
     }
 }

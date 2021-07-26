@@ -34,7 +34,7 @@
                                 asp-controller="Conta" asp-area="" asp-antiforgery="true"
                                 data-ajax="true" data-ajax-method="POST"
                                 data-ajax-success="descricaoAtualizada"
-                                data-ajax-loading="#loading-icon-insercao-membro-direcao">
+                                data-ajax-loading="#loading-icon-atualizar-perfil">
 
                                 <div class="form-group text-left">
                                     <label>Primeiro Nome</label>
@@ -60,6 +60,8 @@
                                     <span class="text-danger text-center"></span>
                                 </div>
                                 <button type="submit" class="btn btn-primary">
+                                    <i id="loading-icon-atualizar-perfil" style="display: none;"
+                                       class="fas fa-spinner fa-spin"></i>
                                     Salvar alterações
                                 </button>
                                 <button type="button" data-toggle="modal" data-target="#modal-alterar-password" class="btn btn-secondary">

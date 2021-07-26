@@ -80,22 +80,23 @@ namespace Oasis.Dados
                        LinkCdn = tema.Value
                    }));
 
-            // Inserção de reações
-       //      int indexReacoes = 0;
-       //      builder.Entity<Reacao>()
-       //             .HasData(new Dictionary<string, string>
-       //             {
-       //                 ["Esclarecedor"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/yeti/bootstrap.min.css",
-       //                 ["Darkly"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css",
-       //                 ["Minty"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css",
-       //                 ["Sketchy"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sketchy/bootstrap.min.css",
-       //                 ["Sandstone"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sandstone/bootstrap.min.css"
-       //             }.Select(reacao => new Reacao
-       //             {
-       //                 Id = ++indexReacoes,
-       //                 Titulo = string.Empty,
-       //                 Icone = string.Empty
-       //             }));
+            //Inserção de reações
+             int indexReacoes = 0;
+            builder.Entity<Reacao>()
+                   .HasData(new Dictionary<string, string>
+                   {
+                       ["Gosto"] = "~/assets/iconesReacoes/gosto.png",
+                       ["Em Cheio!"] = "~/assets/iconesReacoes/emCheio.png",
+                       ["Contente"] = "~/assets/iconesReacoes/contente.png",
+                       ["Adoro"] = "~/assets/iconesReacoes/adoro.png",
+                       ["Interessante"] = "~/assets/iconesReacoes/interessante.png",
+                       ["Supreendente"] = "~/assets/iconesReacoes/supreendente.png"
+                   }.Select(reacao => new Reacao
+                   {
+                       Id = ++indexReacoes,
+                       Titulo = reacao.Key,
+                       Icone = reacao.Value
+                   }));
 
 
             // Comentarios Posts Utilizadores
@@ -252,6 +253,11 @@ namespace Oasis.Dados
            builder.Entity<RespostaContacto>()
                   .Property(respostaContacto => respostaContacto.DataResposta)
                   .HasDefaultValueSql("getdate()");
+
+            builder.Entity<Post>()
+                   .HasOne(post => post.TipoPost)
+                   .WithMany(tipoPost => tipoPost.Posts)
+                   .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

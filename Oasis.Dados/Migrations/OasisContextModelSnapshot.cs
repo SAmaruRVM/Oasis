@@ -16,7 +16,7 @@ namespace Oasis.Dados.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.7")
+                .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -51,28 +51,28 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "2f40de81-756e-40da-a2ed-828c37c685f9",
+                            ConcurrencyStamp = "3ab40fd6-ba1d-4734-b00a-f61c27a644da",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "411ef19b-fb69-4766-b82f-51beae968b46",
+                            ConcurrencyStamp = "47f69e4b-b34b-4ae4-836d-453da3855fca",
                             Name = "Diretor",
                             NormalizedName = "DIRETOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "5070fba3-184c-46e5-8b24-67e8b171c07c",
+                            ConcurrencyStamp = "e6adcc10-a177-4657-a362-6216b7fa1352",
                             Name = "Professor",
                             NormalizedName = "PROFESSOR"
                         },
                         new
                         {
                             Id = 4,
-                            ConcurrencyStamp = "ea904216-3a83-4f56-a881-58c54259f3ee",
+                            ConcurrencyStamp = "bd03bcb5-cd0b-43be-88e5-afa3bd16d01c",
                             Name = "Aluno",
                             NormalizedName = "ALUNO"
                         });
@@ -605,6 +605,9 @@ namespace Oasis.Dados.Migrations
                     b.Property<byte[]>("Ficheiro")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<int>("GrupoId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TipoPostId")
                         .HasColumnType("int");
 
@@ -616,6 +619,8 @@ namespace Oasis.Dados.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("GrupoId");
 
                     b.HasIndex("TipoPostId");
 
@@ -664,7 +669,7 @@ namespace Oasis.Dados.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CssClassIcone")
+                    b.Property<string>("Icone")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -675,6 +680,44 @@ namespace Oasis.Dados.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Reacoes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Icone = "~/assets/iconesReacoes/gosto.png",
+                            Titulo = "Gosto"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Icone = "~/assets/iconesReacoes/emCheio.png",
+                            Titulo = "Em Cheio!"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Icone = "~/assets/iconesReacoes/contente.png",
+                            Titulo = "Contente"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Icone = "~/assets/iconesReacoes/adoro.png",
+                            Titulo = "Adoro"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Icone = "~/assets/iconesReacoes/interessante.png",
+                            Titulo = "Interessante"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Icone = "~/assets/iconesReacoes/supreendente.png",
+                            Titulo = "Supreendente"
+                        });
                 });
 
             modelBuilder.Entity("Oasis.Dominio.Entidades.Report", b =>
@@ -1054,13 +1097,21 @@ namespace Oasis.Dados.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Oasis.Dominio.Entidades.TipoPost", "TipoPost")
+                    b.HasOne("Oasis.Dominio.Entidades.Grupo", "Grupo")
                         .WithMany("Posts")
-                        .HasForeignKey("TipoPostId")
+                        .HasForeignKey("GrupoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Oasis.Dominio.Entidades.TipoPost", "TipoPost")
+                        .WithMany("Posts")
+                        .HasForeignKey("TipoPostId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("Criador");
+
+                    b.Navigation("Grupo");
 
                     b.Navigation("TipoPost");
                 });
@@ -1212,6 +1263,8 @@ namespace Oasis.Dados.Migrations
                     b.Navigation("Alunos");
 
                     b.Navigation("Flairs");
+
+                    b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("Oasis.Dominio.Entidades.PaginaPrincipal", b =>

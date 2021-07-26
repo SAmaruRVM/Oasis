@@ -2,72 +2,98 @@
 @inject IConfiguration configuration
 @{
     var user = await GetUtilizadorLogadoAsync();
-    ViewBag.Title = $"{configuration["Projeto:Nome"]} - nomegrupo ";
+    ViewBag.Title = $"{configuration["Projeto:Nome"]} - {Model.Grupo.Nome}";
 }
+
+@if (User.IsInRole(TipoUtilizador.Professor.ToString()))
+{
+    <button class="btn btn-primary m-3 mr-1">
+        <i class="fas fa-wrench"></i>
+        Definições grupo
+    </button>
+}
+<button class="btn btn-primary" data-toggle="modal" data-target="#modal-inserir-post">
+    <i class="fas fa-plus-square"></i>
+    Novo Post
+</button>
+<hr class="mb-0" />
 <div class="row container-fluid">
     <div class="text-center col-9 pt-5">
         <div class="pl-5">
-            <div class=" pl-5 pr-5"
-                style="position: fixed; height: 90vh; width: 55%; overflow-y: scroll; scrollbar-width: none; ">
+            <div id="container-posts" class="px-5"
+                 style="position: fixed; height: 90vh; width: 55%; overflow-y: scroll; scrollbar-width: none; ">
 
-                <div class="card mb-5">
-                    <div class="card-body">
-                        <h4 class="card-title">Post</h4>
-                        <textarea id="inserir-conteudo" class="form-control m-2" rows="2"></textarea>
-                        <div class="font-weight-bold">
-                            <button type="button" class="btn btn-primary btn-block mt-3">Inserir post</button>
+                <label>Ordernar por:</label>
+                <select class="wide mb-2">
+                    <option selected disabled value="0">-- Selecione o tipo de ordenação --</option>
+                    <option>Com mais gostos</option>
+                    <option>Com menos gostos</option>
+                </select>
+                <span class="text-danger text-center"></span>
+
+
+
+                <hr id="hr-container-posts" />
+                @if (!(Model.PostsGrupo.Any()))
+                {
+                    <h3>Ainda não existem posts aqui!</h3>
+                }
+                else
+                {
+                    @foreach (Post post in Model.PostsGrupo)
+                    {
+                        <div class="card my-5 text-left">
+                            <div class="card-body">
+                                <h4>
+                                    @if (post.Criador.Id == Model.Grupo.ProfessorId)
+                                    {
+                                        <span class="badge badge-success mr-2">Professor</span>
+                                    }
+                                    <span class="badge badge-secondary mr-2">@post.TipoPost.Nome</span>@post.Criador.PrimeiroNome @post.Criador.Apelido
+                                </h4>
+                                <hr />
+                                <h5 class="card-subtitle text-muted mt-2 ">@post.Titulo</h5>
+                            </div>
+                            @* <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%"
+                    height="200"
+                    aria-label="Placeholder: Image cap" focusable="false" role="img"
+                    preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180"
+                    style="font-size:1.125rem;text-anchor:middle">
+                    <rect width="100%" height="100%" fill="#868e96"></rect>
+                    <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
+                    </svg> *@
+                            <div class="card-body">
+                                <p class="card-text">
+                                    @post.Conteudo
+                                </p>
+                            </div>
+                            <div class="card-body d-flex mb-0 pb-0">
+                                <div class="dropdown mr-3">
+                                    <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="far fa-heart fa-lg"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @foreach (Reacao reacao in Model.Reacoes)
+                                        {
+                                            <li>
+                                                <button type="button" data-id-reacao="@reacao.Id" class="dropdown-item">
+                                                    <img style="width:20px;height:20px;" src="@reacao.Icone" />
+                                                    @reacao.Titulo
+                                                </button>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                </div>
+                                <p class="mr-3">@post.UtilizadoresQueGostaram.Count() reações</p>
+                                <a href="#" class="card-link">Comentar</a>
+                            </div>
+                            <div class="card-footer text-muted">
+                                Há 3 dias atrás
+                            </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="card mb-4 text-left">
-                    <div class="card-body">
-                        <h4> <span class="badge badge-secondary mr-2">Dúvida</span>António Pacheco</h4>
-                        <hr />
-                        <h5 class="card-subtitle text-muted mt-2 ">Alguém sabe gerar xml do c#</h5>
-                    </div>
-                    @* <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%"
-                        height="200"
-                        aria-label="Placeholder: Image cap" focusable="false" role="img"
-                        preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180"
-                        style="font-size:1.125rem;text-anchor:middle">
-                        <rect width="100%" height="100%" fill="#868e96"></rect>
-                        <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
-                        </svg> *@
-                    <div class="card-body">
-                        <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maiores, eligendi
-                            cumque itaque est sunt consequuntur aliquam voluptatibus excepturi, optio blanditiis ipsa
-                            exercitationem quibusdam ipsam voluptate distinctio dignissimos unde aperiam ex!</p>
-                    </div>
-                    <div class="card-body d-flex mb-0 pb-0">
-                        <div class="dropdown mr-3">
-                            <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                <i class="far fa-heart fa-lg"></i>
-                            </a>
-                            <ul class="dropdown-menu">
-                                @foreach (Reacao reacao in Model.Reacoes)
-                                {
-
-                                    <button type="button" class="dropdown-item">
-                                        <i class="fas fa-lg @reacao.CssClassIcone">
-
-                                        </i>
-                                        @reacao.Titulo
-                                    </button>
-
-                                }
-
-                            </ul>
-                        </div>
-                        <p class="mr-3">30 likes</p>
-                        <a href="#" class="card-link">Comentar</a>
-                    </div>
-                    <div class="card-footer text-muted">
-                        Há 3 dias atrás
-                    </div>
-                </div>
-
-
+                    }
+                }
             </div>
         </div>
     </div>
@@ -76,4 +102,167 @@
 
     <!-- partial grupos -->
     <partial name="_Grupos" model="@Model.EscolaViewModel" />
+</div>
+@section Scripts {
+    <partial name="~/Views/Shared/_Validacoes.cshtml" />
+    <partial name="~/Views/Shared/_Ajax.cshtml" />
+    <script>
+        function insercaoPost(respostaAjax) {
+            if (!(respostaAjax.ocorreuAlgumErro)) {
+                document.getElementById('form-adicionar-post').reset();
+                $('#modal-inserir-post').modal('hide');
+                const hrContainerPost = document.getElementById('hr-container-posts');
+
+                const postHTML = `<div class="card my-5 text-left">
+                            <div class="card-body">
+                                <h4> <span class="badge badge-secondary mr-2">${respostaAjax.post.tipoPost.nome}</span>${respostaAjax.post.criador.primeiroNome} ${respostaAjax.post.criador.apelido}</h4>
+                                <hr />
+                                <h5 class="card-subtitle text-muted mt-2 ">${respostaAjax.post.titulo}</h5>
+                            </div>
+                            @* <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%"
+                                height="200"
+                                aria-label="Placeholder: Image cap" focusable="false" role="img"
+                                preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180"
+                                style="font-size:1.125rem;text-anchor:middle">
+                                <rect width="100%" height="100%" fill="#868e96"></rect>
+                                <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
+                                </svg> *@
+                            <div class="card-body">
+                                <p class="card-text">
+                                    ${respostaAjax.post.conteudo}
+                                </p>
+                            </div>
+                            <div class="card-body d-flex mb-0 pb-0">
+                                <div class="dropdown mr-3">
+                                    <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="far fa-heart fa-lg"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @foreach (Reacao reacao in Model.Reacoes)
+                                        {
+                                            <li>
+                                                <button type="button" data-id-reacao="@reacao.Id" class="dropdown-item">
+                                                    <img style="width:20px;height:20px;" src="@reacao.Icone"/>
+                                                    @reacao.Titulo
+                                                </button>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                </div>
+                                <p class="mr-3">0 reações</p>
+                                <a href="#" class="card-link">Comentar</a>
+                            </div>
+                            <div class="card-footer text-muted">
+                                Agora mesmo
+                            </div>
+                        </div>`
+                hrContainerPost.insertAdjacentHTML('afterend', postHTML);
+            }
+            ajaxCompleto(respostaAjax.ajax);
+        }
+
+
+
+
+
+        // Reacoes
+        const btnsReacoes = document.querySelectorAll('button[data-id-reacao]');
+
+
+        btnsReacoes.forEach(btn => btn.addEventListener('click', async () => {
+
+            await marcarPostComReacao(btn.getAttribute('data-id-reacao'));
+        }));
+
+        async function marcarPostComReacao(idReacao)
+        {
+            await fetch();
+        }
+    </script>
+}
+
+
+
+<!-- Modals -->
+
+<!-- Modal Novo Post -->
+<div class="modal fade" id="modal-inserir-post" tabindex="-1" role="dialog"
+     aria-labelledby="modal-inserir-post-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-inserir-post-titulo">Post</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-adicionar-post" asp-action="AdicionarPost"
+                      asp-controller="Escola" asp-area="" asp-antiforgery="true" data-ajax="true"
+                      data-ajax-method="POST" data-ajax-success="insercaoPost"
+                      data-ajax-loading="#loading-icon-insercao-post">
+
+                    <div class="form-group mb-3">
+                        <label asp-for="PostInserirViewModel.Post.Titulo"></label>
+                        <input class="form-control" asp-for="PostInserirViewModel.Post.Titulo" />
+                        <span class="text-danger text-center"
+                              asp-validation-for="PostInserirViewModel.Post.Titulo"></span>
+                    </div>
+
+
+                    <div class="form-group mb-3">
+                        <label asp-for="PostInserirViewModel.Post.Conteudo"></label>
+                        <textarea class="form-control" asp-for="PostInserirViewModel.Post.Conteudo" rows="2"></textarea>
+                        <span class="text-danger text-center"
+                              asp-validation-for="PostInserirViewModel.Post.Conteudo"></span>
+                    </div>
+
+                    <label asp-for="PostInserirViewModel.Post.TipoPostId">Que tipo de post achas que se enquadra com aquilo que pretendes partilhar com os teus colegas?</label>
+                    <select class="wide mb-3" asp-for="PostInserirViewModel.Post.TipoPostId" asp-items="@Model.TiposPostDropdownList">
+                        <option selected disabled value="0">-- Selecione o tipo de post --</option>
+                    </select>
+                    <span class="text-danger text-center" asp-validation-for="PostInserirViewModel.Post.TipoPostId"></span>
+
+                    <input asp-for="PostInserirViewModel.Post.ApplicationUserId" value="@user.Id" type="hidden" />
+                    <input asp-for="PostInserirViewModel.Post.GrupoId" value="@Model.Grupo.Id" type="hidden" />
+                    <div class="font-weight-bold">
+                        <button type="submit" class="btn btn-primary btn-block mt-3">
+                            <i id="loading-icon-insercao-post" style="display: none;"
+                               class="fas fa-spinner fa-spin"></i>
+                            Inserir post
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- Modal Definições Grupo -->
+<div class="modal fade" id="modal-definicoes-grupo" tabindex="-1" role="dialog"
+     aria-labelledby="modal-definicoes-grupo-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-definicoes-grupo-titulo">Definições do grupo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
 </div>

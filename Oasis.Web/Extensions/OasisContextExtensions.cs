@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Oasis.Dados;
 using Oasis.Dominio.Entidades;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+
 namespace Oasis.Web.Extensions
 {
     public static class OasisContextExtensions
@@ -20,5 +22,29 @@ namespace Oasis.Web.Extensions
                            .Include(utilizador => utilizador.GruposOndeTemAulas)
                            .SingleOrDefaultAsync(utilizador => utilizador.Email == emailUtilizadorLogado);
 
+
+
+        public static IEnumerable<TipoPost> GetTiposPostsDefault(this OasisContext @this)
+        {
+            yield return new TipoPost
+            {
+                Nome = "Dúvida"
+            };
+
+            yield return new TipoPost
+            {
+                Nome = "Explicação"
+            };
+
+            yield return new TipoPost
+            {
+                Nome = "Praticar"
+            };
+
+            yield return new TipoPost
+            {
+                Nome = "Informação"
+            };
+        }
     }
 }

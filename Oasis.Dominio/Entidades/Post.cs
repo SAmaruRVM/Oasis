@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Oasis.Dominio.Entidades
 {
@@ -13,7 +14,8 @@ namespace Oasis.Dominio.Entidades
         [Display(Name = "Título", Prompt = "Introduza o título")]
         public string Titulo { get; set; }
 
-        [Required(ErrorMessage = "O conteúdo tem que ser obrigatóriamente preenchido!")]
+        [Required(ErrorMessage = "O título tem que ser obrigatóriamente preenchido!")]
+        [Display(Name = "Conteúdo", Prompt = "O que gostavas de partilhar com os teus colegas?")]
         public string Conteudo { get; set; }
 
         // default getdate() <<-- SQL
@@ -29,8 +31,16 @@ namespace Oasis.Dominio.Entidades
 
         public int ApplicationUserId { get; set; }
 
+        [JsonIgnore]
         public ICollection<PostUtilizadorGuardado> UtilizadoresQueGuardaram { get; } = new List<PostUtilizadorGuardado>();
+
+        [JsonIgnore]
         public ICollection<PostGostoUtilizador> UtilizadoresQueGostaram { get; } = new List<PostGostoUtilizador>();
+
+        [JsonIgnore]
         public ICollection<ComentarioPostUtilizador> Comentarios { get; } = new List<ComentarioPostUtilizador>();
+
+        public Grupo Grupo { get; set; }
+        public int GrupoId { get; set; }
     }
 }

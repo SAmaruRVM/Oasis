@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Oasis.Dominio.Entidades
 {
@@ -24,6 +25,7 @@ namespace Oasis.Dominio.Entidades
 
         public int EscolaId { get; set; }
 
+        [JsonIgnore]
         public ICollection<Grupo> Grupos { get; } = new List<Grupo>();
     }
 }

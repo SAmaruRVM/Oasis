@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Oasis.Dados;
 using Oasis.Dominio.Entidades;
 using Oasis.Web.Areas.Direcao.ViewModels;
+using Oasis.Web.Extensions;
 using Oasis.Web.Http;
 
 namespace Oasis.Web.Areas.Direcao.Controllers
@@ -36,6 +37,13 @@ namespace Oasis.Web.Areas.Direcao.Controllers
                 LinkDestino = string.Empty,
                 ApplicationUserId = disciplinasViewModel.ProfessorId
             };
+
+            foreach(TipoPost flair in _context.GetTiposPostsDefault())
+            {
+                disciplinasViewModel.Grupo.Flairs.Add(flair);
+            }
+            
+
 
             _context.Notificacoes.Add(notificacaoProfessorAssociadoGrupo);
             _context.Grupos.Add(disciplinasViewModel.Grupo);

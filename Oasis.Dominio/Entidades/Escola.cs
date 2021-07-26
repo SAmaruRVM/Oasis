@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Oasis.Dominio.Entidades
 {
@@ -54,8 +55,13 @@ namespace Oasis.Dominio.Entidades
         public PaginaPrincipal ConteudoPaginaPrincipal { get; set; }
         public int? PaginaPrincipalId { get; set; }
 
+        [JsonIgnore]
         public ICollection<ApplicationUser> Membros { get; } = new List<ApplicationUser>();
+
+        [JsonIgnore]
         public ICollection<Disciplina> Disciplinas { get; } = new List<Disciplina>();
+
+        [JsonIgnore]
         public ICollection<Equipamento> Equipamentos { get; } = new List<Equipamento>();
 
         // Not mapped properties

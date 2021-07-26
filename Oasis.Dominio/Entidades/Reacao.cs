@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Oasis.Dominio.Entidades
 {
@@ -11,8 +12,9 @@ namespace Oasis.Dominio.Entidades
         public string Titulo { get; set; }
 
         [StringLength(100)]
-        public string CssClassIcone { get; set; }
+        public string Icone { get; set; }
 
+        [JsonIgnore]
         public ICollection<PostGostoUtilizador> PostsQueFizeramUsoDestaReacao { get; } = new List<PostGostoUtilizador>();   
     }
 }

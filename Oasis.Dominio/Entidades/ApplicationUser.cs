@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Oasis.Dominio.Entidades
 {
@@ -37,17 +38,40 @@ namespace Oasis.Dominio.Entidades
         public Escola Escola { get; set; }
         public int? EscolaId { get; set; }
 
+        [JsonIgnore]
         public ICollection<Disciplina> DisciplinasCriadas { get; } = new List<Disciplina>();
+
+        [JsonIgnore]
         public ICollection<Equipamento> EquipamentosInseridos { get; set; } = new List<Equipamento>();
+
+        [JsonIgnore]
         public ICollection<Grupo> GruposOndeEnsina { get; } = new List<Grupo>();
+
+        [JsonIgnore]
         public ICollection<GrupoAluno> GruposOndeTemAulas { get; } = new List<GrupoAluno>();
+
+        [JsonIgnore]
         public ICollection<Post> PostsCriados { get; } = new List<Post>();
+
+        [JsonIgnore]
         public ICollection<PostUtilizadorGuardado> PostsGuardados { get; } = new List<PostUtilizadorGuardado>();
+
+        [JsonIgnore]
         public ICollection<PostGostoUtilizador> PostsGostados { get; } = new List<PostGostoUtilizador>();
+
+        [JsonIgnore]
         public ICollection<Report> ReportsProfessor { get; } = new List<Report>();
+
+        [JsonIgnore]
         public ICollection<Report> ReportsAluno { get; } = new List<Report>();
+
+        [JsonIgnore]
         public ICollection<Notificacao> Notificacoes { get; } = new List<Notificacao>();
+
+        [JsonIgnore]
         public ICollection<RequisicaoEquipamento> RequisicoesEquipamento { get; } = new List<RequisicaoEquipamento>();
+
+        [JsonIgnore]
         public ICollection<ComentarioPostUtilizador> Comentarios { get; } = new List<ComentarioPostUtilizador>();
     }
 }
