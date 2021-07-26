@@ -51,28 +51,28 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "83e498f0-bf64-4af0-b787-8713bc24f2b1",
+                            ConcurrencyStamp = "2f40de81-756e-40da-a2ed-828c37c685f9",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "7948eb05-ea97-49cc-a8bf-ca0c17a68ce6",
+                            ConcurrencyStamp = "411ef19b-fb69-4766-b82f-51beae968b46",
                             Name = "Diretor",
                             NormalizedName = "DIRETOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "7163149e-d89d-4353-93ca-5cc2575492e9",
+                            ConcurrencyStamp = "5070fba3-184c-46e5-8b24-67e8b171c07c",
                             Name = "Professor",
                             NormalizedName = "PROFESSOR"
                         },
                         new
                         {
                             Id = 4,
-                            ConcurrencyStamp = "541e6d29-d436-4394-8d90-7aaaf7b78904",
+                            ConcurrencyStamp = "ea904216-3a83-4f56-a881-58c54259f3ee",
                             Name = "Aluno",
                             NormalizedName = "ALUNO"
                         });
@@ -665,12 +665,10 @@ namespace Oasis.Dados.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CssClassIcone")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Titulo")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
@@ -797,20 +795,20 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 1,
-                            LinkCdn = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/yeti/bootstrap.min.css",
-                            Nome = "Yeti"
+                            LinkCdn = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css",
+                            Nome = "Minty"
                         },
                         new
                         {
                             Id = 2,
-                            LinkCdn = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css",
-                            Nome = "Darkly"
+                            LinkCdn = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cerulean/bootstrap.min.css",
+                            Nome = "Cerulean"
                         },
                         new
                         {
                             Id = 3,
-                            LinkCdn = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css",
-                            Nome = "Minty"
+                            LinkCdn = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css",
+                            Nome = "Darkly"
                         },
                         new
                         {
@@ -821,8 +819,20 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 5,
-                            LinkCdn = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sandstone/bootstrap.min.css",
-                            Nome = "Sandstone"
+                            LinkCdn = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cyborg/bootstrap.min.css",
+                            Nome = "Cyborg"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            LinkCdn = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/journal/bootstrap.min.css",
+                            Nome = "Journal"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            LinkCdn = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/solar/bootstrap.min.css",
+                            Nome = "Solar"
                         });
                 });
 

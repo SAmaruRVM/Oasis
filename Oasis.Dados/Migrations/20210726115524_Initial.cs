@@ -47,8 +47,8 @@ namespace Oasis.Dados.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Titulo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    CssClassIcone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
+                    Titulo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    CssClassIcone = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -594,11 +594,13 @@ namespace Oasis.Dados.Migrations
                 columns: new[] { "Id", "LinkCdn", "Nome" },
                 values: new object[,]
                 {
-                    { 1, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/yeti/bootstrap.min.css", "Yeti" },
-                    { 2, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css", "Darkly" },
-                    { 3, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css", "Minty" },
+                    { 1, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css", "Minty" },
+                    { 2, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cerulean/bootstrap.min.css", "Cerulean" },
+                    { 3, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css", "Darkly" },
                     { 4, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sketchy/bootstrap.min.css", "Sketchy" },
-                    { 5, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sandstone/bootstrap.min.css", "Sandstone" }
+                    { 5, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cyborg/bootstrap.min.css", "Cyborg" },
+                    { 6, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/journal/bootstrap.min.css", "Journal" },
+                    { 7, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/solar/bootstrap.min.css", "Solar" }
                 });
 
             migrationBuilder.InsertData(
@@ -606,10 +608,10 @@ namespace Oasis.Dados.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "83e498f0-bf64-4af0-b787-8713bc24f2b1", "Administrador", "ADMINISTRADOR" },
-                    { 2, "7948eb05-ea97-49cc-a8bf-ca0c17a68ce6", "Diretor", "DIRETOR" },
-                    { 3, "7163149e-d89d-4353-93ca-5cc2575492e9", "Professor", "PROFESSOR" },
-                    { 4, "541e6d29-d436-4394-8d90-7aaaf7b78904", "Aluno", "ALUNO" }
+                    { 1, "2f40de81-756e-40da-a2ed-828c37c685f9", "Administrador", "ADMINISTRADOR" },
+                    { 2, "411ef19b-fb69-4766-b82f-51beae968b46", "Diretor", "DIRETOR" },
+                    { 3, "5070fba3-184c-46e5-8b24-67e8b171c07c", "Professor", "PROFESSOR" },
+                    { 4, "ea904216-3a83-4f56-a881-58c54259f3ee", "Aluno", "ALUNO" }
                 });
 
             migrationBuilder.CreateIndex(

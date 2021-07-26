@@ -6,14 +6,15 @@
 
 @if (Model.Grupos.Any())
 {
-    <div class="container-fluid">
-        <div class="d-flex flex-wrap m-4">
+
+    <div class="" style=" position: fixed; height: 95vh; width: 80%; overflow-y: scroll; scrollbar-width: none; ">
+        <div class=" d-flex flex-wrap m-5 p-5">
             @foreach (Grupo grupo in Model.Grupos)
             {
                 var imagemGrupo = grupo.Banner is null ?
                 "https://www.quasetudo.eu/wp-content/themes/consultix/images/no-image-found-360x260.png" :
                 "data:image/png;base64,@Convert.ToBase64String(grupo.Banner)";
-                <div class="card m-3 p-3" style="flex-grow: 0.3">
+                <div class="card m-4 p-3" style="flex-grow: 0.3">
                     <img data-id-banner="@grupo.Id" class="card-img-top" src="@imagemGrupo" alt="Card image cap" role="button"
                          data-toggle="modal" data-target="#modal-banner">
                     <div class="card-body">
@@ -26,10 +27,14 @@
             }
         </div>
     </div>
+
+    
 }
 else
 {
-    <h3>Ainda não foi inserido em nenhum grupo. Por favor, contacte a administração caso exista algum erro.</h3>
+<div class="container">
+    <h3 class="m-5">Ainda não foi inserido em nenhum grupo. Por favor, contacte a administração caso exista algum erro.</h3>
+</div>
 }
 
 

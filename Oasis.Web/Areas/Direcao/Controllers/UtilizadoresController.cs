@@ -82,7 +82,7 @@ namespace Oasis.Web.Areas.Direcao.Controllers
 
                     utilizadorDirecaoViewModel.Utilizador.Email = utilizadorDirecaoViewModel.Email;
                     utilizadorDirecaoViewModel.Utilizador.SecurityStamp = guidGerado;
-                    utilizadorDirecaoViewModel.Utilizador.TemaId = 3;
+                    utilizadorDirecaoViewModel.Utilizador.TemaId = 1;
                     utilizadorDirecaoViewModel.Utilizador.EscolaId = (await _context.Utilizadores
                                                                                  .AsNoTracking()
                                                                                  .Include(utilizador => utilizador.Escola)

@@ -75,7 +75,7 @@ namespace Oasis.Web.Areas.Administrador.Controllers
                         Apelido = inserirMembroDirecaoViewModel.MembroDirecao.Apelido,
                         SecurityStamp = guidGerado,
                         EscolaId = inserirMembroDirecaoViewModel.IdEscola,
-                        TemaId = 3
+                        TemaId = 1
                     };
 
                     await _userManager.CreateAsync(userDirecao, password: guidGerado);
