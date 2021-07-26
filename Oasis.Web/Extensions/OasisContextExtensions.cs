@@ -20,6 +20,9 @@ namespace Oasis.Web.Extensions
                            .ThenInclude(disciplina => disciplina.CriadorDirecao)
                            .Include(utilizador => utilizador.GruposOndeEnsina)
                            .Include(utilizador => utilizador.GruposOndeTemAulas)
+                           .Include(utilizador => utilizador.PostsCriados)
+                           .Include(utilizador => utilizador.PostsGostados)
+                           .Include(utilizador => utilizador.PostsGuardados)
                            .SingleOrDefaultAsync(utilizador => utilizador.Email == emailUtilizadorLogado);
 
 

@@ -67,42 +67,50 @@
 }
 
 
+@{
+    string width = (User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString())) ? "60%" : "80%";
 
+    string coluna = (User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString())) ? "col-9" : "col-10";
+}
 <div class="row no-gutters container-fluid">
-    <div class="text-center col-9">
+    <div class="text-center @coluna">
         <div class="mt-5">
             <div class="navbar-nav">
-                <h3>@user.Escola.Nome</h3>
+                <h2>@user.Escola.Nome</h2>
             </div>
         </div>
         <div class="p-2">
             <div class="p-4"
-                style="position: fixed; height: 83vh; width: 60%; overflow-y: scroll; scrollbar-width: none; ">
+                style="position: fixed; height: 83vh; width: @width; overflow-y: scroll; scrollbar-width: none; ">
 
                 <div class="">
                     @if (User.IsInRole(TipoUtilizador.Diretor.ToString()))
                     {
                         <div class="card mb-4">
-                            <div class="card-body ">
-                                <h4 class="card-title">Inserir conteúdo</h4>
-                                <textarea id="inserir-conteudo" class="form-control m-2" rows="2"></textarea>
+                            <div class="card-body">
+                                @{
+                                    var conteudo = @user.Escola.ConteudoPaginaPrincipal?.ConteudoHtml ?? "Sem conteudo";
+                                }
+                                <textarea id="inserir-conteudo" class="form-control m-2" rows="2">
+                                    @conteudo
+                                </textarea>
                                 <div class="font-weight-bold">
                                     <button type="button" class="btn btn-primary btn-block mt-3">Inserir conteúdo</button>
                                 </div>
                             </div>
                         </div>
                     }
-                    @Html.Raw(user.Escola.ConteudoPaginaPrincipal?.ConteudoHtml ?? "<h3>Sem conteudo!</h3>")
-
                 </div>
 
             </div>
         </div>
     </div>
 
-
-    <!-- partial grupos -->
-    <partial name="_Grupos" model="@Model" />
+    @if(User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString()))
+    {
+         // partial grupos 
+       <partial name="_Grupos" model="@Model" />
+    }
 
 </div>
 

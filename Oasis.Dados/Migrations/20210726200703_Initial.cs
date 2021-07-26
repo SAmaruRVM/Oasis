@@ -600,12 +600,12 @@ namespace Oasis.Dados.Migrations
                 columns: new[] { "Id", "Icone", "Titulo" },
                 values: new object[,]
                 {
-                    { 5, "~/assets/iconesReacoes/interessante.png", "Interessante" },
-                    { 1, "~/assets/iconesReacoes/gosto.png", "Gosto" },
-                    { 2, "~/assets/iconesReacoes/emCheio.png", "Em Cheio!" },
-                    { 3, "~/assets/iconesReacoes/contente.png", "Contente" },
-                    { 4, "~/assets/iconesReacoes/adoro.png", "Adoro" },
-                    { 6, "~/assets/iconesReacoes/supreendente.png", "Supreendente" }
+                    { 5, "assets/iconesReacoes/interessante.png", "Interessante" },
+                    { 1, "assets/iconesReacoes/gosto.png", "Gosto" },
+                    { 2, "assets/iconesReacoes/emCheio.png", "Em Cheio!" },
+                    { 3, "assets/iconesReacoes/contente.png", "Contente" },
+                    { 4, "assets/iconesReacoes/adoro.png", "Adoro" },
+                    { 6, "assets/iconesReacoes/supreendente.png", "Supreendente" }
                 });
 
             migrationBuilder.InsertData(
@@ -627,10 +627,10 @@ namespace Oasis.Dados.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 4, "bd03bcb5-cd0b-43be-88e5-afa3bd16d01c", "Aluno", "ALUNO" },
-                    { 3, "e6adcc10-a177-4657-a362-6216b7fa1352", "Professor", "PROFESSOR" },
-                    { 2, "47f69e4b-b34b-4ae4-836d-453da3855fca", "Diretor", "DIRETOR" },
-                    { 1, "3ab40fd6-ba1d-4734-b00a-f61c27a644da", "Administrador", "ADMINISTRADOR" }
+                    { 4, "bf777083-0584-40be-993a-7a62388bea71", "Aluno", "ALUNO" },
+                    { 3, "dc2e08d4-c6cd-47ee-8fbb-9ae97a4b68c3", "Professor", "PROFESSOR" },
+                    { 2, "cb2feb42-c0d6-40fd-b4c3-1b782cb992c0", "Diretor", "DIRETOR" },
+                    { 1, "98c2426e-06d3-4e1a-91a0-26ec8a680f40", "Administrador", "ADMINISTRADOR" }
                 });
 
             migrationBuilder.CreateIndex(

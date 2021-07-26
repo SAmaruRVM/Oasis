@@ -2,7 +2,7 @@
 @inject IConfiguration configuration
 @{
     Layout = "~/Views/Escola/Shared/_Layout.cshtml";
-    ViewBag.Title = $"Dire��o {configuration["Projeto:Nome"]} - Utilizadores";
+    ViewBag.Title = $"Direção {configuration["Projeto:Nome"]} - Utilizadores";
 }
 
 <div class="container-fluid">
@@ -31,11 +31,11 @@
                     <td>@utilizador.Email</td>
                     <td>teste</td>
                     <td>@utilizador.DataCriacao</td>
-                    <td>@utilizador.DataUltimoLogin</td>
+                    @{
+                        var dataUltimoLogin = utilizador.DataUltimoLogin?.ToString() ?? "Ainda não efetuou o 1º Login";
+                    }
+                    <td>@dataUltimoLogin</td>
                     <td>
-                        <a href="#">
-                            <i class="far fa-edit fa-lg ml-1"></i>
-                        </a>
                         <a href="#"><i class="far fa-trash-alt fa-lg ml-2"></i></a>
                     </td>
                 </tr>

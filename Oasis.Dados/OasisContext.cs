@@ -85,12 +85,12 @@ namespace Oasis.Dados
             builder.Entity<Reacao>()
                    .HasData(new Dictionary<string, string>
                    {
-                       ["Gosto"] = "~/assets/iconesReacoes/gosto.png",
-                       ["Em Cheio!"] = "~/assets/iconesReacoes/emCheio.png",
-                       ["Contente"] = "~/assets/iconesReacoes/contente.png",
-                       ["Adoro"] = "~/assets/iconesReacoes/adoro.png",
-                       ["Interessante"] = "~/assets/iconesReacoes/interessante.png",
-                       ["Supreendente"] = "~/assets/iconesReacoes/supreendente.png"
+                       ["Gosto"] = "assets/iconesReacoes/gosto.png",
+                       ["Em Cheio!"] = "assets/iconesReacoes/emCheio.png",
+                       ["Contente"] = "assets/iconesReacoes/contente.png",
+                       ["Adoro"] = "assets/iconesReacoes/adoro.png",
+                       ["Interessante"] = "assets/iconesReacoes/interessante.png",
+                       ["Supreendente"] = "assets/iconesReacoes/supreendente.png"
                    }.Select(reacao => new Reacao
                    {
                        Id = ++indexReacoes,

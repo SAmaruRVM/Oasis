@@ -11,6 +11,7 @@ namespace Oasis.Web.ViewModels
         public IEnumerable<Reacao> Reacoes { get; set; }
 
         public Grupo Grupo { get; set; }
+        public ComentarioPostUtilizador ComentarioPostUtilizador { get; set; }
         public PostInserirViewModel PostInserirViewModel { get; set; }
 
         public IEnumerable<SelectListItem> TiposPostDropdownList { get; set; }

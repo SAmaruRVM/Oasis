@@ -23,16 +23,6 @@
             <div id="container-posts" class="px-5"
                  style="position: fixed; height: 90vh; width: 55%; overflow-y: scroll; scrollbar-width: none; ">
 
-                <label>Ordernar por:</label>
-                <select class="wide mb-2">
-                    <option selected disabled value="0">-- Selecione o tipo de ordenação --</option>
-                    <option>Com mais gostos</option>
-                    <option>Com menos gostos</option>
-                </select>
-                <span class="text-danger text-center"></span>
-
-
-
                 <hr id="hr-container-posts" />
                 @if (!(Model.PostsGrupo.Any()))
                 {
@@ -40,8 +30,20 @@
                 }
                 else
                 {
+                       <label>Ordernar por:</label>
+                <select class="wide mb-2">
+                    <option selected disabled value="0">-- Selecione o tipo de ordenação --</option>
+                    <option>Com mais gostos</option>
+                    <option>Com menos gostos</option>
+                </select>
+                <span class="text-danger text-center"></span>
+
                     @foreach (Post post in Model.PostsGrupo)
                     {
+                      
+                            string postGuardado = user.PostsGuardados.Select(pg => pg.PostId)
+                                                                   .Contains(post.Id) ? "Desguardar" : "Guardar";
+                      
                         <div class="card my-5 text-left">
                             <div class="card-body">
                                 <h4>
@@ -50,7 +52,31 @@
                                         <span class="badge badge-success mr-2">Professor</span>
                                     }
                                     <span class="badge badge-secondary mr-2">@post.TipoPost.Nome</span>@post.Criador.PrimeiroNome @post.Criador.Apelido
+
+                                        <div class="dropdown float-right">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Opções
+  </button>
+  <div class="dropdown-menu p-2" aria-labelledby="dropdownMenuButton">
+      <a asp-action="Post" asp-controller="Escola" asp-area="" asp-route-idPost="@post.Id" class="btn btn-secondary btn-block">
+          Detalhes
+      </a>
+ <button type="button" data-id-post-guardar="@post.Id" class="btn btn-info btn-block">
+                                      @postGuardado
+                                    </button>
+                                    @if(post.Criador.Id == user.Id)
+                                    {
+ <button type="button" data-id-post-eliminar="@post.Id" class="btn btn-danger btn-block">
+                                      Eliminar 
+                                    </button>
+                                      }
+  </div>
+</div>
+                                        
+                                   
+                                  
                                 </h4>
+                               
                                 <hr />
                                 <h5 class="card-subtitle text-muted mt-2 ">@post.Titulo</h5>
                             </div>
@@ -77,7 +103,7 @@
                                         {
                                             <li>
                                                 <button type="button" data-id-reacao="@reacao.Id" class="dropdown-item">
-                                                    <img style="width:20px;height:20px;" src="@reacao.Icone" />
+                                                    <img style="width:20px;height:20px;" src="~/@reacao.Icone" />
                                                     @reacao.Titulo
                                                 </button>
                                             </li>
@@ -86,10 +112,33 @@
                                     </ul>
                                 </div>
                                 <p class="mr-3">@post.UtilizadoresQueGostaram.Count() reações</p>
-                                <a href="#" class="card-link">Comentar</a>
+                                <button type="button" data-mostrar-comentario="@post.Id"  class="btn btn-primary mb-2">Comentar</button>
+                    </div>
+                           <form id=@string.Format("form-inserir-comentario-post{0}", post.Id) asp-action="InserirComentarioPost" asp-controller="Escola" asp-area=""
+                      asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
+                      data-ajax-success="insercaoComentarioPost"
+                      data-ajax-loading="#loading-icon-atualizar-descricao-grupo">
+                               <div class="form-group m-3 d-none" id=@string.Format("comentario{0}", @post.Id)>
+                        <textarea class="form-control" rows="2" asp-for="ComentarioPostUtilizador.Comentario"></textarea>
+                        <span class="text-danger text-center"
+                            asp-validation-for="ComentarioPostUtilizador.Comentario"></span>
+
+                            <input type="hidden" asp-for="ComentarioPostUtilizador.PostId" value="@post.Id"/>
+                            <input type="hidden" asp-for="ComentarioPostUtilizador.ApplicationUserId" value="@user.Id"/>
+
+
+                              <button type="submit" class="btn btn-primary my-2 float-right">
+                                Enviar
+                            </button>
                             </div>
+                           </form>
+                          
                             <div class="card-footer text-muted">
-                                Há 3 dias atrás
+                                @post.DataCriacao.Day de
+                                        @post.DataCriacao.ToString("MMMM",
+                                System.Globalization.CultureInfo.CreateSpecificCulture("pt-PT")),
+                                        @post.DataCriacao.Year
+                                        às @post.DataCriacao.Hour:@post.DataCriacao.Minute
                             </div>
                         </div>
                     }
@@ -107,6 +156,17 @@
     <partial name="~/Views/Shared/_Validacoes.cshtml" />
     <partial name="~/Views/Shared/_Ajax.cshtml" />
     <script>
+
+        function insercaoComentarioPost(respostaAjax) 
+        {
+            if(!(respostaAjax.ocorreuAlgumErro)) 
+            {
+                
+            }
+            ajaxCompleto(respostaAjax);
+        }   
+
+
         function insercaoPost(respostaAjax) {
             if (!(respostaAjax.ocorreuAlgumErro)) {
                 document.getElementById('form-adicionar-post').reset();
@@ -142,7 +202,7 @@
                                         {
                                             <li>
                                                 <button type="button" data-id-reacao="@reacao.Id" class="dropdown-item">
-                                                    <img style="width:20px;height:20px;" src="@reacao.Icone"/>
+                                                    <img style="width:20px;height:20px;" src="~/@reacao.Icone"/>
                                                     @reacao.Titulo
                                                 </button>
                                             </li>
@@ -161,6 +221,77 @@
             }
             ajaxCompleto(respostaAjax.ajax);
         }
+
+
+        // comentarios
+
+        const btnsAbrirComentarios = document.querySelectorAll('button[data-mostrar-comentario]');
+        btnsAbrirComentarios.forEach(btn => btn.addEventListener('click', () => 
+        {
+            document.getElementById(`comentario${btn.getAttribute('data-mostrar-comentario')}`).classList.toggle('d-none');
+        }));
+
+
+
+
+        // Guardar Posts
+          const btnsGuardarPosts = document.querySelectorAll('button[data-id-post-guardar]');
+
+
+        btnsGuardarPosts.forEach(btn => btn.addEventListener('click', async () => {
+            const resultadoAjax = await guardarPost(btn.getAttribute('data-id-post-guardar'));
+            ajaxCompleto(resultadoAjax);
+
+
+           btn.innerText = (btn.innerText.trim() === 'Guardar' ? 'Desguardar' : 'Guardar');
+        }));
+
+        async function guardarPost(idPost) 
+        {
+                  const formData = new FormData();
+            formData.append('idPost', idPost);
+            return await fetch(`${location.protocol}//${location.hostname}:${location.port}/escola/guardarPost`,
+                {
+                    method: 'POST',
+                    body: formData
+                }).then(resposta => resposta.json());
+        }
+
+
+
+
+
+
+
+        // Eliminar Posts
+          const btnsEliminarPosts = document.querySelectorAll('button[data-id-post-eliminar]');
+
+
+        btnsEliminarPosts.forEach(btn => btn.addEventListener('click', async () => {
+            const resultadoAjax = await eliminarPost(btn.getAttribute('data-id-post-eliminar'));
+            ajaxCompleto(resultadoAjax);
+
+            if(!(resultadoAjax.ocorreuAlgumErro)) 
+            {
+                btn.parentElement().parentElement().parentElement().parentElement().remove();
+            }
+        }));
+
+        async function eliminarPost(idPost) 
+        {
+                  const formData = new FormData();
+            formData.append('idPost', idPost);
+            return await fetch(`${location.protocol}//${location.hostname}:${location.port}/escola/eliminarPost`,
+                {
+                    method: 'POST',
+                    body: formData
+                }).then(resposta => resposta.json());
+        }
+
+
+
+
+
 
 
 

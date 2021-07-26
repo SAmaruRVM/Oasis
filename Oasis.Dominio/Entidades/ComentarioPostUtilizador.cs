@@ -7,8 +7,9 @@ namespace Oasis.Dominio.Entidades
     {
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(100)]
+        [Required(ErrorMessage = "O comentário tem que ser obrigatóriamente preenchido!")]
+        [StringLength(200, ErrorMessage = "O comentário {0} tem que ter no máximo {1} caracteres!")]
+        [Display(Prompt = "Escreve merda aqui")]
         public string Comentario { get; set; }
 
         // default getdate() <<-- SQL

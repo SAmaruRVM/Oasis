@@ -8,11 +8,14 @@
     Model.Descricao = @user.DescricaoPerfil;
 }
 
+@{
+    string width = (User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString())) ? "60%" : "80%";
+}
 <div class="row no-gutters container-fluid">
     <div class="text-center col-9">
-        <div class="p-2">
-            <div class="p-4"
-                style="margin-top: 30px; position: fixed; height: 90vh; width: 60%; overflow-y: scroll; scrollbar-width: none; ">
+        <div class="">
+            <div class=""
+                style="margin-top: 30px; position: fixed; height: 90vh; width: @width; overflow-y: scroll; scrollbar-width: none; ">
                 <div class="container-fluid">
                     @{
                         var imagemUser = user.ImagemPerfil is null ?
@@ -131,8 +134,11 @@
 
 
 
-    <!-- partial grupos -->
-    <partial name="_Grupos" model="@Model.EscolaViewModel" />
+     @if(User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString()))
+    {
+         // partial grupos 
+       <partial name="_Grupos" model="@Model.EscolaViewModel" />
+    }
 </div>
 
 @section Scripts {

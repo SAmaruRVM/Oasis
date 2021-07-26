@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,9 @@ namespace Oasis.Web.Controllers
     public class EscolaController : Controller
     {
         private readonly OasisContext _context;
-        public EscolaController(OasisContext context) => (_context) = (context);
+        private readonly UserManager<ApplicationUser> _userManager;
+        public EscolaController(OasisContext context, UserManager<ApplicationUser> userManager)
+         => (_context, _userManager) = (context, userManager);
 
 
         [HttpGet]
@@ -205,6 +208,135 @@ namespace Oasis.Web.Controllers
                     UrlRedirecionar = string.Empty
                 },
                 Post = postInserirViewModel.Post
+            });
+        }
+
+
+
+
+
+         [HttpGet("[action]/{idPost}")]
+        public async Task<IActionResult> Post(int idPost)
+        {
+            var utilizadorLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
+
+            var post = await _context.Posts            
+                                     .AsNoTracking()
+                                     .Include(post => post.Comentarios)
+                                     .ThenInclude(comentario => comentario.Utilizador)
+                                     .Include(post => post.Criador)
+                                     .ThenInclude(criador => criador.Escola)
+                                     .Include(post => post.TipoPost)
+                                     .SingleOrDefaultAsync(post => post.Id == idPost);
+
+            if(post is null) 
+            {
+                return NotFound();
+            }
+
+            if(post.Criador.Escola.Id != utilizadorLogado.Escola.Id) 
+            {
+                return Forbid(); // 403
+            }
+
+
+        
+            return View(model: post);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        [HttpPost("[action]")]
+        public async Task<JsonResult> GuardarPost([FromForm] int idPost)
+        {
+            var userLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
+            bool postGuardado = true;
+
+            if (userLogado.PostsGuardados.Select(pg => pg.PostId).Contains(idPost))
+            {
+                userLogado.PostsGuardados.Remove(await _context.PostsUtilizadoresGuardados.SingleOrDefaultAsync(pug => pug.PostId == idPost && pug.ApplicationUserId == userLogado.Id));
+                postGuardado = false;
+            }
+            else
+            {
+                userLogado.PostsGuardados.Add(new PostUtilizadorGuardado
+                {
+                    PostId = idPost
+                });
+            }
+
+            await _userManager.UpdateAsync(user: userLogado);
+
+            return Json(new Ajax
+            {
+                Titulo = $"O post foi {(postGuardado ? "guardado" : "desguardado")} com sucesso!",
+                Descricao = string.Empty,
+                OcorreuAlgumErro = false,
+                UrlRedirecionar = string.Empty
+            });
+        }
+
+
+         [HttpPost("[action]")]
+        public async Task<JsonResult> InserirComentarioPost([FromForm] ComentarioPostUtilizador comentarioPostUtilizador)
+        {
+           
+            
+            await _context.SaveChangesAsync();
+
+                
+
+            return Json(new Ajax
+            {
+                Titulo = $"O teu comentário foi inserido com sucesso!",
+                Descricao = string.Empty,
+                OcorreuAlgumErro = false,
+                UrlRedirecionar = string.Empty
+            });
+        }
+
+
+
+
+       [HttpPost("[action]")]
+        public async Task<JsonResult> EliminarPost([FromForm] int idPost)
+        {
+            var userLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
+
+            var postParaEliminar = await _context.Posts.SingleOrDefaultAsync(post => post.Id == idPost && post.ApplicationUserId == userLogado.Id);
+
+            if(postParaEliminar is null) 
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Ocorreu um erro na eliminação do post selecionado.",
+                    Descricao = "Pedimos desculpa pela incómodo. Já foi enviado a informação aos nossos técnicos. Por favor, tente novamente mais tarde.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+            userLogado.PostsCriados.Remove(postParaEliminar);
+
+            await _userManager.UpdateAsync(user: userLogado);
+            return Json(new Ajax
+            {
+                Titulo = $"O post foi eliminado com sucesso!",
+                Descricao = string.Empty,
+                OcorreuAlgumErro = false,
+                UrlRedirecionar = string.Empty
             });
         }
 

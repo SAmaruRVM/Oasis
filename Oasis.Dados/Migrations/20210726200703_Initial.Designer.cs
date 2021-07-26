@@ -10,7 +10,7 @@ using Oasis.Dados;
 namespace Oasis.Dados.Migrations
 {
     [DbContext(typeof(OasisContext))]
-    [Migration("20210726174107_Initial")]
+    [Migration("20210726200703_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,28 +53,28 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "3ab40fd6-ba1d-4734-b00a-f61c27a644da",
+                            ConcurrencyStamp = "98c2426e-06d3-4e1a-91a0-26ec8a680f40",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "47f69e4b-b34b-4ae4-836d-453da3855fca",
+                            ConcurrencyStamp = "cb2feb42-c0d6-40fd-b4c3-1b782cb992c0",
                             Name = "Diretor",
                             NormalizedName = "DIRETOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "e6adcc10-a177-4657-a362-6216b7fa1352",
+                            ConcurrencyStamp = "dc2e08d4-c6cd-47ee-8fbb-9ae97a4b68c3",
                             Name = "Professor",
                             NormalizedName = "PROFESSOR"
                         },
                         new
                         {
                             Id = 4,
-                            ConcurrencyStamp = "bd03bcb5-cd0b-43be-88e5-afa3bd16d01c",
+                            ConcurrencyStamp = "bf777083-0584-40be-993a-7a62388bea71",
                             Name = "Aluno",
                             NormalizedName = "ALUNO"
                         });
@@ -687,37 +687,37 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 1,
-                            Icone = "~/assets/iconesReacoes/gosto.png",
+                            Icone = "assets/iconesReacoes/gosto.png",
                             Titulo = "Gosto"
                         },
                         new
                         {
                             Id = 2,
-                            Icone = "~/assets/iconesReacoes/emCheio.png",
+                            Icone = "assets/iconesReacoes/emCheio.png",
                             Titulo = "Em Cheio!"
                         },
                         new
                         {
                             Id = 3,
-                            Icone = "~/assets/iconesReacoes/contente.png",
+                            Icone = "assets/iconesReacoes/contente.png",
                             Titulo = "Contente"
                         },
                         new
                         {
                             Id = 4,
-                            Icone = "~/assets/iconesReacoes/adoro.png",
+                            Icone = "assets/iconesReacoes/adoro.png",
                             Titulo = "Adoro"
                         },
                         new
                         {
                             Id = 5,
-                            Icone = "~/assets/iconesReacoes/interessante.png",
+                            Icone = "assets/iconesReacoes/interessante.png",
                             Titulo = "Interessante"
                         },
                         new
                         {
                             Id = 6,
-                            Icone = "~/assets/iconesReacoes/supreendente.png",
+                            Icone = "assets/iconesReacoes/supreendente.png",
                             Titulo = "Supreendente"
                         });
                 });
