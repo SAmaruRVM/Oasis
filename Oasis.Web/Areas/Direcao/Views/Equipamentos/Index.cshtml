@@ -43,7 +43,7 @@
                             <td>@equipamento.DataEntrada</td>
                             <td>@equipamento.DirectorResponsavelInsercao</td>
                             <td>
-                                <button class="btn btn-success ml-2">saida</button>
+                                <button class="btn btn-info disabled ml-2">saida</button>
                             </td>
                         </tr>
                     }
@@ -57,14 +57,11 @@
             <ul>
                 @foreach (Equipamento equipamento in Model)
                 {
-                    <li>@equipamento.Quantidade - @equipamento.Nome</li>
+                    <li>x - @equipamento.Nome</li>
                 }
                 </ul>
-
         </div>
         
-
-
 
     </div>
 </div>

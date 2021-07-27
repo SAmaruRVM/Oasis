@@ -68,14 +68,14 @@
 
 
 @{
-    string width = (User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString())) ? "60%" : "80%";
+    string width = (User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString())) ? "60%" : "70%";
 
     string coluna = (User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString())) ? "col-9" : "col-10";
 }
 <div class="row no-gutters container-fluid">
     <div class="text-center @coluna">
         <div class="mt-5">
-            <div class="navbar-nav">
+            <div class="navbar-nav text-center">
                 <h2>@user.Escola.Nome</h2>
             </div>
         </div>

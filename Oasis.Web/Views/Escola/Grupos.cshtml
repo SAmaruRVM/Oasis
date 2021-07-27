@@ -20,7 +20,7 @@
                         <h5 class="card-title">@grupo.Nome</h5>
                         <p data-id-descricao="@grupo.Id" role="button" class="card-text" data-toggle="modal"
                            data-target="#modal-descricao">@grupo.Descricao</p>
-                        <a asp-controller="Escola" asp-action="Grupo" asp-area="" class="btn btn-primary btn-block">Detalhes</a>
+                        <a asp-controller="Escola" asp-action="Grupo" asp-area="" class="btn btn-primary btn-block">Inserir participante</a>
                     </div>
                 </div>
             }
@@ -50,14 +50,21 @@ else
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="file-drop-area">
-                            <span class="choose-file-button">Choose files</span>
-                            <span class="file-message">or drag and drop files here</span> <input class="file-input" type="file" multiple>
-                        </div>
-                    </div>
+
+
+
+
+
+
+                <div class="file-upload-wrapper">
+                    <input type="file" id="input-file-now-custom-1" class="file-upload" data-default-file=""
+                           style="height:150px;width:100%;"/>
                 </div>
+
+
+
+
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">
@@ -113,6 +120,11 @@ else
     <partial name="~/Views/Shared/_Validacoes.cshtml" />
     <partial name="~/Views/Shared/_Ajax.cshtml" />
     <script>
+
+
+        $('.file-upload').file_upload();
+
+
 
 
         $(document).on('change', '.file-input', function () {
