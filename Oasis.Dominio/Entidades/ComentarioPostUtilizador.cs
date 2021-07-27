@@ -9,7 +9,7 @@ namespace Oasis.Dominio.Entidades
 
         [Required(ErrorMessage = "O comentário tem que ser obrigatóriamente preenchido!")]
         [StringLength(200, ErrorMessage = "O comentário {0} tem que ter no máximo {1} caracteres!")]
-        [Display(Prompt = "Escreve merda aqui")]
+        [Display(Prompt = "O teu comentário...")]
         public string Comentario { get; set; }
 
         // default getdate() <<-- SQL

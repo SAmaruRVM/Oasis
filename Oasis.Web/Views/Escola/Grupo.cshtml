@@ -70,7 +70,7 @@
                                             <a asp-action="Post" asp-controller="Escola" asp-area="" asp-route-idPost="@post.Id" class="btn btn-warning btn-block">
                                                 Detalhes
                                             </a>
-                                          
+
                                             @if (post.Criador.Id == user.Id)
                                             {
                                                 <button type="button" data-id-post-eliminar="@post.Id" class="btn btn-danger btn-block">
@@ -94,11 +94,11 @@
                                         <rect width="100%" height="100%" fill="#868e96"></rect>
                                         <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
                                         </svg> *@
-                                    
-                                        <p class="text-left">
-                                            @post.Conteudo
-                                        </p>
-                                   
+
+                                    <p class="text-left">
+                                        @post.Conteudo
+                                    </p>
+
                                 </div>
                             </div>
 
@@ -113,16 +113,38 @@
                                         @foreach (Reacao reacao in Model.Reacoes)
                                         {
                                             <li>
-                                                <button type="button" data-id-reacao="@reacao.Id" class="dropdown-item">
-                                                    <img style="width:20px;height:20px;" src="~/@reacao.Icone" />
-                                                    @reacao.Titulo
-                                                </button>
+                                                @{
+                                                    var classesCss = "bg-secondary text-white";
+
+                                                    var userReagiuAEstePostTuple = user.PostsGostados.Select(postGostado => (postId: postGostado.PostId, reacaoId: postGostado.ReacaoId));
+
+                                                    var userReagiuAEstePost = userReagiuAEstePostTuple.SingleOrDefault(pu => pu.postId == post.Id);
+
+
+
+
+
+                                                }
+                                                @if (userReagiuAEstePost != default(ValueTuple<int, int>) && userReagiuAEstePost.reacaoId == reacao.Id)
+                                                {
+                                                    <button type="button" data-id-reacao="@reacao.Id" data-id-post-reacao="@post.Id" class="dropdown-item @classesCss">
+                                                        <img style="width:20px;height:20px;" src="~/@reacao.Icone" />
+                                                        @reacao.Titulo
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" data-id-reacao="@reacao.Id" data-id-post-reacao="@post.Id" class="dropdown-item">
+                                                        <img style="width:20px;height:20px;" src="~/@reacao.Icone" />
+                                                        @reacao.Titulo
+                                                    </button>
+                                                }
                                             </li>
                                         }
                                     </ul>
                                 </div>
                                 <div class="p-0 mr-2">
-                                    <p>@post.UtilizadoresQueGostaram.Count() reações</p>
+                                    <p>@post.UtilizadoresQueGostaram.Count() reações e @post.Comentarios.Count() comentários</p>
                                 </div>
                                 <div>
                                     <button type="button" data-mostrar-comentario="@post.Id" class="btn btn-link p-0">Comentar</button>
@@ -180,26 +202,31 @@
 
         function insercaoComentarioPost(respostaAjax)
         {
-            if(!(respostaAjax.ocorreuAlgumErro))
-            {
+                                                            if(!(respostaAjax.ocorreuAlgumErro))
+                                                            {
 
-            }
-            ajaxCompleto(respostaAjax);
-        }
+                                                            }
+                                                            ajaxCompleto(respostaAjax);
+                                                        }
 
 
-        function insercaoPost(respostaAjax) {
-            if (!(respostaAjax.ocorreuAlgumErro)) {
-                document.getElementById('form-adicionar-post').reset();
+                                                        function insercaoPost(respostaAjax) {
+                                                            if (!(respostaAjax.ocorreuAlgumErro)) {
+                                                                document.getElementById('form-adicionar-post').reset();
                 $('#modal-inserir-post').modal('hide');
-                const hrContainerPost = document.getElementById('hr-container-posts');
+                                                                const hrContainerPost = document.getElementById('hr-container-posts');
 
-                const postHTML = `<div class="card my-5 text-left">
-                            <div class="card-body">
-                                <h4> <span class="badge badge-secondary mr-2">${respostaAjax.post.tipoPost.nome}</span>${respostaAjax.post.criador.primeiroNome} ${respostaAjax.post.criador.apelido}</h4>
-                                <hr />
-                                <h5 class="card-subtitle text-muted mt-2 ">${respostaAjax.post.titulo}</h5>
-                            </div>
+                                                                const postHTML = `<div class="card my-5 text-left">
+
+                                                                            <div class="card-body">
+
+                                                                                <h4> <span class="badge badge-secondary mr-2">${respostaAjax.post.tipoPost.nome}</span>${respostaAjax.post.criador.primeiroNome} ${respostaAjax.post.criador.apelido}</h4>
+
+                                                                                <hr />
+
+                                                                                <h5 class="card-subtitle text-muted mt-2 ">${respostaAjax.post.titulo}</h5>
+
+                                                                            </div>
                             @* <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%"
                                 height="200"
                                 aria-label="Placeholder: Image cap" focusable="false" role="img"
@@ -325,12 +352,39 @@
 
         btnsReacoes.forEach(btn => btn.addEventListener('click', async () => {
 
-            await marcarPostComReacao(btn.getAttribute('data-id-reacao'));
+            const btnReacaoSelecionada = btn.parentElement.parentElement.querySelector('button.bg-secondary[data-id-reacao]');
+
+
+            let removerAcao = btnReacaoSelecionada === btn;
+
+            const respostaAjax = await marcarPostComReacao(!(removerAcao) ? btn.getAttribute('data-id-reacao') : null, btn.getAttribute('data-id-post-reacao'));
+
+            if (respostaAjax.ocorreuAlgumErro) {
+                ajaxCompleto(respostaAjax);
+                return;
+            }
+
+
+
+            btnReacaoSelecionada?.classList.remove('bg-secondary', 'text-white');
+
+            // atualizar UI com a devida reacao escolhida
+
+            btn.classList.add('bg-secondary', 'text-white');
+           // btnTemaSelecionado.classList.remove('bg-secondary', 'text-white');
+            //btnTemaSelecionado = btn;
         }));
 
-        async function marcarPostComReacao(idReacao)
+        async function marcarPostComReacao(idReacao, idPost)
         {
-            await fetch();
+            const formData = new FormData();
+            formData.append('idPost', idPost);
+            formData.append('idReacao', idReacao);
+
+            return await fetch(`${location.protocol}//${location.hostname}:${location.port}/escola/marcarPostComReacao`, {
+                method: 'POST',
+                body: formData
+            }).then(resposta => resposta.json());
         }
     </script>
 }

@@ -246,8 +246,81 @@ namespace Oasis.Web.Controllers
 
 
 
+        [HttpPost("[action]")]
+        public async Task<JsonResult> MarcarPostComReacao([FromForm] int idPost, [FromForm] int? idReacao) 
+        {
+            var userLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
 
 
+            var post = await _context.Posts
+                                     .FindAsync(idPost);
+
+            if (post is null) 
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Ocorreu um erro da nossa parte.",
+                    Descricao = "Pedimos desculpa pela incómodo. Já foi enviado a informação aos nossos técnicos. Por favor, tente novamente mais tarde.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+            var gpu = await _context.PostsGostosUtilizadores
+                                                              .SingleOrDefaultAsync(pgu => pgu.ApplicationUserId == userLogado.Id && pgu.PostId == idPost);
+            if (idReacao is null) 
+            {
+                userLogado.PostsGostados.Remove(gpu);
+            }
+            else 
+            {
+                var reacao = await _context.Reacoes
+                                   .FindAsync(idReacao.Value);
+
+
+
+
+                if (reacao is null)
+                {
+                    return Json(new Ajax
+                    {
+                        Titulo = "Ocorreu um erro da nossa parte.",
+                        Descricao = "Pedimos desculpa pela incómodo. Já foi enviado a informação aos nossos técnicos. Por favor, tente novamente mais tarde.",
+                        OcorreuAlgumErro = true,
+                        UrlRedirecionar = string.Empty
+                    });
+                }
+
+
+
+                if(gpu is not null) 
+                {
+                    gpu.ReacaoId = reacao.Id;
+                    _context.PostsGostosUtilizadores.Update(gpu);
+                }
+                else 
+                {
+                    userLogado.PostsGostados.Add(new PostGostoUtilizador
+                    {
+                        PostId = post.Id,
+                        ReacaoId = idReacao.Value
+                    });
+                }
+
+
+           
+
+            }
+            await _context.SaveChangesAsync();
+
+            return Json(new Ajax
+            {
+                Titulo = $"O post foi gostado com sucesso!",
+                Descricao = string.Empty,
+                OcorreuAlgumErro = false,
+                UrlRedirecionar = string.Empty
+            });
+        }
 
 
 

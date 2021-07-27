@@ -90,7 +90,7 @@ namespace Oasis.Dados
                        ["Contente"] = "assets/iconesReacoes/contente.png",
                        ["Adoro"] = "assets/iconesReacoes/adoro.png",
                        ["Interessante"] = "assets/iconesReacoes/interessante.png",
-                       ["Supreendente"] = "assets/iconesReacoes/supreendente.png"
+                       ["Supreendente"] = "assets/iconesReacoes/surpreendente.png"
                    }.Select(reacao => new Reacao
                    {
                        Id = ++indexReacoes,
@@ -137,7 +137,7 @@ namespace Oasis.Dados
 
             // Posts Gostos Utilizadores
             builder.Entity<PostGostoUtilizador>()
-                   .HasKey(pgu => new { pgu.ApplicationUserId, pgu.PostId, pgu.ReacaoId });
+                   .HasKey(pgu => new { pgu.ApplicationUserId, pgu.PostId });
 
             builder.Entity<PostGostoUtilizador>()
                    .HasOne(pgu => pgu.Reacao)
