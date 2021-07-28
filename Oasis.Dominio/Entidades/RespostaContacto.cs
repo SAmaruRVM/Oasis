@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
 namespace Oasis.Dominio.Entidades
 {
     public class RespostaContacto
@@ -11,6 +13,7 @@ namespace Oasis.Dominio.Entidades
         [Display(Prompt = "Introduza a resposta ao contacto")]
         public string Resposta { get; set; }
 
+        [JsonIgnore]
         public Contacto Contacto { get; set; }
 
         public int ContactoId { get; set; }

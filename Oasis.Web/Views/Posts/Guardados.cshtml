@@ -1,0 +1,5 @@
+@inject IConfiguration configuration
+@{
+    Layout = "~/Views/Escola/Shared/_Layout.cshtml";
+    ViewBag.Title = $"{configuration["Projeto:Nome"]} - Posts guardados";
+}

@@ -13,11 +13,11 @@ namespace Oasis.Dados.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Assunto = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Assunto = table.Column<string>(type: "nvarchar(75)", maxLength: 75, nullable: false),
                     Descricao = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     EmailContactante = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PrimeiroNome = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Apelido = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    PrimeiroNome = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Apelido = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Respondido = table.Column<bool>(type: "bit", nullable: false),
                     DataContacto = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
                 },
@@ -524,15 +524,16 @@ namespace Oasis.Dados.Migrations
                 name: "ComentariosPostsUtilizadores",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Comentario = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     PostId = table.Column<int>(type: "int", nullable: false),
-                    ApplicationUserId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Comentario = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
+                    ApplicationUserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ComentariosPostsUtilizadores", x => new { x.ApplicationUserId, x.PostId });
+                    table.PrimaryKey("PK_ComentariosPostsUtilizadores", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ComentariosPostsUtilizadores_Posts_PostId",
                         column: x => x.PostId,
@@ -555,7 +556,7 @@ namespace Oasis.Dados.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PostsGostosUtilizadores", x => new { x.ApplicationUserId, x.PostId, x.ReacaoId });
+                    table.PrimaryKey("PK_PostsGostosUtilizadores", x => new { x.ApplicationUserId, x.PostId });
                     table.ForeignKey(
                         name: "FK_PostsGostosUtilizadores_Posts_PostId",
                         column: x => x.PostId,
@@ -605,7 +606,7 @@ namespace Oasis.Dados.Migrations
                     { 2, "assets/iconesReacoes/emCheio.png", "Em Cheio!" },
                     { 3, "assets/iconesReacoes/contente.png", "Contente" },
                     { 4, "assets/iconesReacoes/adoro.png", "Adoro" },
-                    { 6, "assets/iconesReacoes/supreendente.png", "Supreendente" }
+                    { 6, "assets/iconesReacoes/surpreendente.png", "Supreendente" }
                 });
 
             migrationBuilder.InsertData(
@@ -627,10 +628,10 @@ namespace Oasis.Dados.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 4, "bf777083-0584-40be-993a-7a62388bea71", "Aluno", "ALUNO" },
-                    { 3, "dc2e08d4-c6cd-47ee-8fbb-9ae97a4b68c3", "Professor", "PROFESSOR" },
-                    { 2, "cb2feb42-c0d6-40fd-b4c3-1b782cb992c0", "Diretor", "DIRETOR" },
-                    { 1, "98c2426e-06d3-4e1a-91a0-26ec8a680f40", "Administrador", "ADMINISTRADOR" }
+                    { 4, "36d5a727-a29d-4fb1-a7da-7ffde0857b4a", "Aluno", "ALUNO" },
+                    { 3, "0fd62ca0-9f9e-41e1-b615-8f66212dc450", "Professor", "PROFESSOR" },
+                    { 2, "c73022b8-18e1-46ea-a024-4a424ea7d95d", "Diretor", "DIRETOR" },
+                    { 1, "9ee484f9-24d2-4b8b-889f-8953b4449459", "Administrador", "ADMINISTRADOR" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -652,6 +653,11 @@ namespace Oasis.Dados.Migrations
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ComentariosPostsUtilizadores_ApplicationUserId",
+                table: "ComentariosPostsUtilizadores",
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ComentariosPostsUtilizadores_PostId",

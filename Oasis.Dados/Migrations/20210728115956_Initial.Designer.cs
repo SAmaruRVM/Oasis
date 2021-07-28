@@ -10,7 +10,7 @@ using Oasis.Dados;
 namespace Oasis.Dados.Migrations
 {
     [DbContext(typeof(OasisContext))]
-    [Migration("20210726200703_Initial")]
+    [Migration("20210728115956_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,28 +53,28 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "98c2426e-06d3-4e1a-91a0-26ec8a680f40",
+                            ConcurrencyStamp = "9ee484f9-24d2-4b8b-889f-8953b4449459",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "cb2feb42-c0d6-40fd-b4c3-1b782cb992c0",
+                            ConcurrencyStamp = "c73022b8-18e1-46ea-a024-4a424ea7d95d",
                             Name = "Diretor",
                             NormalizedName = "DIRETOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "dc2e08d4-c6cd-47ee-8fbb-9ae97a4b68c3",
+                            ConcurrencyStamp = "0fd62ca0-9f9e-41e1-b615-8f66212dc450",
                             Name = "Professor",
                             NormalizedName = "PROFESSOR"
                         },
                         new
                         {
                             Id = 4,
-                            ConcurrencyStamp = "bf777083-0584-40be-993a-7a62388bea71",
+                            ConcurrencyStamp = "36d5a727-a29d-4fb1-a7da-7ffde0857b4a",
                             Name = "Aluno",
                             NormalizedName = "ALUNO"
                         });
@@ -267,26 +267,30 @@ namespace Oasis.Dados.Migrations
 
             modelBuilder.Entity("Oasis.Dominio.Entidades.ComentarioPostUtilizador", b =>
                 {
-                    b.Property<int>("ApplicationUserId")
-                        .HasColumnType("int");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("PostId")
+                    b.Property<int>("ApplicationUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("Comentario")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime>("DataCriacao")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("PostId")
                         .HasColumnType("int");
 
-                    b.HasKey("ApplicationUserId", "PostId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("PostId");
 
@@ -302,13 +306,13 @@ namespace Oasis.Dados.Migrations
 
                     b.Property<string>("Apelido")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Assunto")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
 
                     b.Property<DateTime>("DataContacto")
                         .ValueGeneratedOnAdd()
@@ -326,8 +330,8 @@ namespace Oasis.Dados.Migrations
 
                     b.Property<string>("PrimeiroNome")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<bool>("Respondido")
                         .HasColumnType("bit");
@@ -640,7 +644,7 @@ namespace Oasis.Dados.Migrations
                     b.Property<int>("ReacaoId")
                         .HasColumnType("int");
 
-                    b.HasKey("ApplicationUserId", "PostId", "ReacaoId");
+                    b.HasKey("ApplicationUserId", "PostId");
 
                     b.HasIndex("PostId");
 
@@ -717,7 +721,7 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 6,
-                            Icone = "assets/iconesReacoes/supreendente.png",
+                            Icone = "assets/iconesReacoes/surpreendente.png",
                             Titulo = "Supreendente"
                         });
                 });

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.Intrinsics.X86;
 using Oasis.Dominio.Entidades;
 
 namespace Oasis.Web.ViewModels
@@ -9,5 +8,6 @@ namespace Oasis.Web.ViewModels
         public IEnumerable<Grupo> Grupos { get; set; }
 
         public Grupo GrupoAlterar { get; set; }
+        public InsercaoParticipantesGrupoViewModel[] InsercaoParticipantesGrupoViewModels { get; set; }
     }
 }

@@ -7,20 +7,23 @@
 @if (Model.Grupos.Any())
 {
     <div class="" style=" position: fixed; height: 95vh; width: 80%; overflow-y: scroll; scrollbar-width: none; ">
-        <div class=" d-flex flex-wrap m-5 p-5">
-            @foreach (Grupo grupo in Model.Grupos)
+    <div class=" d-flex flex-wrap">
+        @foreach (Grupo grupo in Model.Grupos)
             {
                 var imagemGrupo = grupo.Banner is null ?
                 "https://www.quasetudo.eu/wp-content/themes/consultix/images/no-image-found-360x260.png" :
                 "data:image/png;base64,@Convert.ToBase64String(grupo.Banner)";
-                <div class="card m-4 p-3" style="flex-grow: 0.3">
+                <div class="card m-4 p-3 w-25" style="flex-grow: 0.3">
                     <img data-id-banner="@grupo.Id" class="card-img-top" src="@imagemGrupo" alt="Card image cap" role="button"
-                         data-toggle="modal" data-target="#modal-banner">
+                data-toggle="modal" data-target="#modal-banner">
                     <div class="card-body">
                         <h5 class="card-title">@grupo.Nome</h5>
+                        <hr />
                         <p data-id-descricao="@grupo.Id" role="button" class="card-text" data-toggle="modal"
-                           data-target="#modal-descricao">@grupo.Descricao</p>
-                        <a asp-controller="Escola" asp-action="Grupo" asp-area="" class="btn btn-primary btn-block">Inserir participante</a>
+                    data-target="#modal-descricao"><i class="fas fa-edit fa-lg mr-2"></i>@grupo.Descricao</p>
+                        <button data-toggle="modal" data-target="#modal-insercao-participantes"
+                    class="btn btn-primary btn-block" data-inserir-participante-id-grupo="@grupo.Id">Alterar
+                            participantes</button>
                     </div>
                 </div>
             }
@@ -29,8 +32,9 @@
 }
 else
 {
-<div class="container">
-    <h3 class="m-5">Ainda não foi inserido em nenhum grupo. Por favor, contacte a administração caso exista algum erro.</h3>
+    <div class="container">
+    <h3 class="m-5">Ainda não foi inserido em nenhum grupo. Por favor, contacte a administração caso exista algum erro.
+    </h3>
 </div>
 }
 
@@ -40,7 +44,7 @@ else
 <!-- Modals -->
 <!-- Modal Banner -->
 <div class="modal fade" id="modal-banner" tabindex="-1" role="dialog" aria-labelledby="modal-banner-titulo"
-     aria-hidden="true">
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -58,7 +62,7 @@ else
 
                 <div class="file-upload-wrapper">
                     <input type="file" id="input-file-now-custom-1" class="file-upload" data-default-file=""
-                           style="height:150px;width:100%;"/>
+                        style="height:150px;width:100%;" />
                 </div>
 
 
@@ -78,7 +82,7 @@ else
 
 <!-- Modal Descrição -->
 <div class="modal fade" id="modal-descricao" tabindex="-1" role="dialog" aria-labelledby="modal-descricao-titulo"
-     aria-hidden="true">
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -89,9 +93,9 @@ else
             </div>
             <div class="modal-body">
                 <form id="form-atualizacao-descricao-grupo" asp-action="EditarGrupo" asp-controller="Escola" asp-area=""
-                      asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
-                      data-ajax-success="atualizacaoDescricaoGrupo"
-                      data-ajax-loading="#loading-icon-atualizar-descricao-grupo">
+                    asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
+                    data-ajax-success="atualizacaoDescricaoGrupo"
+                    data-ajax-loading="#loading-icon-atualizar-descricao-grupo">
                     <input type="hidden" asp-for="GrupoAlterar.Id" />
                     <div class="form-group">
                         <label asp-for="GrupoAlterar.Descricao"></label>
@@ -101,7 +105,7 @@ else
 
                     <button class="btn btn-success btn-block" type="submit">
                         <i id="loading-icon-atualizar-descricao-grupo" style="display: none;"
-                           class="fas fa-spinner fa-spin"></i>
+                            class="fas fa-spinner fa-spin"></i>
                         Atualizar descrição
                     </button>
                 </form>
@@ -116,62 +120,170 @@ else
 </div>
 
 
+
+
+<!-- Modal Inserção participantes -->
+<div class="modal fade" id="modal-insercao-participantes" tabindex="-1" role="dialog"
+    aria-labelledby="modal-insercao-participantes-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-insercao-participantes-titulo">Inserção de participantes no grupo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-inserir-participantes-grupo" asp-action="InserirParticipantesGrupo" asp-controller="Escola"
+                    asp-area="" asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
+                    data-ajax-success="insercaoParticipantesGrupo"
+                    data-ajax-loading="#loading-icon-atualizar-descricao-grupo">
+                    <input type="hidden" name="idGrupo" id="id-grupo-hidden" />
+                
+
+                    @if (!(Model.InsercaoParticipantesGrupoViewModels.Any()))
+                    {
+                        <p>Não existem alunos associados a esta escola que possam ser alterados como participantes.
+                            <br />Caso exista algum erro, por favor contacte um elemento da direção da sua escola.
+                        </p>
+                    }
+                    else
+                    {
+
+                        @for (int i = 0; i < Model.InsercaoParticipantesGrupoViewModels.Length; ++i)
+                        {
+                                <input type="hidden" asp-for="InsercaoParticipantesGrupoViewModels[i].IdAluno" />
+                            <div class="form-group mb-3">
+                                <input class="js-switch mb-4" asp-for="InsercaoParticipantesGrupoViewModels[i].Inserir" />
+                                <label
+                            asp-for="InsercaoParticipantesGrupoViewModels[i].Inserir">@Model.InsercaoParticipantesGrupoViewModels[i].Email</label>
+                            </div>
+                        }
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Alterar participantes selecionados
+                        </button>
+
+                    }
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-block" data-dismiss="modal">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @section Scripts {
-    <partial name="~/Views/Shared/_Validacoes.cshtml" />
-    <partial name="~/Views/Shared/_Ajax.cshtml" />
-    <script>
+<partial name="~/Views/Shared/_Validacoes.cshtml" />
+<partial name="~/Views/Shared/_Ajax.cshtml" />
+<script>
+
+    function insercaoParticipantesGrupo(respostaAjax) 
+    {
+        console.log(respostaAjax);
+        ajaxCompleto(respostaAjax);
+    }
 
 
-        $('.file-upload').file_upload();
+
+    const btnsInserirParticipantes = document.querySelectorAll('button[data-inserir-participante-id-grupo]');
+    btnsInserirParticipantes.forEach(btn => btn.addEventListener('click', async () => {
+
+        const idGrupo = btn.getAttribute('data-inserir-participante-id-grupo');
+        const respostaAjax = await getParticipantesGrupo(idGrupo);
+        const idGrupoHidden = document.getElementById('id-grupo-hidden');
 
 
+        idGrupoHidden.value = idGrupo;
 
+        respostaAjax.forEach((participanteGrupo, index) => {
 
-        $(document).on('change', '.file-input', function () {
+            const participanteHtmlElement = document.getElementById(`InsercaoParticipantesGrupoViewModels_${index}__Inserir`);
 
-
-            var filesCount = $(this)[0].files.length;
-
-            var textbox = $(this).prev();
-
-            if (filesCount === 1) {
-                var fileName = $(this).val().split('\\').pop();
-                textbox.text(fileName);
-            } else {
-                textbox.text(filesCount + ' files selected');
+            if (participanteGrupo.inserir) {
+                participanteHtmlElement.click();
             }
         });
 
 
-        const imagensBanner = document.querySelectorAll('img[data-id-banner]');
-        imagensBanner.forEach(imgBanner => imgBanner.addEventListener('click', async () => {
+    }));
 
-        }));
+    async function getParticipantesGrupo(idGrupo) {
+        return await fetch(`${location.protocol}//${location.hostname}:${location.port}/escola/participantesgrupo/${idGrupo}`).then(resposta => resposta.json());
+    }
 
-        let descricaoCarregada = undefined;
 
-        function atualizacaoDescricaoGrupo(respostaAjax) {
-            if (!(respostaAjax.ocorreuAlgumErro)) {
-                $('#modal-descricao').modal('hide');
-                document.getElementById('form-atualizacao-descricao-grupo').reset();
-                descricaoCarregada.innerText = respostaAjax.grupoAtualizado.descricao;
-            }
-            ajaxCompleto(respostaAjax.ajax);
+
+
+
+    /*  $('.file-upload').file_upload();
+
+
+
+
+     $(document).on('change', '.file-input', function () {
+
+
+         var filesCount = $(this)[0].files.length;
+
+         var textbox = $(this).prev();
+
+         if (filesCount === 1) {
+             var fileName = $(this).val().split('\\').pop();
+             textbox.text(fileName);
+         } else {
+             textbox.text(filesCount + ' files selected');
+         }
+     }); */
+
+
+    const imagensBanner = document.querySelectorAll('img[data-id-banner]');
+    imagensBanner.forEach(imgBanner => imgBanner.addEventListener('click', async () => {
+
+    }));
+
+    let descricaoCarregada = undefined;
+
+    function atualizacaoDescricaoGrupo(respostaAjax) {
+        if (!(respostaAjax.ajax.ocorreuAlgumErro)) {
+            $('#modal-descricao').modal('hide');
+            document.getElementById('form-atualizacao-descricao-grupo').reset();
+            descricaoCarregada.innerText = respostaAjax.grupoAtualizado.descricao;
         }
+        ajaxCompleto(respostaAjax.ajax);
+    }
 
 
-  
-        const descricoes = document.querySelectorAll('p[data-id-descricao]');
-        descricoes.forEach(descricao => descricao.addEventListener('click', async () => {
-            const grupo = await grupoPorId(descricao.getAttribute('data-id-descricao'));
 
-            document.getElementById('GrupoAlterar_Id').value = grupo.id;
-            document.getElementById('GrupoAlterar_Descricao').value = grupo.descricao;
-            descricaoCarregada = descricao;
-        }));
+    const descricoes = document.querySelectorAll('p[data-id-descricao]');
+    descricoes.forEach(descricao => descricao.addEventListener('click', async () => {
+        const grupo = await grupoPorId(descricao.getAttribute('data-id-descricao'));
 
-        async function grupoPorId(id) {
-            return await fetch(`${location.protocol}//${location.hostname}:${location.port}/escola/grupo/Id/${id}`).then(resposta => resposta.json());
-        }
-    </script>
+        document.getElementById('GrupoAlterar_Id').value = grupo.id;
+        document.getElementById('GrupoAlterar_Descricao').value = grupo.descricao;
+        descricaoCarregada = descricao;
+    }));
+
+    async function grupoPorId(id) {
+        return await fetch(`${location.protocol}//${location.hostname}:${location.port}/escola/grupo/Id/${id}`).then(resposta => resposta.json());
+    }
+</script>
 }

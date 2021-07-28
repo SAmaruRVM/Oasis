@@ -100,8 +100,6 @@ namespace Oasis.Dados
 
 
             // Comentarios Posts Utilizadores
-            builder.Entity<ComentarioPostUtilizador>()
-                   .HasKey(cpu => new { cpu.ApplicationUserId, cpu.PostId });
 
             builder.Entity<ComentarioPostUtilizador>()
                    .HasOne(cpu => cpu.Utilizador)

@@ -1,14 +1,18 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore.Storage;
 using Oasis.Dados;
 using Oasis.Dominio.Entidades;
+using Oasis.Dominio.Enums;
 using Oasis.Web.Extensions;
 using Oasis.Web.Http;
 using Oasis.Web.ViewModels;
@@ -21,8 +25,9 @@ namespace Oasis.Web.Controllers
     {
         private readonly OasisContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        public EscolaController(OasisContext context, UserManager<ApplicationUser> userManager)
-         => (_context, _userManager) = (context, userManager);
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public EscolaController(OasisContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment webHostEnvironment)
+         => (_context, _userManager, _webHostEnvironment) = (context, userManager, webHostEnvironment);
 
 
         [HttpGet]
@@ -65,6 +70,8 @@ namespace Oasis.Web.Controllers
                                       .Include(grupo => grupo.Posts)
                                       .ThenInclude(post => post.UtilizadoresQueGostaram)
                                       .Include(grupo => grupo.Posts)
+                                      .ThenInclude(post => post.Comentarios)
+                                      .Include(grupo => grupo.Posts)
                                       .ThenInclude(post => post.TipoPost)
                                       .Include(grupo => grupo.Posts)
                                       .ThenInclude(post => post.Criador)
@@ -96,6 +103,7 @@ namespace Oasis.Web.Controllers
                                   .OrderByDescending(post => post.DataCriacao);
 
 
+
             return View(model: new GrupoDisciplinaViewModel
             {
                 EscolaViewModel = new EscolaViewModel
@@ -114,12 +122,24 @@ namespace Oasis.Web.Controllers
         [HttpGet("[action]")]
         public async Task<ViewResult> Grupos()
         {
+            var userLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
+
             var grupos = (await _context.GetLoggedInApplicationUser(User.Identity.Name))
                            .GruposOndeEnsina;
 
+            var insercaoParticipantesGrupoViewModels = (await _userManager.GetUsersInRoleAsync(TipoUtilizador.Aluno.ToString()))
+                                                                         .Where(user => user.EscolaId == userLogado.EscolaId)
+                                                                         .OrderBy(user => user.Email)
+                                                                         .Select(user => new InsercaoParticipantesGrupoViewModel
+                                                                         {
+                                                                             Email = user.Email,
+                                                                             IdAluno = user.Id
+                                                                         }).ToArray();
+
             GruposViewModel gruposViewModel = new()
             {
-                Grupos = grupos
+                Grupos = grupos,
+                InsercaoParticipantesGrupoViewModels = insercaoParticipantesGrupoViewModels
             };
 
             return View(model: gruposViewModel);
@@ -168,12 +188,17 @@ namespace Oasis.Web.Controllers
         {
             if (!(ModelState.IsValid) || (await _context.TiposPosts.FindAsync(postInserirViewModel.Post.TipoPostId)) is null)
             {
-                return Json(new Ajax
+
+                return Json(new
                 {
-                    Titulo = "Os dados indicados não se encontram num formato válido!",
-                    Descricao = "Por favor, introduza os dados corretamente.",
-                    OcorreuAlgumErro = true,
-                    UrlRedirecionar = string.Empty
+                    Ajax = new Ajax
+                    {
+                        Titulo = "Os dados indicados não se encontram num formato válido!",
+                        Descricao = "Por favor, introduza os dados corretamente.",
+                        OcorreuAlgumErro = true,
+                        UrlRedirecionar = string.Empty
+                    },
+                    Post = postInserirViewModel.Post
                 });
             }
 
@@ -215,12 +240,12 @@ namespace Oasis.Web.Controllers
 
 
 
-         [HttpGet("[action]/{idPost}")]
+        [HttpGet("[action]/{idPost}")]
         public async Task<IActionResult> Post(int idPost)
         {
             var utilizadorLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
 
-            var post = await _context.Posts            
+            var post = await _context.Posts
                                      .AsNoTracking()
                                      .Include(post => post.Comentarios)
                                      .ThenInclude(comentario => comentario.Utilizador)
@@ -229,25 +254,126 @@ namespace Oasis.Web.Controllers
                                      .Include(post => post.TipoPost)
                                      .SingleOrDefaultAsync(post => post.Id == idPost);
 
-            if(post is null) 
+            if (post is null)
             {
                 return NotFound();
             }
 
-            if(post.Criador.Escola.Id != utilizadorLogado.Escola.Id) 
+            if (post.Criador.Escola.Id != utilizadorLogado.Escola.Id)
             {
                 return Forbid(); // 403
             }
 
 
-        
+
             return View(model: post);
         }
 
 
 
+
+        [HttpGet("[action]/{idGrupo}")]
+        public async Task<JsonResult> ParticipantesGrupo([FromRoute] int idGrupo)
+        {
+            var userLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
+
+            var grupo = await _context.Grupos
+                                      .AsNoTracking()
+                                      .Include(grupo => grupo.Alunos)
+                                      .ThenInclude(grupoAluno => grupoAluno.Aluno)
+                                      .SingleOrDefaultAsync(grupo => grupo.Id == idGrupo);
+
+            var insercaoParticipantesViewModel = (await _userManager.GetUsersInRoleAsync(TipoUtilizador.Aluno.ToString()))
+                                                                    .Where(user => user.EscolaId == userLogado.EscolaId)
+                                                                    .OrderBy(user => user.Email)
+                                                                    .Select(user => new InsercaoParticipantesGrupoViewModel
+                                                                    {
+                                                                        Email = user.Email,
+                                                                        IdAluno = user.Id,
+                                                                        Inserir = grupo.Alunos
+                                                                                            .Select(grupoAluno => grupoAluno.ApplicationUserId).Contains(user.Id)
+                                                                    }).ToArray();
+
+
+            return Json(data: insercaoParticipantesViewModel);
+        }
+
+
+
+
+
         [HttpPost("[action]")]
-        public async Task<JsonResult> MarcarPostComReacao([FromForm] int idPost, [FromForm] int? idReacao) 
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> InserirParticipantesGrupo([FromForm] GruposViewModel gruposViewModel, [FromForm] int idGrupo)
+        {
+            IDbContextTransaction transaction = default;
+            try
+            {
+                using (transaction = await _context.Database.BeginTransactionAsync())
+                {
+                    _context.GruposAlunos.RemoveRange(_context.GruposAlunos
+                                                              .Where(grupoAluno => grupoAluno.GrupoId == idGrupo));
+
+                    await _context.SaveChangesAsync();
+
+
+                    var participantesViewModel = gruposViewModel.InsercaoParticipantesGrupoViewModels;
+
+                    var gruposAlunosParaEliminar = await _context.GruposAlunos
+                                                                 .AsNoTracking()
+                                                                 .Where(grupoAluno => grupoAluno.GrupoId == idGrupo)
+                                                                 .ToListAsync();
+
+                    _context.GruposAlunos
+                            .RemoveRange(entities:
+                                gruposAlunosParaEliminar.Where(grupoAluno => participantesViewModel.Where(participante => !(participante.Inserir))
+                                                                          .Select(participante => participante.IdAluno)
+                                                                          .Contains(grupoAluno.ApplicationUserId))
+                            );
+
+                    _context.GruposAlunos
+                            .AddRange(entities:
+                            participantesViewModel.Where(participante => participante.Inserir)
+                                                               .Select(participante => new GrupoAluno
+                                                               {
+                                                                   ApplicationUserId = participante.IdAluno,
+                                                                   GrupoId = idGrupo
+                                                               })
+                     );
+
+
+
+                    await _context.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+                }
+                return Json(new Ajax
+                {
+                    Titulo = $"As alterações relativas aos participantes do grupo selecionado foram realizadas com sucesso!",
+                    Descricao = string.Empty,
+                    OcorreuAlgumErro = false,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+            catch (SqlException)
+            {
+                await transaction.RollbackAsync();
+                return Json(new Ajax
+                {
+                    Titulo = "Ocorreu um erro da nossa parte.",
+                    Descricao = "Pedimos desculpa pela incómodo. Já foi enviado a informação aos nossos técnicos. Por favor, tente novamente mais tarde.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+        }
+
+
+
+
+
+        [HttpPost("[action]")]
+        public async Task<JsonResult> MarcarPostComReacao([FromForm] int idPost, [FromForm] int? idReacao)
         {
             var userLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
 
@@ -255,7 +381,7 @@ namespace Oasis.Web.Controllers
             var post = await _context.Posts
                                      .FindAsync(idPost);
 
-            if (post is null) 
+            if (post is null)
             {
                 return Json(new Ajax
                 {
@@ -266,16 +392,17 @@ namespace Oasis.Web.Controllers
                 });
             }
 
+            Reacao reacao = default;
             var gpu = await _context.PostsGostosUtilizadores
                                                               .SingleOrDefaultAsync(pgu => pgu.ApplicationUserId == userLogado.Id && pgu.PostId == idPost);
-            if (idReacao is null) 
+            if (idReacao is null)
             {
                 userLogado.PostsGostados.Remove(gpu);
             }
-            else 
+            else
             {
-                var reacao = await _context.Reacoes
-                                   .FindAsync(idReacao.Value);
+                reacao = await _context.Reacoes
+                                       .FindAsync(idReacao.Value);
 
 
 
@@ -293,12 +420,12 @@ namespace Oasis.Web.Controllers
 
 
 
-                if(gpu is not null) 
+                if (gpu is not null)
                 {
                     gpu.ReacaoId = reacao.Id;
                     _context.PostsGostosUtilizadores.Update(gpu);
                 }
-                else 
+                else
                 {
                     userLogado.PostsGostados.Add(new PostGostoUtilizador
                     {
@@ -308,17 +435,30 @@ namespace Oasis.Web.Controllers
                 }
 
 
-           
+
 
             }
+
             await _context.SaveChangesAsync();
 
-            return Json(new Ajax
+            await _context.Entry(post).Collection(post => post.Comentarios).LoadAsync();
+            await _context.Entry(post).Collection(post => post.UtilizadoresQueGostaram).LoadAsync();
+
+            return Json(new
             {
-                Titulo = $"O post foi gostado com sucesso!",
-                Descricao = string.Empty,
-                OcorreuAlgumErro = false,
-                UrlRedirecionar = string.Empty
+                Ajax = new Ajax
+                {
+                    Titulo = "O post foi reagido com sucesso!",
+                    Descricao = string.Empty,
+                    OcorreuAlgumErro = false,
+                    UrlRedirecionar = string.Empty
+                },
+                Estatisticas = new
+                {
+                    NumeroReacoes = post.UtilizadoresQueGostaram.Count(),
+                    NumeroComentarios = post.Comentarios.Count()
+                },
+                IconeReacao = reacao?.Icone is not null ? Path.Combine("/", reacao?.Icone) : string.Empty
             });
         }
 
@@ -362,35 +502,67 @@ namespace Oasis.Web.Controllers
         }
 
 
-         [HttpPost("[action]")]
-        public async Task<JsonResult> InserirComentarioPost([FromForm] ComentarioPostUtilizador comentarioPostUtilizador)
+        [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> InserirComentarioPost([FromForm] string comentario, [FromForm] int idPost)
         {
-           
-            
+            var postParaComentar = await _context.Posts
+                                                 .FindAsync(idPost);
+
+            if (postParaComentar is null)
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Ocorreu um erro da nossa parte.",
+                    Descricao = "Pedimos desculpa pela incómodo. Já foi enviado a informação aos nossos técnicos. Por favor, tente novamente mais tarde.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+            var userLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
+
+            userLogado.Comentarios.Add(new ComentarioPostUtilizador
+            {
+                Comentario = comentario,
+                PostId = idPost,
+            });
+
+
             await _context.SaveChangesAsync();
 
-                
+            await _context.Entry(postParaComentar).Collection(post => post.UtilizadoresQueGostaram).LoadAsync();
+            await _context.Entry(postParaComentar).Collection(post => post.Comentarios).LoadAsync();
 
-            return Json(new Ajax
+
+            return Json(new
             {
-                Titulo = $"O teu comentário foi inserido com sucesso!",
-                Descricao = string.Empty,
-                OcorreuAlgumErro = false,
-                UrlRedirecionar = string.Empty
+                Ajax = new Ajax
+                {
+                    Titulo = $"O teu comentário foi inserido com sucesso!",
+                    Descricao = string.Empty,
+                    OcorreuAlgumErro = false,
+                    UrlRedirecionar = string.Empty
+                },
+                Estatisticas = new
+                {
+                    NumeroReacoes = postParaComentar.UtilizadoresQueGostaram.Count(),
+                    NumeroComentarios = postParaComentar.Comentarios.Count()
+                },
             });
         }
 
 
 
 
-       [HttpPost("[action]")]
+        [HttpPost("[action]")]
         public async Task<JsonResult> EliminarPost([FromForm] int idPost)
         {
             var userLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
 
             var postParaEliminar = await _context.Posts.SingleOrDefaultAsync(post => post.Id == idPost && post.ApplicationUserId == userLogado.Id);
 
-            if(postParaEliminar is null) 
+            if (postParaEliminar is null)
             {
                 return Json(new Ajax
                 {

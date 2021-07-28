@@ -32,7 +32,6 @@ namespace Oasis.Web.Controllers
 
 
         [HttpPost("[action]")]
-        [ValidateAntiForgeryToken]
         public async Task<JsonResult> Login([FromForm] LoginViewModel loginViewModel)
         {
             if (!(ModelState.IsValid))
@@ -226,30 +225,42 @@ namespace Oasis.Web.Controllers
                 });
             }
 
+
+
+
             var userLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
 
+
+            var stream = perfilViewModel.ImagemPerfil.OpenReadStream();
+
+            userLogado.ImagemPerfil = await stream.ToCharArrayAsync();
+
             userLogado.DescricaoPerfil = perfilViewModel.Descricao;
-            // to do: upload imagem bd
+
 
             await _userManager.UpdateAsync(user: userLogado);
 
 
-            return Json(new Ajax
+            return Json(new
             {
-                Titulo = "O seu perfil foi atualizado com sucesso!",
-                Descricao = string.Empty,
-                OcorreuAlgumErro = false,
-                UrlRedirecionar = string.Empty
+                Ajax = new Ajax
+                {
+                    Titulo = "O seu perfil foi atualizado com sucesso!",
+                    Descricao = string.Empty,
+                    OcorreuAlgumErro = false,
+                    UrlRedirecionar = string.Empty
+                },
+                ImagemUser = $"data:image/png;base64,{Convert.ToBase64String(userLogado.ImagemPerfil)}"
             });
         }
 
 
         [HttpPost("[action]")]
-        public async Task<JsonResult> MarcarNotificacoesComoVistas() 
+        public async Task<JsonResult> MarcarNotificacoesComoVistas()
         {
             var userLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
 
-            foreach(Notificacao notificacao in userLogado.Notificacoes)
+            foreach (Notificacao notificacao in userLogado.Notificacoes)
             {
                 notificacao.FoiVista = true;
             }
@@ -258,7 +269,7 @@ namespace Oasis.Web.Controllers
 
             await _context.SaveChangesAsync();
 
-           return Json(new Ajax
+            return Json(new Ajax
             {
                 Titulo = string.Empty,
                 Descricao = string.Empty,

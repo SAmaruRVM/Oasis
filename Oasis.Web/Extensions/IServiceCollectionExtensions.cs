@@ -44,6 +44,8 @@ namespace Oasis.Web.Extensions
 
             @this.AddHttpContextAccessor();
             @this.AddDistributedMemoryCache();
+
+            
             
             @this.AddSession(sessionOptions =>
             {

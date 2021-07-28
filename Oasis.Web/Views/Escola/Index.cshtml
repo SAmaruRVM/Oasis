@@ -121,6 +121,7 @@
 <partial name="_WYSIWYG" model=@string.Format("inserir-conteudo") />
 @if(primeiraVezLogin)
 {
+    primeiraVezLogin = false;
 <script>
     $('#modal-alterar-password').modal('show');
 </script>

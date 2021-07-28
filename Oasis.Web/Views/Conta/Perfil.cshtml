@@ -9,7 +9,8 @@
 }
 
 @{
-    string width = (User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString())) ? "60%" : "80%";
+    string width = (User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString())) ?
+            "60%" : "80%";
 }
 <div class="row no-gutters container-fluid">
     <div class="text-center col-9">
@@ -20,24 +21,32 @@
                     @{
                         var imagemUser = user.ImagemPerfil is null ?
             "https://rapidapi-prod-apis.s3.amazonaws.com/b42aa17d-8ae0-4a28-b29f-587af5454390.png" :
-            "data:image/png;base64,@Convert.ToBase64String(user.ImagemPerfil)";
+            $"data:image/png;base64,{Convert.ToBase64String(user.ImagemPerfil)}";
                     }
                     <div class="card p-4" style="flex-grow: 0.3">
                         <div class="d-flex justify-content-between">
-                            <img style="width:150px; height:150px;border-radius:100%;" class="card-img-top"
+                            <img id="imagem-perfil-user" style="width:150px; height:150px;border-radius:100%;" class="card-img-top"
                                 alt="Card image cap" src="@imagemUser" role="button" data-toggle="modal"
                                 data-target="#modal-banner">
-                            <p class="float-right">Utilizador @configuration["Projeto:Nome"] desde @user.DataCriacao.Day de
-                                        @user.DataCriacao.ToString("MMMM",
+                            <p class="float-right">Utilizador @configuration["Projeto:Nome"] desde @user.DataCriacao.Day
+                                de
+                                @user.DataCriacao.ToString("MMMM",
                                 System.Globalization.CultureInfo.CreateSpecificCulture("pt-PT")),
-                                        @user.DataCriacao.Year</p>
+                                @user.DataCriacao.Year</p>
                         </div>
                         <div class="card-body">
-                            <form id="form-atualizar-descricao" asp-action="AtualizarPerfil"
-                                asp-controller="Conta" asp-area="" asp-antiforgery="true"
-                                data-ajax="true" data-ajax-method="POST"
-                                data-ajax-success="descricaoAtualizada"
-                                data-ajax-loading="#loading-icon-atualizar-perfil">
+                            <form id="form-atualizar-descricao" asp-action="AtualizarPerfil" asp-controller="Conta"
+                                asp-area="" asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
+                                data-ajax-success="perfilAtualizado"
+                                data-ajax-loading="#loading-icon-atualizar-perfil" enctype="multipart/form-data">
+
+                                <div class="custom-file mb-2">
+                                    <input asp-for="ImagemPerfil" class="custom-file-input">
+                                    <label class="custom-file-label" asp-for="ImagemPerfil"></label>
+                                </div>
+
+
+                                <hr />
 
                                 <div class="form-group text-left">
                                     <label>Primeiro Nome</label>
@@ -64,10 +73,11 @@
                                 </div>
                                 <button type="submit" class="btn btn-primary">
                                     <i id="loading-icon-atualizar-perfil" style="display: none;"
-                                       class="fas fa-spinner fa-spin"></i>
+                                        class="fas fa-spinner fa-spin"></i>
                                     Salvar alterações
                                 </button>
-                                <button type="button" data-toggle="modal" data-target="#modal-alterar-password" class="btn btn-secondary">
+                                <button type="button" data-toggle="modal" data-target="#modal-alterar-password"
+                                    class="btn btn-secondary">
                                     Alterar password
                                 </button>
                             </form>
@@ -80,83 +90,87 @@
 
 
 
-<!-- Modals -->
-<div class="modal fade" id="modal-alterar-password" tabindex="-1" role="dialog"
-    aria-labelledby="modal-alterar-password-titulo" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal-alterar-password-titulo">Alteração de password</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="form-alterar-password" class="w-100" asp-action="AlterarPassword" asp-controller="Conta"
-                    asp-antiforgery="true" data-ajax="true" data-ajax-method="POST" data-ajax-success="passwordAlterada"
-                    data-ajax-loading="#loading-icon-alterar-password">
-                    <div class="form-group mb-3">
-                        <label asp-for="AlterarPasswordViewModel.Password"></label>
-                        <input class="form-control" asp-for="AlterarPasswordViewModel.Password" />
-                        <span class="text-danger text-center"
-                            asp-validation-for="AlterarPasswordViewModel.Password"></span>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label asp-for="AlterarPasswordViewModel.NovaPassword"></label>
-                        <input class="form-control" asp-for="AlterarPasswordViewModel.NovaPassword" />
-                        <span class="text-danger text-center"
-                            asp-validation-for="AlterarPasswordViewModel.NovaPassword"></span>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label asp-for="AlterarPasswordViewModel.ConfirmacaoNovaPassword"></label>
-                        <input class="form-control" asp-for="AlterarPasswordViewModel.ConfirmacaoNovaPassword" />
-                        <span class="text-danger text-center"
-                            asp-validation-for="AlterarPasswordViewModel.ConfirmacaoNovaPassword"></span>
-                    </div>
-
-                    <button class="btn btn-primary btn-block mt-2" type="submit">
-                        <i id="loading-icon-alterar-password" style="display: none;" class="fas fa-spinner fa-spin"></i>
-                        Alterar password
+    <!-- Modals -->
+    <div class="modal fade" id="modal-alterar-password" tabindex="-1" role="dialog"
+        aria-labelledby="modal-alterar-password-titulo" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-alterar-password-titulo">Alteração de password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
                     </button>
-                </form>
+                </div>
+                <div class="modal-body">
+                    <form id="form-alterar-password" class="w-100" asp-action="AlterarPassword" asp-controller="Conta"
+                        asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
+                        data-ajax-success="passwordAlterada" data-ajax-loading="#loading-icon-alterar-password">
+                        <div class="form-group mb-3">
+                            <label asp-for="AlterarPasswordViewModel.Password"></label>
+                            <input class="form-control" asp-for="AlterarPasswordViewModel.Password" />
+                            <span class="text-danger text-center"
+                                asp-validation-for="AlterarPasswordViewModel.Password"></span>
+                        </div>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">
-                    Fechar
-                </button>
+                        <div class="form-group mb-3">
+                            <label asp-for="AlterarPasswordViewModel.NovaPassword"></label>
+                            <input class="form-control" asp-for="AlterarPasswordViewModel.NovaPassword" />
+                            <span class="text-danger text-center"
+                                asp-validation-for="AlterarPasswordViewModel.NovaPassword"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="AlterarPasswordViewModel.ConfirmacaoNovaPassword"></label>
+                            <input class="form-control" asp-for="AlterarPasswordViewModel.ConfirmacaoNovaPassword" />
+                            <span class="text-danger text-center"
+                                asp-validation-for="AlterarPasswordViewModel.ConfirmacaoNovaPassword"></span>
+                        </div>
+
+                        <button class="btn btn-primary btn-block mt-2" type="submit">
+                            <i id="loading-icon-alterar-password" style="display: none;"
+                                class="fas fa-spinner fa-spin"></i>
+                            Alterar password
+                        </button>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">
+                        Fechar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
 
-     @if(User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString()))
+    @if (User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString()))
     {
-         // partial grupos 
-       <partial name="_Grupos" model="@Model.EscolaViewModel" />
+        // partial grupos
+        <partial name="_Grupos" model="@Model.EscolaViewModel" />
     }
 </div>
 
 @section Scripts {
-  
-    <partial name="~/Views/Shared/_Validacoes.cshtml" />
-    <partial name="~/Views/Shared/_Ajax.cshtml" />
-    <script>
-        function passwordAlterada(respostaAjax) 
-        {
-            if(!(respostaAjax.ocorreuAlgumErro))
-            {
 
-            }
-            ajaxCompleto(respostaAjax);
+<partial name="~/Views/Shared/_Validacoes.cshtml" />
+<partial name="~/Views/Shared/_Ajax.cshtml" />
+<script>
+    function passwordAlterada(respostaAjax) {
+        if (!(respostaAjax.ocorreuAlgumErro)) {
+            $('#modal-alterar-password').modal('hide');
+            document.getElementById('form-alterar-password').reset();
         }
+        ajaxCompleto(respostaAjax);
+    }
 
-        function descricaoAtualizada(respostaAjax) {
-            ajaxCompleto(respostaAjax);
+    function perfilAtualizado(respostaAjax) {
+        if (!(respostaAjax.ajax.ocorreuAlgumErro)) {
+            document.getElementById('imagem-perfil-user').src = respostaAjax.imagemUser;
+            document.getElementById('imagem-perfil-user-layout').src = respostaAjax.imagemUser;
         }
-    </script>
+        ajaxCompleto(respostaAjax.ajax);
+    }
+</script>
 }

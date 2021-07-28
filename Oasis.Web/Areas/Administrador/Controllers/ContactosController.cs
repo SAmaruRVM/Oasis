@@ -46,7 +46,7 @@ namespace Oasis.Web.Areas.Administrador.Controllers
 
             Contacto contacto = await _context.Contactos
                                               .FindAsync(contactosViewModel.RespostaContactoAdicionar.ContactoId);
-            
+
 
             if (contacto is null)
             {
@@ -77,18 +77,22 @@ namespace Oasis.Web.Areas.Administrador.Controllers
             await client.EnviarEmailAsync("O administrador respondeu-te pa", $"Resposta: <hr/>{contactosViewModel.RespostaContactoAdicionar.Resposta}", contacto.EmailContactante, client.ConfiguracoesEmail(_configuration));
 
 
-            return Json(new Ajax
+            return Json(new
             {
-                Titulo = "A resposta ao contacto foi adicionada com sucesso!",
-                Descricao = "Foi enviado um email ao contactante com a sua resposta. Obrigado!",
-                OcorreuAlgumErro = false,
-                UrlRedirecionar = string.Empty
+                Ajax = new Ajax
+                {
+                    Titulo = "A resposta ao contacto foi adicionada com sucesso!",
+                    Descricao = "Foi enviado um email ao contactante com a sua resposta. Obrigado!",
+                    OcorreuAlgumErro = false,
+                    UrlRedirecionar = string.Empty
+                },
+                Contacto = contacto
             });
         }
 
 
         [HttpGet("[area]/[controller]/[action]/{id}")]
-        public async Task<JsonResult> Id(int id) => Json(await _context.Contactos.FindAsync(id));
+        public async Task<JsonResult> Id(int id) => Json(await _context.Contactos.AsNoTracking().Include(contacto => contacto.RespostaContacto).SingleOrDefaultAsync(contacto => contacto.Id == id));
 
     }
 }
