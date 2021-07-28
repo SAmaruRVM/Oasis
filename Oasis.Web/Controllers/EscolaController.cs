@@ -42,14 +42,32 @@ namespace Oasis.Web.Controllers
                 return Forbid();
             }
 
-            var disciplinaGruposAlunos = utilizadorLogado.GruposOndeEnsina
-                                   .GroupBy(grupo => grupo.Disciplina.Nome)
-                                   .Select(disciplina => new DisciplinaGruposAlunos
-                                   {
-                                       NomeDisciplina = disciplina.Key,
-                                       GruposOndeEnsina = disciplina
-                                   })
-                                   .OrderBy(disciplina => disciplina.NomeDisciplina);
+            IOrderedEnumerable<DisciplinaGruposAlunos> disciplinaGruposAlunos;
+            if (await _userManager.IsInRoleAsync(utilizadorLogado, TipoUtilizador.Professor.ToString()))
+            {
+                disciplinaGruposAlunos = utilizadorLogado.GruposOndeEnsina
+                                                .GroupBy(grupo => grupo.Disciplina.Nome)
+                                                .Select(disciplina => new DisciplinaGruposAlunos
+                                                {
+                                                    NomeDisciplina = disciplina.Key,
+                                                    GruposOndeEnsina = disciplina
+                                                })
+                                                .OrderBy(disciplina => disciplina.NomeDisciplina);
+            }
+            else
+            {
+
+                disciplinaGruposAlunos = utilizadorLogado.GruposOndeTemAulas
+                                                        .GroupBy(grupo => grupo.Grupo.Disciplina.Nome)
+                                                        .Select(disciplina => new DisciplinaGruposAlunos
+                                                        {
+                                                            NomeDisciplina = disciplina.Key,
+                                                            GruposOndeEnsina = disciplina.Select(d => d.Grupo)
+                                                        })
+                                                          .OrderBy(disciplina => disciplina.NomeDisciplina);
+            }
+
+
 
             return View(model: new EscolaViewModel
             {
@@ -84,15 +102,32 @@ namespace Oasis.Web.Controllers
                 return NotFound();
             }
 
+            IOrderedEnumerable<DisciplinaGruposAlunos> disciplinaGruposAlunos;
+            if (await _userManager.IsInRoleAsync(utilizadorLogado, TipoUtilizador.Professor.ToString()))
+            {
+                disciplinaGruposAlunos = utilizadorLogado.GruposOndeEnsina
+                                                .GroupBy(grupo => grupo.Disciplina.Nome)
+                                                .Select(disciplina => new DisciplinaGruposAlunos
+                                                {
+                                                    NomeDisciplina = disciplina.Key,
+                                                    GruposOndeEnsina = disciplina
+                                                })
+                                                .OrderBy(disciplina => disciplina.NomeDisciplina);
+            }
+            else
+            {
 
-            var disciplinaGruposAlunos = utilizadorLogado.GruposOndeEnsina
-                                                         .GroupBy(grupo => grupo.Disciplina.Nome)
-                                                         .Select(disciplina => new DisciplinaGruposAlunos
-                                                         {
-                                                             NomeDisciplina = disciplina.Key,
-                                                             GruposOndeEnsina = disciplina
-                                                         })
-                                                         .OrderBy(disciplina => disciplina.NomeDisciplina);
+                disciplinaGruposAlunos = utilizadorLogado.GruposOndeTemAulas
+                                                        .GroupBy(grupo => grupo.Grupo.Disciplina.Nome)
+                                                        .Select(disciplina => new DisciplinaGruposAlunos
+                                                        {
+                                                            NomeDisciplina = disciplina.Key,
+                                                            GruposOndeEnsina = disciplina.Select(d => d.Grupo)
+                                                        })
+                                                          .OrderBy(disciplina => disciplina.NomeDisciplina);
+            }
+
+
 
 
             var tiposPostDropdownList = grupo.Flairs
@@ -177,7 +212,7 @@ namespace Oasis.Web.Controllers
                 escola.ConteudoPaginaPrincipal.ConteudoHtml = escolaViewModel.PaginaPrincipal.ConteudoHtml;
                 escola.ConteudoPaginaPrincipal.DataUltimaAlteracao = DateTime.Now;
             }
-            
+
 
 
             _context.Escolas.Update(escola);
@@ -285,20 +320,25 @@ namespace Oasis.Web.Controllers
                                       .SingleOrDefaultAsync(grupo => grupo.Id == postInserirViewModel.Post.GrupoId);
 
 
-            grupo.Professor.Notificacoes.Add(new Notificacao
-            {
-                Titulo = $"Um novo post foi criado no grupo {grupo.Nome}",
-                LinkDestino = string.Empty
-            });
-
-
 
             postInserirViewModel.Post.ApplicationUserId = (await _context.GetLoggedInApplicationUser(User.Identity.Name)).Id;
 
-
+          
 
 
             _context.Posts.Add(postInserirViewModel.Post);
+            await _context.SaveChangesAsync();
+
+
+
+            var link = Url.Action("Post", "Escola", new { idPost = postInserirViewModel.Post.Id }, "https", HttpContext.Request.Host.ToString(), string.Empty);
+
+            grupo.Professor.Notificacoes.Add(new Notificacao
+            {
+                Titulo = $"Um novo post foi criado no grupo {grupo.Nome}",
+                LinkDestino = link
+            });
+
             await _context.SaveChangesAsync();
 
             return Json(new

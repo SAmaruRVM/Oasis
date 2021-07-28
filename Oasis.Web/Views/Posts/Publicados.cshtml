@@ -1,4 +1,4 @@
-@model PostsGostadosViewModel
+@model IEnumerable<Post>
 @inject IConfiguration configuration
 @{
     Layout = "~/Views/Escola/Shared/_Layout.cshtml";
@@ -11,19 +11,19 @@
         <div class="pl-5">
             <div id="container-posts" class="px-5"
                  style="position: fixed; height: 90vh; width: 75%; scrollbar-width: none; overflow: auto;">
-                @if (!(Model.PostsGostados.Any()))
+                @if (!(Model.Any()))
                 {
-                    <h3>De momento, ainda não reagiu a nenhum post.</h3>
+                    <h3>De momento, ainda não publicou nenhum post.</h3>
                     <hr/>
-                    <p>Para reagir a um post, basta clicar no ícone no canto inferior esquerdo do post pretendido.</p>
+                    <p>Para publicar um post, basta ir ao grupo onde pretende publicar o post.</p>
                 }
                 else
                 {
-                    @foreach (PostGostoUtilizador pGostado in Model.PostsGostados)
+                    @foreach (Post postPublicado in Model)
                     {
 
                         string postGuardadoIcone = user.PostsGuardados.Select(pg => pg.PostId)
-                                                                 .Contains(pGostado.Post.Id) ? "fas fa-bookmark fa-lg" : "far fa-bookmark fa-lg";
+                                                                 .Contains(postPublicado.Id) ? "fas fa-bookmark fa-lg" : "far fa-bookmark fa-lg";
 
                         <div class="card p-0 mb-4">
                             <div class="card-body px-4 py-0">
@@ -31,11 +31,11 @@
 
                                     <h5>
                                         <div class="float-left pt-4">
-                                            <span class="badge badge-secondary mr-2">@pGostado.Post.TipoPost.Nome</span>
+                                            <span class="badge badge-secondary mr-2">@postPublicado.TipoPost.Nome</span>
 
                                         </div>
                                          <div class="d-flex">
-                                                <p class="pt-4">@pGostado.Post.Criador.PrimeiroNome @pGostado.Post.Criador.Apelido</p>
+                                                <p class="pt-4">@postPublicado.Criador.PrimeiroNome @postPublicado.Criador.Apelido</p>
                                          </div>
                                     </h5>
                                     <div class="dropdown ml-auto">
@@ -43,13 +43,13 @@
                                             Opções
                                         </button>
                                         <div class="dropdown-menu p-2" aria-labelledby="dropdownMenuButton">
-                                            <a asp-action="Post" asp-controller="Escola" asp-area="" asp-route-idPost="@pGostado.Post.Id" class="btn btn-warning btn-block">
+                                            <a asp-action="Post" asp-controller="Escola" asp-area="" asp-route-idPost="@postPublicado.Id" class="btn btn-warning btn-block">
                                                 Detalhes
                                             </a>
 
-                                            @if (pGostado.Post.Criador.Id == user.Id)
+                                            @if (postPublicado.Criador.Id == user.Id)
                                             {
-                                                <button type="button" data-id-post-eliminar="@pGostado.Post.Id" class="btn btn-danger btn-block">
+                                                <button type="button" data-id-post-eliminar="@postPublicado.Id" class="btn btn-danger btn-block">
                                                     Eliminar
                                                 </button>
                                             }
@@ -60,7 +60,7 @@
 
                                 <hr />
                                 <div class="text-left">
-                                    <h5 class="card-subtitle text-muted my-2 ">@pGostado.Post.Titulo</h5>
+                                    <h5 class="card-subtitle text-muted my-2 ">@postPublicado.Titulo</h5>
 
                                     @* <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%"
                                         height="200"
@@ -72,7 +72,7 @@
                                         </svg> *@
 
                                     <p class="text-left">
-                                        @pGostado.Post.Conteudo
+                                        @postPublicado.Conteudo
                                     </p>
 
                                 </div>
@@ -84,7 +84,7 @@
                                 <div class="dropdown mr-3">
                                     <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                         @{
-                                            var postGostado = user.PostsGostados.SingleOrDefault(p => p.PostId == pGostado.Post.Id);
+                                            var postGostado = user.PostsGostados.SingleOrDefault(p => p.PostId == postPublicado.Id);
                                         }
 
                                         @if(postGostado is not null) 
@@ -126,27 +126,27 @@
                                     </ul> *@
                                 </div>
                                 <div class="p-0 mr-2">
-                                    <p data-id-estatisticas-post>@pGostado.Post.UtilizadoresQueGostaram.Count() reações e @pGostado.Post.Comentarios.Count() comentários</p>
+                                    <p data-id-estatisticas-post>@postPublicado.UtilizadoresQueGostaram.Count() reações e @postPublicado.Comentarios.Count() comentários</p>
                                 </div>
                                 <div>
-                                    <button type="button" data-mostrar-comentario="@pGostado.Post.Id" class="btn btn-link p-0">Comentar</button>
+                                    <button type="button" data-mostrar-comentario="@postPublicado.Id" class="btn btn-link p-0">Comentar</button>
                                 </div>
                                 <div class="ml-auto">
-                                    <button type="button" data-id-post-guardar="@pGostado.Post.Id" class="btn btn-link">
-                                        <i class="@pGostado"></i>
+                                    <button type="button" data-id-post-guardar="@postPublicado.Id" class="btn btn-link">
+                                        <i class="@postPublicado"></i>
                                     </button>
                                 </div>
                             </div>
 
 
-                            <form id=@string.Format("form-inserir-comentario-post{0}", pGostado.Post.Id) asp-action="InserirComentarioPost" asp-controller="Escola" asp-area=""
+                            <form id=@string.Format("form-inserir-comentario-post{0}", postPublicado.Id) asp-action="InserirComentarioPost" asp-controller="Escola" asp-area=""
                                   asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
                                   data-ajax-success="insercaoComentarioPost"
                                   data-ajax-loading="#loading-icon-atualizar-descricao-grupo">
-                                <div class="form-group m-3 d-none" id=@string.Format("comentario{0}", @pGostado.Post.Id)>
+                                <div class="form-group m-3 d-none" id=@string.Format("comentario{0}", @postPublicado.Id)>
                                     <textarea class="form-control" rows="2" name="comentario" placeholder="O teu comentário..."></textarea>
                                  
-                                    <input type="hidden" name="idPost" value="@pGostado.Post.Id" />
+                                    <input type="hidden" name="idPost" value="@postPublicado.Id" />
 
                                     <button type="submit" class="btn btn-primary my-2 float-right" onclick="enviarComentario(this)">
                                         Enviar
@@ -155,11 +155,11 @@
                             </form>
 
                             <div class="card-footer text-muted">
-                                @pGostado.Post.DataCriacao.Day de
-                                @pGostado.Post.DataCriacao.ToString("MMMM",
+                                @postPublicado.DataCriacao.Day de
+                                @postPublicado.DataCriacao.ToString("MMMM",
                         System.Globalization.CultureInfo.CreateSpecificCulture("pt-PT")),
-                                @pGostado.Post.DataCriacao.Year
-                                às @pGostado.Post.DataCriacao.Hour:@pGostado.Post.DataCriacao.Minute
+                                @postPublicado.DataCriacao.Year
+                                às @postPublicado.DataCriacao.Hour:@postPublicado.DataCriacao.Minute
                             </div>
                         </div>
                     }

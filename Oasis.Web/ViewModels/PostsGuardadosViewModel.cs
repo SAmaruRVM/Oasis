@@ -6,6 +6,5 @@ namespace Oasis.Web.ViewModels
     public class PostsGuardadosViewModel
     {
         public IEnumerable<PostUtilizadorGuardado> PostsGuardados { get; set; }
-
     }
 }

@@ -190,14 +190,30 @@ namespace Oasis.Web.Controllers
         {
             var utilizadorLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
 
-            var disciplinaGruposAlunos = utilizadorLogado.GruposOndeEnsina
-                                  .GroupBy(grupo => grupo.Disciplina.Nome)
-                                  .Select(disciplina => new DisciplinaGruposAlunos
-                                  {
-                                      NomeDisciplina = disciplina.Key,
-                                      GruposOndeEnsina = disciplina
-                                  })
-                                  .OrderBy(disciplina => disciplina.NomeDisciplina);
+             IOrderedEnumerable<DisciplinaGruposAlunos> disciplinaGruposAlunos;
+            if (await _userManager.IsInRoleAsync(utilizadorLogado, TipoUtilizador.Professor.ToString()))
+            {
+                disciplinaGruposAlunos = utilizadorLogado.GruposOndeEnsina
+                                                .GroupBy(grupo => grupo.Disciplina.Nome)
+                                                .Select(disciplina => new DisciplinaGruposAlunos
+                                                {
+                                                    NomeDisciplina = disciplina.Key,
+                                                    GruposOndeEnsina = disciplina
+                                                })
+                                                .OrderBy(disciplina => disciplina.NomeDisciplina);
+            }
+            else
+            {
+
+                disciplinaGruposAlunos = utilizadorLogado.GruposOndeTemAulas
+                                                        .GroupBy(grupo => grupo.Grupo.Disciplina.Nome)
+                                                        .Select(disciplina => new DisciplinaGruposAlunos
+                                                        {
+                                                            NomeDisciplina = disciplina.Key,
+                                                            GruposOndeEnsina = disciplina.Select(d => d.Grupo)
+                                                        })
+                                                          .OrderBy(disciplina => disciplina.NomeDisciplina);
+            }
 
 
             return View(model: new PerfilViewModel

@@ -62,7 +62,7 @@
                     {
                         foreach (Notificacao notificacao in user.Notificacoes.OrderByDescending(n => n.DataCriacao).Take(5))
                         {
-                            <a class="dropdown-item d-flex align-items-center" href="#">
+                            <a class="dropdown-item d-flex align-items-center" href="@notificacao.LinkDestino">
                                 <div class="mr-3">
                                     <div class="icon-circle bg-primary">
                                         <i class="fas fa-file-alt text-white"></i>
@@ -96,7 +96,7 @@
             @if (User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString()))
             {
                 <div class="">
-                    <a class="nav-link" asp-controller="Escola" asp-action="Index">
+                    <a class="nav-link" asp-controller="Posts" asp-action="Reagidos">
                         <i class="far fa-heart fa-lg"></i>
                     </a>
                 </div>
@@ -154,11 +154,12 @@
 
                         @if (User.IsInRole(TipoUtilizador.Aluno.ToString()))
                         {
-                            <a class="nav-link">
+                            <a class="nav-link" asp-controller="Posts" asp-action="Publicados">
                                 <div class="d-flex align-items-baseline">
                                     <i class="fas fa-align-center mr-2"></i>
-                                    <p>Publicações</p>
+                                    <p>Posts</p>
                                 </div>
+
                             </a>
 
                             <a class="nav-link" asp-controller="Apoio" asp-action="Index" asp-area="Alunos">
@@ -201,15 +202,14 @@
                                     <p>Grupos</p>
                                 </div>
                             </a>
+                            <a class="nav-link" asp-controller="Posts" asp-action="Publicados">
+                                <div class="d-flex align-items-baseline">
+                                    <i class="fas fa-align-center mr-2"></i>
+                                    <p>Posts</p>
+                                </div>
+
+                            </a>
                         }
-
-                        <a class="nav-link" asp-controller="Reports" asp-action="Index" asp-area="Direcao">
-                            <div class="d-flex align-items-baseline">
-                                <i class="fas fa-bullhorn mr-2"></i>
-                                <p>Reports</p>
-                            </div>
-                        </a>
-
 
                         <form class="mt-5 text-center" asp-controller="Conta" asp-action="Logout" method="POST"
                             asp-antiforgery="true">

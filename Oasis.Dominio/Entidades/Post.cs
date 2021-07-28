@@ -23,8 +23,10 @@ namespace Oasis.Dominio.Entidades
 
         public byte[] Ficheiro { get; set; }
 
+        [JsonIgnore]
         public TipoPost TipoPost { get; set; }
 
+        [JsonIgnore]
         public ApplicationUser Criador { get; set; }
 
         public int TipoPostId { get; set; }
@@ -40,6 +42,7 @@ namespace Oasis.Dominio.Entidades
         [JsonIgnore]
         public ICollection<ComentarioPostUtilizador> Comentarios { get; } = new List<ComentarioPostUtilizador>();
 
+        [JsonIgnore]
         public Grupo Grupo { get; set; }
         public int GrupoId { get; set; }
     }

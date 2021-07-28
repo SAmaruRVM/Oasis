@@ -108,7 +108,7 @@
                             </div>
                          </form>
                     }
-                    @Html.Raw(conteudo)
+                    @Html.Raw(System.Web.HttpUtility.HtmlDecode(conteudo));
                 </div>
 
             </div>

@@ -10,26 +10,34 @@ namespace Oasis.Web.Controllers
 {
     [Authorize(Roles = "Professor,Aluno")]
     public class PostsController : Controller
-    {   
+    {
         private readonly OasisContext _context;
         public PostsController(OasisContext context) => (_context) = (context);
 
 
         [HttpGet]
-        public async Task<ViewResult> Guardados() 
+        public async Task<ViewResult> Guardados() => View(model: new PostsGuardadosViewModel
         {
-
-
-            return View(model: new PostsGuardadosViewModel
-            {
-                PostsGuardados = (await _context.GetLoggedInApplicationUser(User.Identity.Name))
+            PostsGuardados = (await _context.GetLoggedInApplicationUser(User.Identity.Name))
                                                 .PostsGuardados
                                                 .OrderBy(postGuardado => postGuardado.Post.DataCriacao)
-            });
-        
-        }
+        });
 
         [HttpGet]
-        public async Task<ViewResult> Reagidos() => View();
+        public async Task<ViewResult> Reagidos() => View(model: new PostsGostadosViewModel
+        {
+            PostsGostados = (await _context.GetLoggedInApplicationUser(User.Identity.Name))
+                                                .PostsGostados
+                                                .OrderBy(postReagido => postReagido.Post.DataCriacao)
+        });
+
+
+        [HttpGet]
+
+        public async Task<ViewResult> Publicados() => View(model: (await _context.GetLoggedInApplicationUser(User.Identity.Name))
+                                                .PostsCriados
+                                                .OrderBy(postPublicado => postPublicado.DataCriacao));
     }
+
+
 }
