@@ -23,7 +23,7 @@ namespace Oasis.Web
                 return _utilizadorLogado;
             }
 
-            return _utilizadorLogado = await DatabaseContext.GetLoggedInApplicationUser(User.Identity.Name);
+            return _utilizadorLogado ?? await DatabaseContext.GetLoggedInApplicationUser(User.Identity.Name);
         }
       
 

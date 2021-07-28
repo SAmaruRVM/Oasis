@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-
+using Oasis.Dominio.Entidades;
 namespace Oasis.Web.ViewModels
 {
     public class EscolaViewModel
@@ -8,5 +8,7 @@ namespace Oasis.Web.ViewModels
 
         public IEnumerable<DisciplinaGruposAlunos> DisciplinaGruposAlunos  { get; set; }
 
+        public PaginaPrincipal PaginaPrincipal { get; set; }
+    
     }
 }

@@ -68,9 +68,11 @@
 
 
 @{
-    string width = (User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString())) ? "60%" : "70%";
+    string width = (User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString())) ?
+            "60%" : "75%";
 
-    string coluna = (User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString())) ? "col-9" : "col-10";
+    string coluna = (User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString())) ?
+    "col-9" : "col-10";
 }
 <div class="row no-gutters container-fluid">
     <div class="text-center @coluna">
@@ -79,37 +81,44 @@
                 <h2>@user.Escola.Nome</h2>
             </div>
         </div>
+        <hr/> 
         <div class="p-2">
             <div class="p-4"
                 style="position: fixed; height: 83vh; width: @width; overflow-y: scroll; scrollbar-width: none; ">
 
                 <div class="">
+                    @{
+                        var conteudo = @user.Escola.ConteudoPaginaPrincipal?.ConteudoHtml ?? "<h3>Sem conteudo</h3>";
+                    }
                     @if (User.IsInRole(TipoUtilizador.Diretor.ToString()))
                     {
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                @{
-                                    var conteudo = @user.Escola.ConteudoPaginaPrincipal?.ConteudoHtml ?? "Sem conteudo";
-                                }
-                                <textarea id="inserir-conteudo" class="form-control m-2" rows="2">
-                                    @conteudo
-                                </textarea>
-                                <div class="font-weight-bold">
-                                    <button type="button" class="btn btn-primary btn-block mt-3">Inserir conteúdo</button>
+                         <form id="form-inserir-conteudo-pagina-escola" asp-action="InserirConteudoPaginaEscola" asp-controller="Escola" asp-area=""
+                                  asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
+                                  data-ajax-success="insercaoConteudoPaginaEscola"
+                                  data-ajax-loading="#loading-icon-insercao-conteudo-escola">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <textarea id="inserir-conteudo" asp-for="PaginaPrincipal.ConteudoHtml" class="form-control m-2" rows="2">
+                                        @conteudo
+                                        </textarea>
+                                    <div class="font-weight-bold">
+                                        <button type="submit" class="btn btn-primary btn-block mt-3">Inserir conteúdo</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                         </form>
                     }
+                    @Html.Raw(conteudo)
                 </div>
 
             </div>
         </div>
     </div>
 
-    @if(User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString()))
+    @if (User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString()))
     {
-         // partial grupos 
-       <partial name="_Grupos" model="@Model" />
+        // partial grupos
+        <partial name="_Grupos" model="@Model" />
     }
 
 </div>
@@ -121,7 +130,7 @@
 <partial name="_WYSIWYG" model=@string.Format("inserir-conteudo") />
 @if(primeiraVezLogin)
 {
-    primeiraVezLogin = false;
+primeiraVezLogin = false;
 <script>
     $('#modal-alterar-password').modal('show');
 </script>
@@ -129,6 +138,14 @@
 
 <script>
 
+     function insercaoConteudoPaginaEscola(respostaAjax) 
+     {
+         if(!(respostaAjax.ocorreuAlgumErro))
+         {
+             document.getElementById('form-inserir-conteudo-pagina-escola').reset();
+         }
+         ajaxCompleto(respostaAjax);
+     }
 
 
     function passwordAlterada(respostaAjax) {

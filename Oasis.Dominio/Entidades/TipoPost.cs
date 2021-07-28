@@ -8,8 +8,9 @@ namespace Oasis.Dominio.Entidades
     {
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(20)]
+        [Required(ErrorMessage = "O nome tem que ser obrigatóriamente preenchido!")]
+        [StringLength(20, ErrorMessage = "O nome {0} tem que ter no máximo {1} caracteres!")]
+        [Display(Name = "Nome", Prompt = "Introduza o nome")]
         public string Nome { get; set; }
 
         public Grupo Grupo { get; set; }

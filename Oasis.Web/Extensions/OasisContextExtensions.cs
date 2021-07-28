@@ -24,6 +24,8 @@ namespace Oasis.Web.Extensions
                            .Include(utilizador => utilizador.PostsGostados)
                            .ThenInclude(postGostado => postGostado.Reacao)
                            .Include(utilizador => utilizador.PostsGuardados)
+                           .ThenInclude(postGostado => postGostado.Post)
+                           .ThenInclude(post => post.TipoPost)
                            .SingleOrDefaultAsync(utilizador => utilizador.Email == emailUtilizadorLogado);
 
 

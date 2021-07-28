@@ -16,5 +16,6 @@ namespace Oasis.Web.ViewModels
 
         public IEnumerable<SelectListItem> TiposPostDropdownList { get; set; }
         public IEnumerable<Post> PostsGrupo { get; set; }
+        public TipoPost TipoPostInserir { get; set; }
     }
 }

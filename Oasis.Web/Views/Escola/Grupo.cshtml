@@ -12,14 +12,25 @@
         <i class="fas fa-plus-square"></i>
         Novo Post
     </button>
+
+
+
+@if(User.IsInRole(TipoUtilizador.Professor.ToString()))
+{
+     <button class="btn btn-primary ml-2" data-toggle="modal" data-target="#modal-inserir-tipo-post">
+        <i class="fas fa-plus-square"></i>
+        Novo Tipo de Post
+    </button>
+}
 </div>
+
 
 <hr class="mb-0" />
 <div class="row container-fluid">
     <div class="text-center col-9 pt-5">
         <div class="pl-5">
             <div id="container-posts" class="px-5"
-                 style="position: fixed; height: 90vh; width: 55%; overflow-y: scroll; scrollbar-width: none; ">
+                 style="position: fixed; height: 90vh; width: 75%; overflow-y: auto; scrollbar-width: none; ">
 
                 <hr id="hr-container-posts" />
                 @if (!(Model.PostsGrupo.Any()))
@@ -43,16 +54,17 @@
                                             <span class="badge badge-secondary mr-2">@post.TipoPost.Nome</span>
 
                                         </div>
-
+                                         <div class="d-flex">
+                                                <p class="pt-4">@post.Criador.PrimeiroNome @post.Criador.Apelido</p>
                                         @if (post.Criador.Id == Model.Grupo.ProfessorId)
                                         {
-                                            <div class="d-flex">
-                                                <p class="pt-4">@post.Criador.PrimeiroNome @post.Criador.Apelido</p>
+                                           
                                                 <span class="badge" style="color:darkkhaki; font-size: 12px; height: 19px; width: 25px; margin-top:16px; margin-left:-7px;">
                                                     <i class="fas fa-crown"></i>
                                                 </span>
-                                            </div>
+                                           
                                         }
+                                         </div>
                                     </h5>
                                     <div class="dropdown ml-auto">
                                         <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -185,9 +197,6 @@
     </div>
 
 
-
-    <!-- partial grupos -->
-    <partial name="_Grupos" model="@Model.EscolaViewModel" />
 </div>
 @section Scripts {
     <partial name="~/Views/Shared/_Validacoes.cshtml" />
@@ -341,7 +350,15 @@
 
 
 
-
+        function insercaoTipoPost(respostaAjax) 
+        {
+            if(!(respostaAjax.ocorreuAlgumErro))
+            {
+                $('#modal-inserir-tipo-post').modal('hide');
+                document.getElementById('form-adicionar-tipo-post').reset();
+            }
+            ajaxCompleto(respostaAjax);
+        }
 
 
 
@@ -469,6 +486,55 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+
+<!-- Modal Novo Tipo Post -->
+<div class="modal fade" id="modal-inserir-tipo-post" tabindex="-1" role="dialog"
+     aria-labelledby="modal-inserir-tipo-post-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-inserir-tipo-post-titulo">Tipo de Post</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-adicionar-tipo-post" asp-action="AdicionarTipoPost"
+                      asp-controller="Escola" asp-area="" asp-antiforgery="true" data-ajax="true"
+                      data-ajax-method="POST" data-ajax-success="insercaoTipoPost"
+                      data-ajax-loading="#loading-icon-insercao-tipo-post">
+
+                    <div class="form-group mb-3">
+                        <label asp-for="TipoPostInserir.Nome"></label>
+                        <input class="form-control" asp-for="TipoPostInserir.Nome" />
+                        <span class="text-danger text-center"
+                              asp-validation-for="TipoPostInserir.Nome"></span>
+                    </div>
+
+                    <input asp-for="TipoPostInserir.GrupoId" type="hidden" value="@Model.Grupo.Id"/>
+
+
+                    <div class="font-weight-bold">
+                        <button type="submit" class="btn btn-primary btn-block mt-3">
+                            <i id="loading-icon-insercao-tipo-post" style="display: none;"
+                               class="fas fa-spinner fa-spin"></i>
+                            Inserir tipo de post
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 

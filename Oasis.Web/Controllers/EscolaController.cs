@@ -119,7 +119,85 @@ namespace Oasis.Web.Controllers
             });
         }
 
+
+
+
+        [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AdicionarTipoPost([FromForm] GrupoDisciplinaViewModel grupoDisciplinaViewModel)
+        {
+            var grupo = await _context.Grupos
+                                       .FindAsync(grupoDisciplinaViewModel.TipoPostInserir.GrupoId);
+
+            if (grupo is null)
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Ocorreu um erro na inserção do tipo de post!",
+                    Descricao = "Pedimos desculpa pela incómodo. Já foi enviado a informação aos nossos técnicos. Por favor, tente novamente mais tarde.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+            _context.TiposPosts.Add(grupoDisciplinaViewModel.TipoPostInserir);
+            await _context.SaveChangesAsync();
+
+
+            return Json(new Ajax
+            {
+                Titulo = "O tipo de post foi inserido com sucesso!",
+                Descricao = "De modo a que possa criar posts com o novo tipo inserido, terá que atualizar a página.",
+                OcorreuAlgumErro = false,
+                UrlRedirecionar = string.Empty
+            });
+        }
+
+
+
+
+
+        [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> InserirConteudoPaginaEscola([FromForm] EscolaViewModel escolaViewModel)
+        {
+            var userLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
+
+            var escola = userLogado.Escola;
+
+
+            if (escola.ConteudoPaginaPrincipal is null)
+            {
+                _context.ConteudoPaginaPrincipalEscolas.Add(escolaViewModel.PaginaPrincipal);
+                await _context.SaveChangesAsync();
+                escola.PaginaPrincipalId = escolaViewModel.PaginaPrincipal.Id;
+            }
+            else
+            {
+                escola.ConteudoPaginaPrincipal.ConteudoHtml = escolaViewModel.PaginaPrincipal.ConteudoHtml;
+                escola.ConteudoPaginaPrincipal.DataUltimaAlteracao = DateTime.Now;
+            }
+            
+
+
+            _context.Escolas.Update(escola);
+
+            await _context.SaveChangesAsync();
+
+
+            return Json(new Ajax
+            {
+                Titulo = "O tipo de post foi inserido com sucesso!",
+                Descricao = "De modo a que possa criar posts com o novo tipo inserido, terá que atualizar a página.",
+                OcorreuAlgumErro = false,
+                UrlRedirecionar = string.Empty
+            });
+        }
+
+
+
         [HttpGet("[action]")]
+        [Authorize(Roles = "Professor")]
         public async Task<ViewResult> Grupos()
         {
             var userLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
@@ -247,6 +325,8 @@ namespace Oasis.Web.Controllers
 
             var post = await _context.Posts
                                      .AsNoTracking()
+                                     .Include(post => post.Grupo)
+                                     .ThenInclude(grupo => grupo.Professor)
                                      .Include(post => post.Comentarios)
                                      .ThenInclude(comentario => comentario.Utilizador)
                                      .Include(post => post.Criador)
@@ -266,7 +346,13 @@ namespace Oasis.Web.Controllers
 
 
 
-            return View(model: post);
+            return View(model: new PostEspecificoViewModel
+            {
+                Post = post,
+                Reacoes = await _context.Reacoes
+                                                  .AsNoTracking()
+                                                  .ToListAsync(),
+            });
         }
 
 
