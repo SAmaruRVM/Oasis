@@ -32,17 +32,14 @@ namespace Oasis.Web.Areas.Direcao.Controllers
 
         [HttpGet]
         public async Task<ViewResult> Index()
+        => View(model: new UtilizadoresDirecaoViewModel
         {
-            UtilizadoresDirecaoViewModel utilizadoresViewModel = new()
-            {
-                UtilizadoresRoles = await _userManager.Users
+            UtilizadoresRoles = await _userManager.Users
                                                   .AsNoTracking()
-                                                  .OrderBy(user => user.UserName)
+                                                  .OrderBy(u => u.PrimeiroNome)
                                                   .ToListAsync(),
-            };
 
-            return View(model: utilizadoresViewModel);
-        }
+        });
 
 
         [HttpGet]

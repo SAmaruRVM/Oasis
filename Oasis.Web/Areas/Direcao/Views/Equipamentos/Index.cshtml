@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Equipamento>
+﻿@model EquipamentoViewModel
 @inject IConfiguration configuration
 @{
     Layout = "~/Views/Escola/Shared/_Layout.cshtml";
@@ -34,7 +34,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (Equipamento equipamento in Model)
+                    @foreach (Equipamento equipamento in Model.Equipamentos)
                     {
                         <tr>
                             <td>@equipamento.Nome</td>
@@ -55,10 +55,7 @@
             <h5 class="text-center">Stock</h5>
 
             <ul>
-                @foreach (Equipamento equipamento in Model)
-                {
-                    <li>x - @equipamento.Nome</li>
-                }
+                
                 </ul>
         </div>
         

@@ -84,7 +84,7 @@
         <hr/> 
         <div class="p-2">
             <div class="p-4"
-                style="position: fixed; height: 83vh; width: @width; overflow-y: scroll; scrollbar-width: none; ">
+                style="position: fixed; height: 78vh; width: @width; overflow-y: scroll; scrollbar-width: none; ">
 
                 <div class="">
                     @{
@@ -92,10 +92,10 @@
                     }
                     @if (User.IsInRole(TipoUtilizador.Diretor.ToString()))
                     {
-                         <form id="form-inserir-conteudo-pagina-escola" asp-action="InserirConteudoPaginaEscola" asp-controller="Escola" asp-area=""
-                                  asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
-                                  data-ajax-success="insercaoConteudoPaginaEscola"
-                                  data-ajax-loading="#loading-icon-insercao-conteudo-escola">
+                        <form id="form-inserir-conteudo-pagina-escola" asp-action="InserirConteudoPaginaEscola" asp-controller="Escola" asp-area=""
+                              asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
+                              data-ajax-success="insercaoConteudoPaginaEscola"
+                              data-ajax-loading="#loading-icon-insercao-conteudo-escola">
                             <div class="card mb-4">
                                 <div class="card-body">
                                     <textarea id="inserir-conteudo" asp-for="PaginaPrincipal.ConteudoHtml" class="form-control m-2" rows="2">
@@ -106,11 +106,10 @@
                                     </div>
                                 </div>
                             </div>
-                         </form>
+                        </form>
                     }
-                    @Html.Raw(System.Web.HttpUtility.HtmlDecode(conteudo));
+                    @Html.Raw(System.Web.HttpUtility.HtmlDecode(conteudo))
                 </div>
-
             </div>
         </div>
     </div>

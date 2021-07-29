@@ -7,180 +7,184 @@
                                                                  .Contains(Model.Post.Id) ? "fas fa-bookmark fa-lg" : "far fa-bookmark fa-lg";
 }
 <style>
-    body{
+    body {
         overflow-y: scroll !important;
     }
 </style>
 <div class="row container-fluid">
     <div class=" col-12 pt-5">
         <div class="pl-5">
-                        <div class="card p-0 mb-4">
-                            <div class="card-body px-4 py-0">
-                                <div class="d-flex align-items-center">
+            <div class="card p-0 mb-4">
+                <div class="card-body px-4 py-0">
+                    <div class="d-flex align-items-center">
 
-                                    <h5>
-                                        <div class="float-left pt-4">
-                                            <span class="badge badge-secondary mr-2">@Model.Post.TipoPost.Nome</span>
+                        <h5>
+                            <div class="float-left pt-4">
+                                <span class="badge badge-secondary mr-2">@Model.Post.TipoPost.Nome</span>
 
-                                        </div>
-                                         <div class="d-flex">
-                                                <p class="pt-4">@Model.Post.Criador.PrimeiroNome @Model.Post.Criador.Apelido</p>
-                                        @if (Model.Post.Criador.Id == Model.Post.Grupo.ProfessorId)
-                                        {
-                                           
-                                                <span class="badge" style="color:darkkhaki; font-size: 12px; height: 19px; width: 25px; margin-top:16px; margin-left:-7px;">
-                                                    <i class="fas fa-crown"></i>
-                                                </span>
-                                           
-                                        }
-                                         </div>
-                                    </h5>
-                                    <div class="dropdown ml-auto">
-                                        <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Opções
-                                        </button>
-                                        <div class="dropdown-menu p-2" aria-labelledby="dropdownMenuButton">
-                                            @if (Model.Post.Criador.Id == user.Id)
-                                            {
-                                                <button type="button" data-id-post-eliminar="@Model.Post.Id" class="btn btn-danger btn-block">
-                                                    Eliminar
-                                                </button>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <hr />
-                                <div class="text-left">
-                                    <h5 class="card-subtitle text-muted my-2 ">@Model.Post.Titulo</h5>
-
-                                    @* <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%"
-                                        height="200"
-                                        aria-label="Placeholder: Image cap" focusable="false" role="img"
-                                        preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180"
-                                        style="font-size:1.125rem;text-anchor:middle">
-                                        <rect width="100%" height="100%" fill="#868e96"></rect>
-                                        <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
-                                        </svg> *@
-
-                                    <p class="text-left">
-                                        @Model.Post.Conteudo
-                                    </p>
-
-                                </div>
                             </div>
+                            <div class="d-flex">
+                                <p class="pt-4">@Model.Post.Criador.PrimeiroNome @Model.Post.Criador.Apelido</p>
+                                @if (Model.Post.Criador.Id == Model.Post.Grupo.ProfessorId)
+                                {
 
+                                    <span class="badge" style="color:darkkhaki; font-size: 12px; height: 19px; width: 25px; margin-top:16px; margin-left:-7px;">
+                                        <i class="fas fa-crown"></i>
+                                    </span>
 
-
-                            <div class="card-body d-flex align-self-start mb-2 pb-0 w-100">
-                                <div class="dropdown mr-3">
-                                    <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                        @{
-                                            var postGostado = user.PostsGostados.SingleOrDefault(p => p.PostId == Model.Post.Id);
-                                        }
-
-                                        @if(postGostado is not null) 
-                                        {
-                                            <img data-id-icone-reacao style="width:20px;height:20px;" src="~/@postGostado.Reacao.Icone" />
-                                        }
-                                        else {
-                                        <i data-id-icone-reacao class="far fa-heart fa-lg"></i>
-                                        }
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        @foreach (Reacao reacao in Model.Reacoes)
-                                        {
-                                            <li>
-                                                @{
-                                                    var classesCss = "bg-secondary text-white";
-
-                                                    var userReagiuAEstePostTuple = user.PostsGostados.Select(postGostado => (postId: postGostado.PostId, reacaoId: postGostado.ReacaoId));
-
-                                                    var userReagiuAEstePost = userReagiuAEstePostTuple.SingleOrDefault(pu => pu.postId == Model.Post.Id);
-
-                                                }
-                                                @if (userReagiuAEstePost != default(ValueTuple<int, int>) && userReagiuAEstePost.reacaoId == reacao.Id)
-                                                {
-                                                    <button type="button" data-id-reacao="@reacao.Id" data-id-post-reacao="@Model.Post.Id" class="dropdown-item @classesCss">
-                                                        <img style="width:20px;height:20px;" src="~/@reacao.Icone" />
-                                                        @reacao.Titulo
-                                                    </button>
-                                                }
-                                                else
-                                                {
-                                                    <button type="button" data-id-reacao="@reacao.Id" data-id-post-reacao="@Model.Post.Id" class="dropdown-item">
-                                                        <img style="width:20px;height:20px;" src="~/@reacao.Icone" />
-                                                        @reacao.Titulo
-                                                    </button>
-                                                }
-                                            </li>
-                                        }
-                                    </ul>
-                                </div>
-                                <div class="p-0 mr-2">
-                                    <p data-id-estatisticas-post>@Model.Post.UtilizadoresQueGostaram.Count() reações e @Model.Post.Comentarios.Count() comentários</p>
-                                </div>
-                                <div>
-                                    <button type="button" data-mostrar-comentario="@Model.Post.Id" class="btn btn-link p-0">Comentar</button>
-                                </div>
-                                <div class="ml-auto">
-                                    <button type="button" data-id-post-guardar="@Model.Post.Id" class="btn btn-link">
-                                        <i class="@postGuardado"></i>
-                                    </button>
-                                </div>
+                                }
                             </div>
-
-
-                            <form id=@string.Format("form-inserir-comentario-post{0}", Model.Post.Id) asp-action="InserirComentarioPost" asp-controller="Escola" asp-area=""
-                                  asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
-                                  data-ajax-success="insercaoComentarioPost"
-                                  data-ajax-loading="#loading-icon-atualizar-descricao-grupo">
-                                <div class="form-group m-3 d-none" id=@string.Format("comentario{0}", @Model.Post.Id)>
-                                    <textarea class="form-control" rows="2" name="comentario" placeholder="O teu comentário..."></textarea>
-                                 
-                                    <input type="hidden" name="idPost" value="@Model.Post.Id" />
-
-                                    <button type="submit" class="btn btn-primary my-2 float-right" onclick="enviarComentario(this)">
-                                        Enviar
+                        </h5>
+                        <div class="dropdown ml-auto">
+                            <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Opções
+                            </button>
+                            <div class="dropdown-menu p-2" aria-labelledby="dropdownMenuButton">
+                                @if (Model.Post.Criador.Id == user.Id)
+                                {
+                                    <button type="button" data-id-post-eliminar="@Model.Post.Id" class="btn btn-danger btn-block">
+                                        Eliminar
                                     </button>
-                                </div>
-                            </form>
-
-                            <div class="card-footer text-muted text-center">
-                                @Model.Post.DataCriacao.Day de
-                                @Model.Post.DataCriacao.ToString("MMMM",
-                        System.Globalization.CultureInfo.CreateSpecificCulture("pt-PT")),
-                                @Model.Post.DataCriacao.Year
-                                às @Model.Post.DataCriacao.Hour:@Model.Post.DataCriacao.Minute
+                                }
                             </div>
                         </div>
-                        <h3 class="text-center">Comentários</h3>
-                        <hr/>
-                        @foreach(ComentarioPostUtilizador comentario in Model.Post.Comentarios.OrderByDescending(comentario => comentario.DataCriacao))
-                        {
-                           <div class="card mt-0 mb-2">
-                            <div class="card-body">
-                                <h5 class="card-title">@comentario.Utilizador.PrimeiroNome @comentario.Utilizador.Apelido
-                                        @if (comentario.Utilizador.Id == comentario.Post.Grupo.ProfessorId)
-                                        {
-                                           
-                                                <span class="badge" style="color:darkkhaki; font-size: 12px; height: 19px; width: 25px; margin-top:16px; margin-left:-7px;">
-                                                    <i class="fas fa-crown"></i>
-                                                </span>
-                                           
-                                        }
-                                        </h5>
-                                        <hr/>
-                                <h6 class="card-subtitle mb-2 text-muted">@comentario.DataCriacao.Day de
-                                @comentario.DataCriacao.ToString("MMMM",
-                        System.Globalization.CultureInfo.CreateSpecificCulture("pt-PT")),
-                                @comentario.DataCriacao.Year
-                                às @comentario.DataCriacao.Hour:@comentario.DataCriacao.Minute</h6>
-                                <p class="card-text">@comentario.Comentario</p>
-                            </div>
-                           </div>
-                        }
+                    </div>
+
+
+                    <hr />
+                    <div class="text-left">
+                        <h5 class="card-subtitle text-muted my-2 ">@Model.Post.Titulo</h5>
+
+                        @* <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%"
+                            height="200"
+                            aria-label="Placeholder: Image cap" focusable="false" role="img"
+                            preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180"
+                            style="font-size:1.125rem;text-anchor:middle">
+                            <rect width="100%" height="100%" fill="#868e96"></rect>
+                            <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
+                            </svg> *@
+
+                        <p class="text-left">
+                            @Model.Post.Conteudo
+                        </p>
+
+                    </div>
+                </div>
+
+
+
+                <div class="card-body d-flex align-self-start mb-2 pb-0 w-100">
+                    <div class="dropdown mr-3">
+                        <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            @{
+                                var postGostado = user.PostsGostados.SingleOrDefault(p => p.PostId == Model.Post.Id);
+                            }
+
+                            @if (postGostado is not null)
+                            {
+                                <img data-id-icone-reacao style="width:20px;height:20px;" src="~/@postGostado.Reacao.Icone" />
+                            }
+                            else
+                            {
+                                <i data-id-icone-reacao class="far fa-heart fa-lg"></i>
+                            }
+                        </a>
+                        <ul class="dropdown-menu">
+                            @foreach (Reacao reacao in Model.Reacoes)
+                            {
+                                <li>
+                                    @{
+                                        var classesCss = "bg-secondary text-white";
+
+                                        var userReagiuAEstePostTuple = user.PostsGostados.Select(postGostado => (postId: postGostado.PostId, reacaoId: postGostado.ReacaoId));
+
+                                        var userReagiuAEstePost = userReagiuAEstePostTuple.SingleOrDefault(pu => pu.postId == Model.Post.Id);
+
+                                    }
+                                    @if (userReagiuAEstePost != default(ValueTuple<int, int>) && userReagiuAEstePost.reacaoId == reacao.Id)
+                                    {
+                                        <button type="button" data-id-reacao="@reacao.Id" data-id-post-reacao="@Model.Post.Id" class="dropdown-item @classesCss">
+                                            <img style="width:20px;height:20px;" src="~/@reacao.Icone" />
+                                            @reacao.Titulo
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" data-id-reacao="@reacao.Id" data-id-post-reacao="@Model.Post.Id" class="dropdown-item">
+                                            <img style="width:20px;height:20px;" src="~/@reacao.Icone" />
+                                            @reacao.Titulo
+                                        </button>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="p-0 mr-2">
+                        <p data-id-estatisticas-post>@Model.Post.UtilizadoresQueGostaram.Count() reações e @Model.Post.Comentarios.Count() comentários</p>
+                    </div>
+                    <div>
+                        <button type="button" data-mostrar-comentario="@Model.Post.Id" class="btn btn-link p-0">Comentar</button>
+                    </div>
+                    <div class="ml-auto">
+                        <button type="button" data-id-post-guardar="@Model.Post.Id" class="btn btn-link">
+                            <i class="@postGuardado"></i>
+                        </button>
+                    </div>
+                </div>
+
+
+                <form id=@string.Format("form-inserir-comentario-post{0}", Model.Post.Id) asp-action="InserirComentarioPost" asp-controller="Escola" asp-area=""
+                      asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
+                      data-ajax-success="insercaoComentarioPost"
+                      data-ajax-loading="#loading-icon-atualizar-descricao-grupo">
+                    <div class="form-group m-3 d-none" id=@string.Format("comentario{0}", @Model.Post.Id)>
+                        <textarea class="form-control" rows="2" name="comentario" placeholder="O teu comentário..."></textarea>
+
+                        <input type="hidden" name="idPost" value="@Model.Post.Id" />
+
+                        <button type="submit" class="btn btn-primary my-2 float-right" onclick="enviarComentario(this)">
+                            Enviar
+                        </button>
+                    </div>
+                </form>
+
+                <div class="card-footer text-muted text-center">
+                    @Model.Post.DataCriacao.Day de
+                    @Model.Post.DataCriacao.ToString("MMMM",
+            System.Globalization.CultureInfo.CreateSpecificCulture("pt-PT")),
+                    @Model.Post.DataCriacao.Year
+                    às @Model.Post.DataCriacao.Hour:@Model.Post.DataCriacao.Minute
+                </div>
+            </div>
+            <h3 class="text-center">Comentários</h3>
+            <hr />
+            @foreach (ComentarioPostUtilizador comentario in Model.Post.Comentarios.OrderByDescending(comentario => comentario.DataCriacao))
+            {
+                <div class="card mt-0 mb-2">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            @comentario.Utilizador.PrimeiroNome @comentario.Utilizador.Apelido
+                            @if (comentario.Utilizador.Id == comentario.Post.Grupo.ProfessorId)
+                            {
+
+                                <span class="badge" style="color:darkkhaki; font-size: 12px; height: 19px; width: 25px; margin-top:16px; margin-left:-7px;">
+                                    <i class="fas fa-crown"></i>
+                                </span>
+
+                            }
+                        </h5>
+                        <hr />
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            @comentario.DataCriacao.Day de
+                            @comentario.DataCriacao.ToString("MMMM",
+                    System.Globalization.CultureInfo.CreateSpecificCulture("pt-PT")),
+                            @comentario.DataCriacao.Year
+                            às @comentario.DataCriacao.Hour:@comentario.DataCriacao.Minute
+                        </h6>
+                        <p class="card-text">@comentario.Comentario</p>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>
