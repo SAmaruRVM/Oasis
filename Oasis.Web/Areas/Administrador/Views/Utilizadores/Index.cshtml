@@ -29,13 +29,10 @@
                     <td>Tipo de Perfil</td>
                     <td>@utilizador.DataCriacao</td>
                     @{
-                        <td>@utilizador.DataUltimoLogin</td>
+                        var dataUltimoLogin = utilizador.DataUltimoLogin?.ToString() ?? "Ainda não efetuou o 1º Login";
                     }
+                    <td>@dataUltimoLogin</td>
                     <td>
-                        <a href="#" data-toggle="modal" data-target="#modal-editar-utilizador" data-id-utilizador-atualizar="@utilizador.Id"><i
-                            class="far fa-edit fa-lg ml-1"></i></a>
-                
-
                         <a href="#" data-id-utilizador-eliminar="@utilizador.Id" data-toggle="modal" data-target="#modal-eliminar-utilizador" teste><i class="far fa-trash-alt fa-lg ml-2"></i></a>
                     </td>
                 </tr>
@@ -204,6 +201,7 @@
         if (!(respostaAjax.ocorreuAlgumErro)) {
             $('#modal-inserir-utilizador').modal('hide');
             document.getElementById('form-adicionar-membro-direcao').reset();
+            location.reload();
         }
         ajaxCompleto(respostaAjax);
     }
@@ -220,6 +218,7 @@
             $('#modal-eliminar-utilizador').modal('hide');
             document.getElementById('form-eliminacao-utilizador').reset();
             ajaxCompleto(respostaAjax);
+            location.reload();
         }
 
           async function utilizadorPorId(id) {

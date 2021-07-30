@@ -17,5 +17,11 @@ namespace Oasis.Web.ViewModels
 
         [Display(Name = "Lembrar de mim")]
         public bool LembrarDeMim { get; set; }
+
+
+        [Required(ErrorMessage = "O email para a recuperação de password tem que ser obrigatóriamente preenchido!")]
+        [EmailAddress(ErrorMessage = "O email introduzido para a recuperação de password encontra-se num formato inválido!")]
+        [Display(Name = "Email", Prompt = "Introduza o seu email para a recuperação de password ")]
+        public string EmailRecuperacaoPassword { get; set; }
     }
 }

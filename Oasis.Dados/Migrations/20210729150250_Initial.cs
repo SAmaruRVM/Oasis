@@ -295,14 +295,12 @@ namespace Oasis.Dados.Migrations
                         name: "FK_Disciplinas_Escolas_EscolaId",
                         column: x => x.EscolaId,
                         principalTable: "Escolas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Disciplinas_Utilizadores_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "Utilizadores",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -326,33 +324,6 @@ namespace Oasis.Dados.Migrations
                         principalTable: "Utilizadores",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Reports",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Assunto = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
-                    AlunoId = table.Column<int>(type: "int", nullable: true),
-                    ProfessorId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Reports", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Reports_Utilizadores_AlunoId",
-                        column: x => x.AlunoId,
-                        principalTable: "Utilizadores",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Reports_Utilizadores_ProfessorId",
-                        column: x => x.ProfessorId,
-                        principalTable: "Utilizadores",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -395,8 +366,7 @@ namespace Oasis.Dados.Migrations
                         name: "FK_Grupos_Disciplinas_DisciplinaId",
                         column: x => x.DisciplinaId,
                         principalTable: "Disciplinas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Grupos_Utilizadores_ProfessorId",
                         column: x => x.ProfessorId,
@@ -614,11 +584,11 @@ namespace Oasis.Dados.Migrations
                 columns: new[] { "Id", "LinkCdn", "Nome" },
                 values: new object[,]
                 {
-                    { 5, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cyborg/bootstrap.min.css", "Cyborg" },
+                    { 5, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css", "Cyborg" },
                     { 4, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sketchy/bootstrap.min.css", "Sketchy" },
-                    { 3, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css", "Darkly" },
+                    { 3, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css", "Darkly" },
                     { 2, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cerulean/bootstrap.min.css", "Cerulean" },
-                    { 7, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/solar/bootstrap.min.css", "Solar" },
+                    { 7, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css", "Solar" },
                     { 6, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/journal/bootstrap.min.css", "Journal" },
                     { 1, "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css", "Minty" }
                 });
@@ -628,10 +598,10 @@ namespace Oasis.Dados.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 4, "36d5a727-a29d-4fb1-a7da-7ffde0857b4a", "Aluno", "ALUNO" },
-                    { 3, "0fd62ca0-9f9e-41e1-b615-8f66212dc450", "Professor", "PROFESSOR" },
-                    { 2, "c73022b8-18e1-46ea-a024-4a424ea7d95d", "Diretor", "DIRETOR" },
-                    { 1, "9ee484f9-24d2-4b8b-889f-8953b4449459", "Administrador", "ADMINISTRADOR" }
+                    { 4, "48525e57-809a-4e3b-b56b-edd158738362", "Aluno", "ALUNO" },
+                    { 3, "51a7d0a2-ddbd-4a0e-8f0a-b7fadf3f0006", "Professor", "PROFESSOR" },
+                    { 2, "dfa451f7-926d-4635-9d23-8e603b144cb2", "Diretor", "DIRETOR" },
+                    { 1, "7e821e9b-d3b1-49d4-a6f8-d5b3a257816c", "Administrador", "ADMINISTRADOR" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -747,16 +717,6 @@ namespace Oasis.Dados.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reports_AlunoId",
-                table: "Reports",
-                column: "AlunoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reports_ProfessorId",
-                table: "Reports",
-                column: "ProfessorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RequisicaoEquipamentos_ApplicationUserId",
                 table: "RequisicaoEquipamentos",
                 column: "ApplicationUserId");
@@ -836,9 +796,6 @@ namespace Oasis.Dados.Migrations
 
             migrationBuilder.DropTable(
                 name: "PostsUtilizadoresGuardados");
-
-            migrationBuilder.DropTable(
-                name: "Reports");
 
             migrationBuilder.DropTable(
                 name: "RespostasContactos");

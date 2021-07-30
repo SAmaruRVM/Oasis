@@ -74,8 +74,7 @@ namespace Oasis.Web.Areas.Administrador.Controllers
 
 
             using SmtpClient client = new();
-            await client.EnviarEmailAsync("O administrador respondeu-te pa", $"Resposta: <hr/>{contactosViewModel.RespostaContactoAdicionar.Resposta}", contacto.EmailContactante, client.ConfiguracoesEmail(_configuration));
-
+            await client.EnviarEmailAsync($"{_configuration["Projeto:Nome"]} - Resposta ao seu contacto", $"Caro/a {contacto.PrimeiroNome} {contacto.Apelido}, o seu contacto já foi visto pelos nossos colaboradores e temos a seguinte resposta:<hr/>{respostaContacto.Resposta}<hr/><strong>Obrigado!</strong>", contacto.EmailContactante, client.ConfiguracoesEmail(_configuration));
 
             return Json(new
             {

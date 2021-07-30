@@ -3,39 +3,48 @@
 
     <div class="p-2">
         <h3>Grupos</h3>
-        <div class="p-4"
-             style="position: fixed; height: 83vh; width: 20%; overflow-y: scroll; scrollbar-width: none;">
-
+        <div class="p-4" style="position: fixed; height: 83vh; width: 20%; overflow-y: scroll; scrollbar-width: none;">
+            <hr/>
             @{
                 int index = 0;
             }
-            @foreach (var disciplina in Model.DisciplinaGruposAlunos)
+            @if (!(Model.DisciplinaGruposAlunos.Any()))
             {
-                <div id=@string.Format("accordion{0}", index)>
-                    <div class="card mx-2" >
-                        <div class="card-header" id=@string.Format("heading{0}", index)>
-                            <h5 class="mb-0">
-                                <button class="btn btn-link" data-toggle="collapse"
-                                        data-target=@string.Format("#collapse{0}", index) aria-expanded="true"
-                                        aria-controls=@string.Format("collapse{0}", index)>
-                                    <h5>@disciplina.NomeDisciplina</h5>
-                                </button>
+                <p>Ainda não foi inserido em nenhum grupo!</p>
+            }
+            else
+            {
+                @foreach (var disciplina in Model.DisciplinaGruposAlunos)
+                {
+                    <div id=@string.Format("accordion{0}", index)>
+                        <div class="card mx-2">
+                            <div class="card-header" id=@string.Format("heading{0}", index)>
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse"
+                                data-target=@string.Format("#collapse{0}", index) aria-expanded="true"
+                                aria-controls=@string.Format("collapse{0}", index)>
+                                        <h5>@disciplina.NomeDisciplina</h5>
+                                    </button>
 
-                            </h5>
-                        </div>
-                        @foreach (var grupo in disciplina.GruposOndeEnsina)
-                        {
-                            <div id=@string.Format("collapse{0}", index) class="collapse"
-                                 aria-labelledby=@string.Format("heading{0}", index) data-parent=@string.Format("#accordion{0}", index)>
-                                <div class="card-body">
-                                    <i class="fas fa-external-link-alt"></i>
-                                    <a asp-area="" asp-controller="Escola" asp-action="Grupo" asp-route-nomeGrupo="@string.Join('-', grupo.Nome.ToLower().Split(' '))" class="text-success">@grupo.Nome</a>
-                                </div>
+                                </h5>
                             </div>
-                        }
+                            @foreach (var grupo in disciplina.GruposOndeEnsina)
+                            {
+                                <div id=@string.Format("collapse{0}", index) class="collapse"
+                        aria-labelledby=@string.Format("heading{0}", index) data-parent=@string.Format("#accordion{0}",
+                        index)>
+                                    <div class="card-body">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        <a asp-area="" asp-controller="Escola" asp-action="Grupo"
+                                asp-route-nomeGrupo="@string.Join('-', grupo.Nome.ToLower().Split(' '))"
+                                class="text-success">@grupo.Nome</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
                     </div>
-                </div>
-                index++;
+                    index++;
+                }
             }
         </div>
     </div>

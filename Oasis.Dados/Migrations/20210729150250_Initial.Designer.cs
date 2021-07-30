@@ -10,7 +10,7 @@ using Oasis.Dados;
 namespace Oasis.Dados.Migrations
 {
     [DbContext(typeof(OasisContext))]
-    [Migration("20210728115956_Initial")]
+    [Migration("20210729150250_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,28 +53,28 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "9ee484f9-24d2-4b8b-889f-8953b4449459",
+                            ConcurrencyStamp = "7e821e9b-d3b1-49d4-a6f8-d5b3a257816c",
                             Name = "Administrador",
                             NormalizedName = "ADMINISTRADOR"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "c73022b8-18e1-46ea-a024-4a424ea7d95d",
+                            ConcurrencyStamp = "dfa451f7-926d-4635-9d23-8e603b144cb2",
                             Name = "Diretor",
                             NormalizedName = "DIRETOR"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "0fd62ca0-9f9e-41e1-b615-8f66212dc450",
+                            ConcurrencyStamp = "51a7d0a2-ddbd-4a0e-8f0a-b7fadf3f0006",
                             Name = "Professor",
                             NormalizedName = "PROFESSOR"
                         },
                         new
                         {
                             Id = 4,
-                            ConcurrencyStamp = "36d5a727-a29d-4fb1-a7da-7ffde0857b4a",
+                            ConcurrencyStamp = "48525e57-809a-4e3b-b56b-edd158738362",
                             Name = "Aluno",
                             NormalizedName = "ALUNO"
                         });
@@ -726,43 +726,6 @@ namespace Oasis.Dados.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Oasis.Dominio.Entidades.Report", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AlunoId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Assunto")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int?>("ProfessorId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AlunoId");
-
-                    b.HasIndex("ProfessorId");
-
-                    b.ToTable("Reports");
-                });
-
             modelBuilder.Entity("Oasis.Dominio.Entidades.RequisicaoEquipamento", b =>
                 {
                     b.Property<int>("Id")
@@ -856,7 +819,7 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 3,
-                            LinkCdn = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css",
+                            LinkCdn = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css",
                             Nome = "Darkly"
                         },
                         new
@@ -868,7 +831,7 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 5,
-                            LinkCdn = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cyborg/bootstrap.min.css",
+                            LinkCdn = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css",
                             Nome = "Cyborg"
                         },
                         new
@@ -880,7 +843,7 @@ namespace Oasis.Dados.Migrations
                         new
                         {
                             Id = 7,
-                            LinkCdn = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/solar/bootstrap.min.css",
+                            LinkCdn = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css",
                             Nome = "Solar"
                         });
                 });
@@ -1000,13 +963,13 @@ namespace Oasis.Dados.Migrations
                     b.HasOne("Oasis.Dominio.Entidades.ApplicationUser", "CriadorDirecao")
                         .WithMany("DisciplinasCriadas")
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Oasis.Dominio.Entidades.Escola", "Escola")
                         .WithMany("Disciplinas")
                         .HasForeignKey("EscolaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("CriadorDirecao");
@@ -1051,7 +1014,7 @@ namespace Oasis.Dados.Migrations
                     b.HasOne("Oasis.Dominio.Entidades.Disciplina", "Disciplina")
                         .WithMany("Grupos")
                         .HasForeignKey("DisciplinaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Oasis.Dominio.Entidades.ApplicationUser", "Professor")
@@ -1168,23 +1131,6 @@ namespace Oasis.Dados.Migrations
                     b.Navigation("Utilizador");
                 });
 
-            modelBuilder.Entity("Oasis.Dominio.Entidades.Report", b =>
-                {
-                    b.HasOne("Oasis.Dominio.Entidades.ApplicationUser", "Aluno")
-                        .WithMany("ReportsAluno")
-                        .HasForeignKey("AlunoId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Oasis.Dominio.Entidades.ApplicationUser", "Professor")
-                        .WithMany("ReportsProfessor")
-                        .HasForeignKey("ProfessorId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("Aluno");
-
-                    b.Navigation("Professor");
-                });
-
             modelBuilder.Entity("Oasis.Dominio.Entidades.RequisicaoEquipamento", b =>
                 {
                     b.HasOne("Oasis.Dominio.Entidades.ApplicationUser", "Aluno")
@@ -1237,10 +1183,6 @@ namespace Oasis.Dados.Migrations
                     b.Navigation("PostsGostados");
 
                     b.Navigation("PostsGuardados");
-
-                    b.Navigation("ReportsAluno");
-
-                    b.Navigation("ReportsProfessor");
 
                     b.Navigation("RequisicoesEquipamento");
                 });

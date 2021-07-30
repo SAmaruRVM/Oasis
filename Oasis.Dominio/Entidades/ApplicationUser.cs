@@ -59,11 +59,7 @@ namespace Oasis.Dominio.Entidades
         [JsonIgnore]
         public ICollection<PostGostoUtilizador> PostsGostados { get; } = new List<PostGostoUtilizador>();
 
-        [JsonIgnore]
-        public ICollection<Report> ReportsProfessor { get; } = new List<Report>();
-
-        [JsonIgnore]
-        public ICollection<Report> ReportsAluno { get; } = new List<Report>();
+      
 
         [JsonIgnore]
         public ICollection<Notificacao> Notificacoes { get; } = new List<Notificacao>();

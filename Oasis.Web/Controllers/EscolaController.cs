@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Oasis.Aplicacao.Extensions;
 using Oasis.Dados;
 using Oasis.Dominio.Entidades;
 using Oasis.Dominio.Enums;
@@ -323,7 +324,7 @@ namespace Oasis.Web.Controllers
 
             postInserirViewModel.Post.ApplicationUserId = (await _context.GetLoggedInApplicationUser(User.Identity.Name)).Id;
 
-          
+
 
 
             _context.Posts.Add(postInserirViewModel.Post);
@@ -365,6 +366,7 @@ namespace Oasis.Web.Controllers
 
             var post = await _context.Posts
                                      .AsNoTracking()
+                                     .Include(post => post.UtilizadoresQueGostaram)
                                      .Include(post => post.Grupo)
                                      .ThenInclude(grupo => grupo.Professor)
                                      .Include(post => post.Comentarios)
@@ -450,6 +452,8 @@ namespace Oasis.Web.Controllers
                                                                  .Where(grupoAluno => grupoAluno.GrupoId == idGrupo)
                                                                  .ToListAsync();
 
+
+
                     _context.GruposAlunos
                             .RemoveRange(entities:
                                 gruposAlunosParaEliminar.Where(grupoAluno => participantesViewModel.Where(participante => !(participante.Inserir))
@@ -505,7 +509,8 @@ namespace Oasis.Web.Controllers
 
 
             var post = await _context.Posts
-                                     .FindAsync(idPost);
+                                     .Include(post => post.Criador)
+                                     .SingleOrDefaultAsync(post => post.Id == idPost);
 
             if (post is null)
             {
@@ -560,6 +565,13 @@ namespace Oasis.Web.Controllers
                     });
                 }
 
+                var link = Url.Action("Post", "Escola", new { idPost = post.Id }, "https", HttpContext.Request.Host.ToString(), string.Empty);
+
+                post.Criador.Notificacoes.Add(new Notificacao
+                {
+                    Titulo = "Alguém reagiu ao seu post!",
+                    LinkDestino = link
+                });
 
 
 
@@ -633,7 +645,8 @@ namespace Oasis.Web.Controllers
         public async Task<JsonResult> InserirComentarioPost([FromForm] string comentario, [FromForm] int idPost)
         {
             var postParaComentar = await _context.Posts
-                                                 .FindAsync(idPost);
+                                                 .Include(post => post.Criador)
+                                                 .SingleOrDefaultAsync(post => post.Id == idPost);
 
             if (postParaComentar is null)
             {
@@ -660,6 +673,15 @@ namespace Oasis.Web.Controllers
             await _context.Entry(postParaComentar).Collection(post => post.UtilizadoresQueGostaram).LoadAsync();
             await _context.Entry(postParaComentar).Collection(post => post.Comentarios).LoadAsync();
 
+            var link = Url.Action("Post", "Escola", new { idPost = postParaComentar.Id }, "https", HttpContext.Request.Host.ToString(), string.Empty);
+
+            postParaComentar.Criador.Notificacoes.Add(new Notificacao
+            {
+                Titulo = "Alguém comentou o seu post!",
+                LinkDestino = link
+            });
+
+            await _context.SaveChangesAsync();
 
             return Json(new
             {
@@ -711,6 +733,44 @@ namespace Oasis.Web.Controllers
             });
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AlteracaoBannerGrupo([FromForm] AtualizarBannerViewModel atualizarBannerViewModel)
+        {
+            var grupo = await _context.Grupos
+                                      .FindAsync(atualizarBannerViewModel.IdGrupo);
+
+            if (grupo is null)
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Ocorreu um erro na atualização do banner do grupo selecionado.",
+                    Descricao = "Pedimos desculpa pela incómodo. Já foi enviado a informação aos nossos técnicos. Por favor, tente novamente mais tarde.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+            var stream = atualizarBannerViewModel.ImagemBanner.OpenReadStream();
+
+            grupo.Banner = await stream.ToCharArrayAsync();
+
+            _context.Grupos.Update(grupo);
+            await _context.SaveChangesAsync();
+
+            return Json(new
+            {
+                Ajax = new Ajax
+                {
+                    Titulo = $"O banner do grupo selecionado foi atualizado com sucesso!",
+                    Descricao = string.Empty,
+                    OcorreuAlgumErro = false,
+                    UrlRedirecionar = string.Empty
+                },
+                ImagemBanner = $"data:image/png;base64,{Convert.ToBase64String(grupo.Banner)}"
+            });
+        }
 
 
         [HttpGet("[action]/Id/{id}")]

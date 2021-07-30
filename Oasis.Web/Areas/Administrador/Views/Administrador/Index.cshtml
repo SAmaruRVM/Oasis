@@ -27,12 +27,12 @@
                     <td>@admin.Apelido</td>
                     <td>@admin.Email</td>
                     <td>@admin.DataCriacao</td>
-                    <td>@admin.DataUltimoLogin</td>
+                    @{
+                        var dataUltimoLogin = admin.DataUltimoLogin?.ToString() ?? "Ainda não efetuou o 1º Login";
+                    }
+                    <td>@dataUltimoLogin</td>
                     <td>
-                        <a href="#" data-toggle="modal" data-target="#modal-editar-utilizador" data-id="@admin.Id">
-                            <i class="far fa-edit fa-lg ml-1"></i>
-                        </a>
-                        <a href="#"><i class="far fa-trash-alt fa-lg ml-2"></i></a>
+                        <a href="#" data-id-utilizador-eliminar="@admin.Id" data-toggle="modal" data-target="#modal-eliminar-utilizador" teste><i class="far fa-trash-alt fa-lg ml-2"></i></a>
                     </td>
                 </tr>
             }
@@ -96,6 +96,42 @@
 
 
 
+
+<!-- Modals -->
+<!--Modal eliminação utilizador-->
+<div class="modal fade" id="modal-eliminar-utilizador" tabindex="-1" role="dialog"
+     aria-labelledby="modal-eliminar-utilizador-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-eliminar-utilizador-titulo">Eliminação do utilizador selecionado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-eliminacao-utilizador" asp-action="EliminarAdmin" asp-controller="Utilizadores" asp-area="Administrador" asp-antiforgery="true"
+                      data-ajax="true" data-ajax-method="POST" data-ajax-success="utilizadorEliminado"
+                      data-ajax-loading="#loading-icon-eliminacao-utilizador">
+
+                    <input type="hidden" asp-for="AdministradorEliminarId"/> 
+                    <p id="eliminar-tema-texto-confirmacao">Tem a certeza que pretende apagar o administrador selecionado?</p>
+                    <button type="submit" class="btn btn-success btn-block">Confirmar eliminação</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
 @section Scripts {
     <partial name="_DataTables" />
     <partial name="~/Views/Shared/_Validacoes.cshtml" />
@@ -105,6 +141,25 @@
             $('#modal-inserir-administrador').modal('hide');
             document.getElementById('form-adicionar-administrador').reset();
             ajaxCompleto(respostaAjax);
+            location.reload();
+        }
+
+              const btnsEliminarUtilizadores = document.querySelectorAll('a[data-id-utilizador-eliminar]');
+
+        btnsEliminarUtilizadores.forEach(btn => btn.addEventListener('click', async () => {
+            const utilizador = await utilizadorPorId(btn.getAttribute('data-id-utilizador-eliminar'));
+            document.getElementById('AdministradorEliminarId').value = utilizador.id;
+        }));
+
+        function utilizadorEliminado(respostaAjax) {
+            $('#modal-eliminar-utilizador').modal('hide');
+            document.getElementById('form-eliminacao-utilizador').reset();
+            ajaxCompleto(respostaAjax);
+            location.reload();
+        }
+
+          async function utilizadorPorId(id) {
+            return await fetch(`${location.protocol}//${location.hostname}:${location.port}/administrador/Utilizadores/Id/${id}`).then(resposta => resposta.json());
         }
     </script>
 }

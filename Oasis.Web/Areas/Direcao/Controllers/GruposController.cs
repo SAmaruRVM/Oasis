@@ -31,19 +31,24 @@ namespace Oasis.Web.Areas.Direcao.Controllers
 
             disciplinasViewModel.Grupo.DisciplinaId = disciplinasViewModel.DisciplinaId;
             disciplinasViewModel.Grupo.ProfessorId = disciplinasViewModel.ProfessorId;
+
+
+            var link = Url.Action("Grupo", "Escola", new { area = string.Empty, nomeGrupo = string.Join('-', disciplinasViewModel.Grupo.Nome.Split(' ')) }, "https", HttpContext.Request.Host.ToString(), string.Empty);
+
+        
             Notificacao notificacaoProfessorAssociadoGrupo = new()
             {
                 Titulo = $"Foi adicionado ao grupo {disciplinasViewModel.Grupo.Nome}!",
-                LinkDestino = string.Empty,
+                LinkDestino = link,
                 ApplicationUserId = disciplinasViewModel.ProfessorId
             };
 
-            foreach(TipoPost flair in _context.GetTiposPostsDefault())
+            foreach (TipoPost flair in _context.GetTiposPostsDefault())
             {
                 disciplinasViewModel.Grupo.Flairs.Add(flair);
             }
-            
 
+        
 
             _context.Notificacoes.Add(notificacaoProfessorAssociadoGrupo);
             _context.Grupos.Add(disciplinasViewModel.Grupo);

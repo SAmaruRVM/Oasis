@@ -17,6 +17,6 @@ namespace Oasis.Web.Areas.Administrador.ViewModels {
         public string Email { get; set; }
 
         public IEnumerable<ApplicationUser> Utilizadores { get; set; }
-
+        public int AdministradorEliminarId { get; set; }
     }
 }

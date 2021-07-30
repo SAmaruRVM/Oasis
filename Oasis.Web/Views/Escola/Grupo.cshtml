@@ -22,6 +22,7 @@
         Novo Tipo de Post
     </button>
 }
+
 </div>
 
 
@@ -31,7 +32,7 @@
         <div class="pl-5">
             <div id="container-posts" class="px-5"
                  style="position: fixed; height: 90vh; width: 75%; overflow-y: auto; scrollbar-width: none; ">
-
+<h2 class="text-center">@Model.Grupo.Nome</h2>
                 <hr id="hr-container-posts" />
                 @if (!(Model.PostsGrupo.Any()))
                 {
@@ -228,7 +229,7 @@
                                                                 const hrContainerPost = document.getElementById('hr-container-posts');
 
              
-                location.href = location.href;
+                location.reload();
             }
             ajaxCompleto(respostaAjax.ajax);
         }

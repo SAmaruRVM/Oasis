@@ -1,0 +1,31 @@
+@model IEnumerable<Notificacao>
+@inject IConfiguration configuration
+@{
+    Layout = "~/Views/Escola/Shared/_Layout.cshtml";
+    ViewBag.Title = $"{configuration["Projeto:Nome"]} - Notificações";
+    var user = await GetUtilizadorLogadoAsync();
+}
+
+<div class="row container-fluid">
+    <div class="text-center col-9 pt-5">
+        <div class="pl-5">
+            <div id="container-posts" class="px-5"
+                 style="position: fixed; height: 90vh; width: 75%; scrollbar-width: none; overflow: auto;">
+                 <h2 class="text-center">Notificações</h2>
+                 <hr/>
+                @if (!(Model.Any()))
+                {
+                    <h3>De momento, ainda não tem nenhuma notificação.</h3>
+                }
+                else
+                {
+                    @foreach (Notificacao notificacoes in Model)
+                    {
+
+                       
+                    }
+                }
+            </div>
+        </div>
+    </div>
+

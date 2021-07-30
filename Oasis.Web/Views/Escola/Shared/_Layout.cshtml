@@ -43,7 +43,7 @@
             <a class="navbar-brand" asp-controller="Escola" asp-action="Index">
                 <img src="~/assets/img/logoOasis.png" style="height:30px; width:auto">
             </a>
-
+    
             <div class="ml-auto">
                 <button type="button" id="alertsDropdown" class="btn btn-link" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
@@ -51,7 +51,6 @@
                     <span class="position-absolute badge rounded-pill bg-secondary"
                         style=" font-size:10px; margin-top:10px; margin-left:-5px;">@numeroNotificacoesNaoVistas</span>
                 </button>
-
                 <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                     aria-labelledby="alertsDropdown">
                     <h6 class="dropdown-header">
@@ -80,7 +79,7 @@
                             </a>
                         }
                         <hr />
-                        <a class="dropdown-item text-center small text-gray-500 mb-2 p-2" href="#">
+                        <a asp-controller="Notificacoes" asp-action="Todas" asp-area="" class="dropdown-item text-center small text-gray-500 mb-2 p-2">
                             Ver todas as minhas
                             notificações
                         </a>
@@ -162,12 +161,6 @@
 
                             </a>
 
-                            <a class="nav-link" asp-controller="Apoio" asp-action="Index" asp-area="Alunos">
-                                <div class="d-flex align-items-baseline">
-                                    <i class="fas fa-laptop mr-2"></i>
-                                    <p>Apoio</p>
-                                </div>
-                            </a>
                         }
                         else if (User.IsInRole(TipoUtilizador.Diretor.ToString()))
                         {
@@ -187,12 +180,6 @@
 
                             </a>
 
-                            <a class="nav-link" asp-controller="Equipamentos" asp-action="Index" asp-area="Direcao">
-                                <div class="d-flex align-items-baseline">
-                                    <i class="fas fa-laptop mr-2"></i>
-                                    <p>Equipamentos</p>
-                                </div>
-                            </a>
                         }
                         else
                         {

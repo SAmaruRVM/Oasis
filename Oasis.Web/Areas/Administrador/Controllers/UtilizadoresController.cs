@@ -85,9 +85,11 @@ namespace Oasis.Web.Areas.Administrador.Controllers
 
                     using SmtpClient client = new();
 
-                  
                     var urlConfirmacaoEmail = $"{Request.Scheme}://{Request.Host}/conta/confirmacao-email/{userDirecao.Email.Encrypt()}";
-                    await client.EnviarEmailAsync("Foste inscrito na oasis", $"Password gerada: {guidGerado}<hr/><a href='{urlConfirmacaoEmail}'>Confirmar email </a>", userDirecao.Email, client.ConfiguracoesEmail(_configuration));
+
+
+                  
+                  await client.EnviarEmailAsync($"{_configuration["Projeto:Nome"]} - Criação de conta", $"Viva, {userDirecao.PrimeiroNome} {userDirecao.Apelido}! <br/> Foi criado na nossa plataforma pedagógica. <hr/> <h4>Para realizar o seu login, por favor confirme o seu email, clicando no link providenciado e de seguida autenticar-se com a password gerada. Recomendamos a alteração da password após o 1º login! Obrigado.</h4> <hr/> <strong>Password gerada:</strong> {guidGerado}<hr/><a href='{urlConfirmacaoEmail}'>Confirmar email </a>", userDirecao.Email, client.ConfiguracoesEmail(_configuration));
 
                     return Json(new Ajax
                     {
@@ -208,6 +210,39 @@ namespace Oasis.Web.Areas.Administrador.Controllers
                 UrlRedirecionar = string.Empty
             });
         }
+
+
+         [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> EliminarAdmin([FromForm] AdministradoresViewModel administradoresViewModel)
+        {
+            var userParaEliminar = await _context.Utilizadores
+                                                 .FindAsync(administradoresViewModel.AdministradorEliminarId);
+
+            if (userParaEliminar is null)
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Ocorreu um erro na eliminação do administrador!",
+                    Descricao = "Pedimos desculpa pelo incómodo. Já foi enviado a informação aos nossos técnicos. Por favor, tente novamente mais tarde.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+            await _userManager.DeleteAsync(userParaEliminar);
+
+            return Json(new Ajax
+            {
+                Titulo = "Sucesso ao eliminar o administrador!",
+                Descricao = "O administrador eliminado com sucesso.",
+                OcorreuAlgumErro = false,
+                UrlRedirecionar = string.Empty
+            });
+        }
+
+
+
 
         [HttpPost]
         public async Task<JsonResult> AtualizarTema([FromForm] int idTema) 

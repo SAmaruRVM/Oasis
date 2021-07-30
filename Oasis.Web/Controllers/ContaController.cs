@@ -15,6 +15,7 @@ using Oasis.Dominio.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Oasis.Web.Extensions;
 using System.Linq;
+using System.Net.Mail;
 
 namespace Oasis.Web.Controllers
 {
@@ -34,16 +35,7 @@ namespace Oasis.Web.Controllers
         [HttpPost("[action]")]
         public async Task<JsonResult> Login([FromForm] LoginViewModel loginViewModel)
         {
-            if (!(ModelState.IsValid))
-            {
-                return Json(new Ajax
-                {
-                    Titulo = "Os dados indicados não se encontram num formato válido!",
-                    Descricao = "Por favor, introduza os dados corretamente.",
-                    OcorreuAlgumErro = true,
-                    UrlRedirecionar = string.Empty
-                });
-            }
+
 
             var utilizadorTentativaLogin = await _context.Utilizadores
                                                          .SingleOrDefaultAsync(utilizador => utilizador.Email == loginViewModel.Email);
@@ -190,7 +182,7 @@ namespace Oasis.Web.Controllers
         {
             var utilizadorLogado = await _context.GetLoggedInApplicationUser(User.Identity.Name);
 
-             IOrderedEnumerable<DisciplinaGruposAlunos> disciplinaGruposAlunos;
+            IOrderedEnumerable<DisciplinaGruposAlunos> disciplinaGruposAlunos;
             if (await _userManager.IsInRoleAsync(utilizadorLogado, TipoUtilizador.Professor.ToString()))
             {
                 disciplinaGruposAlunos = utilizadorLogado.GruposOndeEnsina
@@ -269,6 +261,51 @@ namespace Oasis.Web.Controllers
                 ImagemUser = $"data:image/png;base64,{Convert.ToBase64String(userLogado.ImagemPerfil)}"
             });
         }
+
+
+        [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> RecuperarPassword([FromForm] LoginViewModel loginViewModel)
+        {
+
+            var passwordGerada = Guid.NewGuid();
+
+            var user = await _userManager.FindByEmailAsync(loginViewModel.EmailRecuperacaoPassword);
+
+            if (user is null)
+            {
+                return Json(new Ajax
+                {
+                    Titulo = "Não foi encontrado nenhuma conta com o email facultado!",
+                    Descricao = "Por favor, introduza os dados corretamente.",
+                    OcorreuAlgumErro = true,
+                    UrlRedirecionar = string.Empty
+                });
+            }
+
+            await _userManager.RemovePasswordAsync(user);
+            await _userManager.AddPasswordAsync(user, passwordGerada.ToString());
+            
+
+
+            using SmtpClient client = new();
+
+            await client.EnviarEmailAsync($"{_configuration["Projeto:Nome"]} - O seu pedido de recuperação de password", $"Como requisitado, foi gerada uma password temporária de modo a que se possa autenticar e alterar a sua password:<hr/><h3>Password gerada:<h3/>{passwordGerada}<hr/><h2>Recomendamos que altere a sua password com a maior brevidade possível.<br/>Obrigado,<br/>{_configuration["Projeto:Nome"]}</h2>", loginViewModel.EmailRecuperacaoPassword, client.ConfiguracoesEmail(_configuration));
+
+
+
+
+            return Json(new Ajax
+            {
+                Titulo = "Foi-lhe enviado um email para que possa recuperar a password.",
+                Descricao = string.Empty,
+                OcorreuAlgumErro = false,
+                UrlRedirecionar = string.Empty
+            });
+        }
+
+
+
 
 
         [HttpPost("[action]")]

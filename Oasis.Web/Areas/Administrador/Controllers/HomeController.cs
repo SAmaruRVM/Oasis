@@ -4,6 +4,6 @@ namespace Oasis.Web.Areas.Administrador.Controllers
     public class HomeController : BaseAdministradorController
     {
         [HttpGet]
-        public ViewResult Index() => View();
+        public RedirectToActionResult Index() => RedirectToAction(actionName: "Index", controllerName: "Escolas", new { area = "Administrador"});
     }
 }

@@ -17,29 +17,28 @@
                 <th scope="col">Nome Proprio</th>
                 <th scope="col">Apelido</th>
                 <th scope="col">Email utilizador</th>
-                <th scope="col">Tipo de perfil</th>
                 <th scope="col">Data de criação</th>
                 <th scope="col">Data do ultimo Login</th>
-                <th scope="col">Acções</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (ApplicationUser utilizador in Model.UtilizadoresRoles) {
+            @foreach (ApplicationUser utilizador in Model.UtilizadoresRoles)
+            {
                 <tr>
                     <td>@utilizador.PrimeiroNome</td>
                     <td>@utilizador.Apelido</td>
                     <td>@utilizador.Email</td>
-                    <td>teste</td>
                     <td>@utilizador.DataCriacao</td>
                     @{
                         var dataUltimoLogin = utilizador.DataUltimoLogin?.ToString() ?? "Ainda não efetuou o 1º Login";
                     }
                     <td>@dataUltimoLogin</td>
-                    <td>
-                        <a href="#"><i class="far fa-trash-alt fa-lg ml-2"></i></a>
-                    </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+@section Scripts {
+<partial name="~/Areas/Administrador/Views/Shared/_DataTables.cshtml" />
+}

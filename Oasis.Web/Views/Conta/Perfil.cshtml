@@ -16,7 +16,7 @@
     <div class="text-center col-9">
         <div class="">
             <div class=""
-                style="margin-top: 30px; position: fixed; height: 90vh; width: @width; overflow-y: scroll; scrollbar-width: none; ">
+                style="margin-top: 30px; position: fixed; height: 90vh; width: 80%; overflow-y: scroll; scrollbar-width: none; ">
                 <div class="container-fluid">
                     @{
                         var imagemUser = user.ImagemPerfil is null ?
@@ -144,12 +144,6 @@
     </div>
 
 
-
-    @if (User.IsInRole(TipoUtilizador.Aluno.ToString()) || User.IsInRole(TipoUtilizador.Professor.ToString()))
-    {
-        // partial grupos
-        <partial name="_Grupos" model="@Model.EscolaViewModel" />
-    }
 </div>
 
 @section Scripts {

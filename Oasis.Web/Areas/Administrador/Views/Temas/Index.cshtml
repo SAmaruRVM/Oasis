@@ -168,6 +168,7 @@
             if (!(respostaAjax.ocorreuAlgumErro)) {
                 $('#modal-inserir-tema').modal('hide');
                 document.getElementById('form-adicionar-tema').reset();
+                location.reload();
             }
             ajaxCompleto(respostaAjax.ajax);
         }
@@ -184,6 +185,7 @@
             $('#modal-eliminar-tema').modal('hide');
             document.getElementById('form-eliminacao-tema').reset();
             ajaxCompleto(respostaAjax);
+            location.reload();
         }
 
         const btnsAtualizarTemas = document.querySelectorAll('a[data-id-tema-atualizar]');
@@ -199,6 +201,7 @@
             if (!(respostaAjax.ocorreuAlgumErro)) {
                 $('#modal-atualizacao-tema').modal('hide');
                 document.getElementById('form-atualizacao-tema').reset();
+                location.reload();
             }
             ajaxCompleto(respostaAjax.ajax);
         }

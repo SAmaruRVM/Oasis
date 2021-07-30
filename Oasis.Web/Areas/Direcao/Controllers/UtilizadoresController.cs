@@ -37,6 +37,8 @@ namespace Oasis.Web.Areas.Direcao.Controllers
             UtilizadoresRoles = await _userManager.Users
                                                   .AsNoTracking()
                                                   .OrderBy(u => u.PrimeiroNome)
+                                                  .ThenBy(u => u.Apelido)
+                                                  .ThenBy(u => u.DataCriacao)
                                                   .ToListAsync(),
 
         });
@@ -116,7 +118,10 @@ namespace Oasis.Web.Areas.Direcao.Controllers
 
 
                     var urlConfirmacaoEmail = $"{Request.Scheme}://{Request.Host}/conta/confirmacao-email/{utilizadorDirecaoViewModel.Utilizador.Email.Encrypt()}";
-                    await client.EnviarEmailAsync("Foste inscrito na oasis", $"Password gerada: {guidGerado}<hr/><a href='{urlConfirmacaoEmail}'>Confirmar email </a>", utilizadorDirecaoViewModel.Utilizador.Email, client.ConfiguracoesEmail(_configuration));
+
+
+
+                    await client.EnviarEmailAsync($"{_configuration["Projeto:Nome"]} - Criação de conta", $"Viva, {utilizadorDirecaoViewModel.Utilizador.PrimeiroNome} {utilizadorDirecaoViewModel.Utilizador.Apelido}! <br/> Foi criado na nossa plataforma pedagógica. <hr/> <h4>Para realizar o seu login, por favor confirme o seu email, clicando no link providenciado e de seguida autenticar-se com a password gerada. Recomendamos a alteração da password após o 1º login! Obrigado.</h4> <hr/> <strong>Password gerada:</strong> {guidGerado}<hr/><a href='{urlConfirmacaoEmail}'>Confirmar email </a>", utilizadorDirecaoViewModel.Utilizador.Email, client.ConfiguracoesEmail(_configuration));
 
                     var tipoUtilizador = role.Name.ToLower();
                     return Json(new Ajax

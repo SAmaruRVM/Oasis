@@ -4,7 +4,7 @@
     ViewBag.Title = $"{configuration["Projeto:Nome"]} - {Model.Post.Titulo}";
     var user = await GetUtilizadorLogadoAsync();
     string postGuardado = user.PostsGuardados.Select(pg => pg.PostId)
-                                                                 .Contains(Model.Post.Id) ? "fas fa-bookmark fa-lg" : "far fa-bookmark fa-lg";
+    .Contains(Model.Post.Id) ? "fas fa-bookmark fa-lg" : "far fa-bookmark fa-lg";
 }
 <style>
     body {
@@ -28,7 +28,8 @@
                                 @if (Model.Post.Criador.Id == Model.Post.Grupo.ProfessorId)
                                 {
 
-                                    <span class="badge" style="color:darkkhaki; font-size: 12px; height: 19px; width: 25px; margin-top:16px; margin-left:-7px;">
+                                    <span class="badge"
+                                    style="color:darkkhaki; font-size: 12px; height: 19px; width: 25px; margin-top:16px; margin-left:-7px;">
                                         <i class="fas fa-crown"></i>
                                     </span>
 
@@ -36,13 +37,15 @@
                             </div>
                         </h5>
                         <div class="dropdown ml-auto">
-                            <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Opções
                             </button>
                             <div class="dropdown-menu p-2" aria-labelledby="dropdownMenuButton">
                                 @if (Model.Post.Criador.Id == user.Id)
                                 {
-                                    <button type="button" data-id-post-eliminar="@Model.Post.Id" class="btn btn-danger btn-block">
+                                    <button type="button" data-id-post-eliminar="@Model.Post.Id"
+                                    class="btn btn-danger btn-block">
                                         Eliminar
                                     </button>
                                 }
@@ -82,7 +85,8 @@
 
                             @if (postGostado is not null)
                             {
-                                <img data-id-icone-reacao style="width:20px;height:20px;" src="~/@postGostado.Reacao.Icone" />
+                                <img data-id-icone-reacao style="width:20px;height:20px;"
+                                src="~/@postGostado.Reacao.Icone" />
                             }
                             else
                             {
@@ -96,21 +100,26 @@
                                     @{
                                         var classesCss = "bg-secondary text-white";
 
-                                        var userReagiuAEstePostTuple = user.PostsGostados.Select(postGostado => (postId: postGostado.PostId, reacaoId: postGostado.ReacaoId));
+                                        var userReagiuAEstePostTuple = user.PostsGostados.Select(postGostado => (postId:
+                                        postGostado.PostId, reacaoId: postGostado.ReacaoId));
 
-                                        var userReagiuAEstePost = userReagiuAEstePostTuple.SingleOrDefault(pu => pu.postId == Model.Post.Id);
+                                        var userReagiuAEstePost = userReagiuAEstePostTuple.SingleOrDefault(pu => pu.postId ==
+                                        Model.Post.Id);
 
                                     }
-                                    @if (userReagiuAEstePost != default(ValueTuple<int, int>) && userReagiuAEstePost.reacaoId == reacao.Id)
+                                    @if (userReagiuAEstePost != default(ValueTuple<int, int>) &&
+                                   userReagiuAEstePost.reacaoId == reacao.Id)
                                     {
-                                        <button type="button" data-id-reacao="@reacao.Id" data-id-post-reacao="@Model.Post.Id" class="dropdown-item @classesCss">
+                                        <button type="button" data-id-reacao="@reacao.Id" data-id-post-reacao="@Model.Post.Id"
+                                    class="dropdown-item @classesCss">
                                             <img style="width:20px;height:20px;" src="~/@reacao.Icone" />
                                             @reacao.Titulo
                                         </button>
                                     }
                                     else
                                     {
-                                        <button type="button" data-id-reacao="@reacao.Id" data-id-post-reacao="@Model.Post.Id" class="dropdown-item">
+                                        <button type="button" data-id-reacao="@reacao.Id" data-id-post-reacao="@Model.Post.Id"
+                                    class="dropdown-item">
                                             <img style="width:20px;height:20px;" src="~/@reacao.Icone" />
                                             @reacao.Titulo
                                         </button>
@@ -120,10 +129,12 @@
                         </ul>
                     </div>
                     <div class="p-0 mr-2">
-                        <p data-id-estatisticas-post>@Model.Post.UtilizadoresQueGostaram.Count() reações e @Model.Post.Comentarios.Count() comentários</p>
+                        <p data-id-estatisticas-post>@Model.Post.UtilizadoresQueGostaram.Count() reações e
+                            @Model.Post.Comentarios.Count() comentários</p>
                     </div>
                     <div>
-                        <button type="button" data-mostrar-comentario="@Model.Post.Id" class="btn btn-link p-0">Comentar</button>
+                        <button type="button" data-mostrar-comentario="@Model.Post.Id"
+                            class="btn btn-link p-0">Comentar</button>
                     </div>
                     <div class="ml-auto">
                         <button type="button" data-id-post-guardar="@Model.Post.Id" class="btn btn-link">
@@ -133,12 +144,13 @@
                 </div>
 
 
-                <form id=@string.Format("form-inserir-comentario-post{0}", Model.Post.Id) asp-action="InserirComentarioPost" asp-controller="Escola" asp-area=""
-                      asp-antiforgery="true" data-ajax="true" data-ajax-method="POST"
-                      data-ajax-success="insercaoComentarioPost"
-                      data-ajax-loading="#loading-icon-atualizar-descricao-grupo">
+                <form id=@string.Format("form-inserir-comentario-post{0}", Model.Post.Id)
+                    asp-action="InserirComentarioPost" asp-controller="Escola" asp-area="" asp-antiforgery="true"
+                    data-ajax="true" data-ajax-method="POST" data-ajax-success="insercaoComentarioPost"
+                    data-ajax-loading="#loading-icon-atualizar-descricao-grupo">
                     <div class="form-group m-3 d-none" id=@string.Format("comentario{0}", @Model.Post.Id)>
-                        <textarea class="form-control" rows="2" name="comentario" placeholder="O teu comentário..."></textarea>
+                        <textarea class="form-control" rows="2" name="comentario"
+                            placeholder="O teu comentário..."></textarea>
 
                         <input type="hidden" name="idPost" value="@Model.Post.Id" />
 
@@ -151,39 +163,48 @@
                 <div class="card-footer text-muted text-center">
                     @Model.Post.DataCriacao.Day de
                     @Model.Post.DataCriacao.ToString("MMMM",
-            System.Globalization.CultureInfo.CreateSpecificCulture("pt-PT")),
+                    System.Globalization.CultureInfo.CreateSpecificCulture("pt-PT")),
                     @Model.Post.DataCriacao.Year
                     às @Model.Post.DataCriacao.Hour:@Model.Post.DataCriacao.Minute
                 </div>
             </div>
             <h3 class="text-center">Comentários</h3>
             <hr />
-            @foreach (ComentarioPostUtilizador comentario in Model.Post.Comentarios.OrderByDescending(comentario => comentario.DataCriacao))
+            @if (!(Model.Post.Comentarios.Any()))
             {
-                <div class="card mt-0 mb-2">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            @comentario.Utilizador.PrimeiroNome @comentario.Utilizador.Apelido
-                            @if (comentario.Utilizador.Id == comentario.Post.Grupo.ProfessorId)
-                            {
+                <p class="text-center">Ainda não existe nenhum comentário associado a este post.</p>
+            }
+            else
+            {
+                @foreach (ComentarioPostUtilizador comentario in Model.Post.Comentarios.OrderByDescending(comentario =>
+               comentario.DataCriacao))
+                {
+                    <div class="card mt-0 mb-2">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                @comentario.Utilizador.PrimeiroNome @comentario.Utilizador.Apelido
+                                @if (comentario.Utilizador.Id == comentario.Post.Grupo.ProfessorId)
+                                {
 
-                                <span class="badge" style="color:darkkhaki; font-size: 12px; height: 19px; width: 25px; margin-top:16px; margin-left:-7px;">
-                                    <i class="fas fa-crown"></i>
-                                </span>
+                                    <span class="badge"
+                            style="color:darkkhaki; font-size: 12px; height: 19px; width: 25px; margin-top:16px; margin-left:-7px;">
+                                        <i class="fas fa-crown"></i>
+                                    </span>
 
-                            }
-                        </h5>
-                        <hr />
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            @comentario.DataCriacao.Day de
-                            @comentario.DataCriacao.ToString("MMMM",
-                    System.Globalization.CultureInfo.CreateSpecificCulture("pt-PT")),
-                            @comentario.DataCriacao.Year
-                            às @comentario.DataCriacao.Hour:@comentario.DataCriacao.Minute
-                        </h6>
-                        <p class="card-text">@comentario.Comentario</p>
+                                }
+                            </h5>
+                            <hr />
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                @comentario.DataCriacao.Day de
+                                @comentario.DataCriacao.ToString("MMMM",
+                        System.Globalization.CultureInfo.CreateSpecificCulture("pt-PT")),
+                                @comentario.DataCriacao.Year
+                                às @comentario.DataCriacao.Hour:@comentario.DataCriacao.Minute
+                            </h6>
+                            <p class="card-text">@comentario.Comentario</p>
+                        </div>
                     </div>
-                </div>
+                }
             }
         </div>
     </div>

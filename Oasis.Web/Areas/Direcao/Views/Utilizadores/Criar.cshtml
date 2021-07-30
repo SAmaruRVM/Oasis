@@ -25,6 +25,7 @@
             <span class="text-danger text-center" asp-validation-for="Email"></span>
         </div>
 
+        <label asp-for="TiposUtilizadorId" class="mt-2"></label>
         <select class="wide mb-2" asp-for="TiposUtilizadorId" asp-items="@Model.TiposUtilizadorDropdownList">
             <option selected disabled value="">-- Selecione o tipo de Utilizador --</option>
         </select>

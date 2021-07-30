@@ -26,9 +26,6 @@
                             <td>@disciplina.DataCriacao</td>
                             <td>@disciplina.CriadorDirecao.PrimeiroNome @disciplina.CriadorDirecao.Apelido</td>
                             <td>
-                                <a href="#" data-disciplina-id="@disciplina.Id" data-disciplina-eliminar="true"
-                                data-toggle="modal" data-target="#modal-eliminar-disciplina"><i
-                                    class="far fa-trash-alt fa-lg ml-2"></i></a>
                                 <button type="button" class="btn btn-primary float-right" data-toggle="modal"
                                 data-target="#modal-inserir-grupo" data-grupo-inserir="true"
                                 data-disciplina-id="@disciplina.Id">
@@ -156,10 +153,15 @@
 
 <partial name="~/Views/Shared/_Validacoes.cshtml" />
 <partial name="~/Views/Shared/_Ajax.cshtml" />
+
+<partial name="~/Areas/Administrador/Views/Shared/_DataTables.cshtml" />
+
+
 <script>
     function disciplinaInserida(respostaAjax) { 
         if (!(respostaAjax.ocorreuAlgumErro)) {
             document.getElementById('form-inserir-disciplina').reset();
+            location.reload();
         }
         ajaxCompleto(respostaAjax);
     }
@@ -187,6 +189,7 @@
         if (!(respostaAjax.ocorreuAlgumErro)) {
             $('#modal-inserir-grupo').modal('hide');
             document.getElementById('form-inserir-grupo').reset();
+            
         }
         ajaxCompleto(respostaAjax);
     }

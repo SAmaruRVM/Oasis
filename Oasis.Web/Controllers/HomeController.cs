@@ -28,8 +28,6 @@ namespace Oasis.Web.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-
-
             if (User.Identity.IsAuthenticated)
             {
                 if (User.IsInRole(TipoUtilizador.Administrador.ToString()))
@@ -73,9 +71,14 @@ namespace Oasis.Web.Controllers
 
             using SmtpClient smtpClient = new();
 
-            await smtpClient.EnviarEmailAsync("Teste email", "Contacto enviado", contacto.EmailContactante, smtpClient.ConfiguracoesEmail(_configuration));
-            await smtpClient.EnviarEmailAsync("Teste email", "Uma nova pessoa tentou contactar", "joaopedromane23@gmail.com", smtpClient.ConfiguracoesEmail(_configuration));
+            await smtpClient.EnviarEmailAsync($"{_configuration["Projeto:Nome"]} - Contacto enviado com sucesso", $"Caro/a {contacto.PrimeiroNome} {contacto.Apelido},  o seu contacto foi enviado com sucesso e está ser visto pelos nossos administradores.<br/> Assim que possível, receberá a resposta ao seu contacto. <br/>Pedimos que se mantenha atento/a ao seu email.<br/><strong> Obrigado!</strong>", contacto.EmailContactante, smtpClient.ConfiguracoesEmail(_configuration));
 
+
+            foreach(var administrador in await _userManager.GetUsersInRoleAsync(TipoUtilizador.Administrador.ToString()))
+            {
+                 await smtpClient.EnviarEmailAsync($"{_configuration["Projeto:Nome"]} - Novo pedido de contacto", $"Caro/a {administrador.PrimeiroNome} {administrador.Apelido}, um novo contacto foi recebido. Assim que disponível, a {_configuration["Projeto:Nome"]} pede aos seus colaboradores para que respondam ao contacto. Obrigado", administrador.Email, smtpClient.ConfiguracoesEmail(_configuration));
+            }
+           
             return Json(new Ajax
             {
                 Titulo = "O seu contacto foi enviado com sucesso!",

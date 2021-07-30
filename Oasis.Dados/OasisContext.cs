@@ -27,7 +27,6 @@ namespace Oasis.Dados
         public DbSet<PostGostoUtilizador> PostsGostosUtilizadores { get; set; }
         public DbSet<PostUtilizadorGuardado> PostsUtilizadoresGuardados { get; set; }
         public DbSet<Reacao> Reacoes { get; set; }
-        public DbSet<Report> Reports { get; set; }
         public DbSet<RequisicaoEquipamento> RequisicaoEquipamentos { get; set; }
         public DbSet<RespostaContacto> RespostasContactos { get; set; }
         public DbSet<Tema> Temas { get; set; }
@@ -68,11 +67,11 @@ namespace Oasis.Dados
                    {
                        ["Minty"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css",
                        ["Cerulean"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cerulean/bootstrap.min.css",
-                       ["Darkly"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/darkly/bootstrap.min.css",
+                       ["Darkly"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css",
                        ["Sketchy"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/sketchy/bootstrap.min.css",
-                       ["Cyborg"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cyborg/bootstrap.min.css",
+                       ["Cyborg"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/litera/bootstrap.min.css",
                        ["Journal"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/journal/bootstrap.min.css",
-                       ["Solar"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/solar/bootstrap.min.css"
+                       ["Solar"] = "https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css"
                    }.Select(tema => new Tema
                    {
                        Id = ++indexTemas,
@@ -166,20 +165,6 @@ namespace Oasis.Dados
                    .WithMany(post => post.UtilizadoresQueGuardaram)
                    .OnDelete(DeleteBehavior.NoAction);
 
-            // Reports
-            builder.Entity<Report>()
-                   .HasOne(report => report.Professor)
-                   .WithMany(professor => professor.ReportsProfessor)
-                   .OnDelete(DeleteBehavior.NoAction);
-
-            builder.Entity<Report>()
-                   .HasOne(report => report.Aluno)
-                   .WithMany(aluno => aluno.ReportsAluno)
-                   .OnDelete(DeleteBehavior.NoAction);
-
-            builder.Entity<Report>()
-                   .Property(report => report.DataCriacao)
-                   .HasDefaultValueSql("getdate()");
 
             // Grupos
             builder.Entity<Grupo>()
@@ -247,6 +232,23 @@ namespace Oasis.Dados
                   .HasDefaultValueSql("getdate()");
 
        
+           builder.Entity<Disciplina>()
+                  .HasOne(disciplina => disciplina.CriadorDirecao)
+                  .WithMany(criadorDirecao => criadorDirecao.DisciplinasCriadas)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+           builder.Entity<Disciplina>()
+                  .HasOne(disciplina => disciplina.Escola)
+                  .WithMany(escola => escola.Disciplinas)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+
+           builder.Entity<Disciplina>()
+                  .HasMany(disciplina => disciplina.Grupos)
+                  .WithOne(grupo => grupo.Disciplina)
+                  .OnDelete(DeleteBehavior.NoAction);
+
+
            // RespostasContactos
            builder.Entity<RespostaContacto>()
                   .Property(respostaContacto => respostaContacto.DataResposta)
